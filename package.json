@@ -5,7 +5,8 @@
   "scripts": {
     "lite": "lite-server --baseDir=\"dist\"",
     "webpack": "webpack --watch",
-    "start": "concurrently \"npm run webpack\" \"npm run lite\" "    
+    "start": "concurrently \"npm run webpack\" \"npm run lite\" ",
+    "build": "webpack --optimize-minimize"
   },
   "private": true,
   "devDependencies": {
