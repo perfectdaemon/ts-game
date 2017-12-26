@@ -1,53 +1,40 @@
 import { Player } from './game/player'
-import { Vector } from './math/vector';
+import { Vector } from './engine/math/vector';
+import { GameBase } from './engine/game-base';
 
-export class Game {
-    private context: CanvasRenderingContext2D;
+/**
+ * Main game class with game loop
+ */
+export class Game extends GameBase {
+    
     private player: Player;
     
-    private canvasPos: Vector;
-
-    constructor (private canvasElement: HTMLCanvasElement) {
-        this.context = <CanvasRenderingContext2D>canvasElement.getContext('2d');
-        this.player = new Player();
-        this.canvasPos = { 
-            x: this.canvasElement.getBoundingClientRect().left,
-            y: this.canvasElement.getBoundingClientRect().top
-        };
+    constructor (protected canvasElement: HTMLCanvasElement) {
+        super(canvasElement);
     }
 
-    public run(): void {
+    protected onInit(): void {
         console.log('Run, TypeScript, run!');
-        this.player.position = {x: 400, y: 300};
-        this.player.look = {x: 0, y: 0};
-
-        this.canvasElement.onmousemove = event => this.onMouseMove(event);
-
-        const cycle = (timestamp: number) => {
-            this.onUpdate(timestamp);
-            this.onRender(timestamp);
-            window.requestAnimationFrame(cycle);
-        }
-
-        window.requestAnimationFrame(cycle);
+        this.player = new Player();
+        this.player.position = new Vector(400, 300);
     }
 
-    private onUpdate(timestamp: number): void {
+    protected onUpdate(timestamp: number): void {
 
     }
 
-    private onRender(timestamp: number): void {
-        this.context.clearRect(0, 0, 800, 600);
-        this.context.font = "16pt serif";
-        this.context.fillText("Hello " + timestamp, 10, 16);
+    protected onRender(timestamp: number): void {
+        super.onRender(timestamp);
 
-        this.player.draw(this.context);
+        this.renderer.drawText(`Hello, world: ${timestamp}`, new Vector(5, 10));
+        this.renderer.drawText(`player position: ${this.player.position}`, new Vector(5, 20));
+        this.renderer.drawText(`player look: ${this.player.look}`, new Vector(5, 30));
+        this.renderer.drawText(`player look angle: ${this.player.look.toAngle()}`, new Vector(5, 40));
+
+        this.player.render(this.renderer);
     }
 
-    private onMouseMove(event: MouseEvent): void {
-        this.player.look = {
-            x: event.pageX - this.canvasPos.x,
-            y: event.pageY - this.canvasPos.y
-        };
+    protected onMouseMove(position: Vector): void {
+        this.player.look = position.subtract(this.player.position);
     }
 }
