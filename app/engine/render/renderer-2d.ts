@@ -1,4 +1,5 @@
 import { Vector } from './../math/vector';
+import { MathBase } from '../math/math-base';
 
 export class Renderer2D {
     private context: CanvasRenderingContext2D;
@@ -60,8 +61,8 @@ export class Renderer2D {
     }
 
     public transform(moveTo: Vector, look: Vector): void {
-        this.context.moveTo(moveTo.x, moveTo.y);
-        this.context.rotate(-look.toAngle());
+        this.context.translate(moveTo.x, moveTo.y);
+        this.context.rotate(look.toAngle() * MathBase.deg2rad);
     }
 
     public get context2D() {

@@ -14,7 +14,7 @@ export class Player extends Transform2D {
         //context.save();
 
         context.fillStyle = "#f44";
-        context.fillRect(this.position.x, this.position.y, 10, 10);
+        context.fillRect(-10, -5, 20, 10);
         // context.restore();
     }
 }
