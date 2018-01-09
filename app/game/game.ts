@@ -1,6 +1,6 @@
-import { Player } from './game/player'
-import { Vector } from './engine/math/vector';
-import { GameBase } from './engine/game-base';
+import { Player } from './player'
+import { Vector } from './../engine/math/vector';
+import { GameBase } from './../engine/game-base';
 
 /**
  * Main game class with game loop
