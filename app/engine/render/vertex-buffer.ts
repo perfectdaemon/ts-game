@@ -1,9 +1,6 @@
 import { VertexFormat, VertexBufferId, VertexBufferUsage, VertexBufferMapAccess, VertexAtrib } from "./webgl-types";
 import { gl } from "./webgl";
 
-/**
- * Вершинный буфер
- */
 export class VertexBuffer {
   public buffer: WebGLBuffer;
 
