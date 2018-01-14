@@ -9,7 +9,7 @@ export type Index = number;
 
 export enum TextureFormat { RGB8, RGBA8, BGR8, BGRA8 };
 export enum VertexFormat { Pos2Tex2 = 0, Pos3Tex2, Pos3Tex2Nor3, Pos3Tex2Col4 };
-export enum IndexFormat { Byte = 0, Short, ifInt };
+export enum IndexFormat { Byte = 0, Short, Int };
 
 export enum VertexAtrib { vaCoord = 0, vaNormal = 1, vaTexCoord0 = 2, vaTexCoord1 = 3, vaColor = 4 };
 export enum VertexBufferMapAccess { Read, Write, ReadWrite };
