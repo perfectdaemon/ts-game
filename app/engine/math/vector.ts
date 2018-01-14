@@ -40,3 +40,7 @@ export class Vector2 {
         return `x: ${this.x}, y:${this.y}`;
     }
 }
+
+export class Vector3 {
+    constructor(public x: number, public y: number, public z: number) {}
+}
