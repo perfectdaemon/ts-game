@@ -1,4 +1,4 @@
-import { Vector } from './math/vector';
+import { Vector2 } from './math/vector';
 import { Renderer2D } from './render/renderer-2d';
 
 /**
@@ -47,5 +47,5 @@ export abstract class GameBase {
      * Mouse move callback
      * @param event MouseEvent
      */
-    protected abstract onMouseMove(position: Vector): void;
+    protected abstract onMouseMove(position: Vector2): void;
 }

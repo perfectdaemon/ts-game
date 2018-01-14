@@ -1,4 +1,4 @@
-import { Vector } from "../math/vector";
+import { Vector2 } from "../math/vector";
 import { BlendingMode, CullMode, PolygonMode, FuncComparison, ShaderId, TextureId, VertexBufferId, IndexBufferId, FrameBufferId, ClearMask, ShaderProgramId } from 'webgl-types';
 import { VertexBuffer } from "./vertex-buffer";
 import { IndexBuffer } from "./index-buffer";

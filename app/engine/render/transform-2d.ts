@@ -1,12 +1,12 @@
-import { Vector } from './../math/vector';
+import { Vector2 } from './../math/vector';
 import { Renderer2D } from './renderer-2d';
 
 export class Transform2D {
     public parent: Transform2D;
     public childs: Transform2D[];
 
-    public position: Vector = new Vector(0, 0);
-    private _look: Vector = new Vector(0, 1);
+    public position: Vector2 = new Vector2(0, 0);
+    private _look: Vector2 = new Vector2(0, 1);
 
     public render(renderer: Renderer2D): void {
         renderer.save();
@@ -31,7 +31,7 @@ export class Transform2D {
         return this._look;
     }
 
-    public set look(value: Vector) {
+    public set look(value: Vector2) {
         this._look = value.normal();
     }
 }
