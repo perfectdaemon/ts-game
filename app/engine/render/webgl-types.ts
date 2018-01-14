@@ -23,7 +23,6 @@ export enum BlendingMode { None, Alpha, Additive, Multiply, Screen };
 export enum CullMode { None, Back, Front };
 export enum FuncComparison { Never, Less, Equal, LessOrEqual, Greater, NotEqual, GreaterOrEqual, Always };
 export enum ClearMask { All, Color, Depth };
-export enum PolygonMode { Fill, Lines, Points };
 
 /*
   TglrVertexP2T2 = record

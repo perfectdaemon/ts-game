@@ -14,7 +14,7 @@ export class UniformInfo {
 export class ShaderProgram {
     private linkStatus: number;
 
-    public id: ShaderProgramId;
+    public program: WebGLProgram;
     public shadersId: ShaderId[];
     public uniforms: UniformInfo[];
 
@@ -51,7 +51,7 @@ export class ShaderProgram {
     }
     /*
     public setUniform(uniformType: UniformType, count: number, value: any, name: string, index: number = -1): void {
-    
+
     }*/
 
     public setUniform(internalIndex: number, value: any): void {

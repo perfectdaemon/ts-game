@@ -12,7 +12,7 @@ export class IndexBuffer {
     }
 
     this.bind();
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, count * this.getSizeFromFormat(format), gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, count * IndexBuffer.getSizeFromFormat(format), gl.STATIC_DRAW);
   }
 
   public free(): void {
@@ -28,11 +28,19 @@ export class IndexBuffer {
     gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, start, data)
   }
 
-  private getSizeFromFormat(format: IndexFormat): number {
+  public static getSizeFromFormat(format: IndexFormat): number {
     switch (format) {
       case IndexFormat.Byte: return 1;
       case IndexFormat.Short: return 2;
       case IndexFormat.Int: return 4;
+    }
+  }
+
+  public static getWebGLFormat(format: IndexFormat): number {
+    switch (format) {
+      case IndexFormat.Byte: return gl.UNSIGNED_BYTE;
+      case IndexFormat.Short: return gl.UNSIGNED_SHORT;
+      case IndexFormat.Int: return gl.UNSIGNED_INT;
     }
   }
 }
