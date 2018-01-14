@@ -1,80 +1,149 @@
 import { Vector } from "../math/vector";
-import { } from 'webgl-types';
-/*
+import { BlendingMode, CullMode, PolygonMode, FuncComparison, ShaderId, TextureId, VertexBufferId, IndexBufferId, FrameBufferId, ClearMask, ShaderProgramId } from 'webgl-types';
+import { VertexBuffer } from "./vertex-buffer";
+import { IndexBuffer } from "./index-buffer";
+import { WebGLRegisterService } from "./webgl";
+
+
+const TEXTURE_SAMPLERS_MAX = 8;
 
 export class WebGLRenderer {
-    private _gl: WebGLRenderingContext;
-
-    private _internalVB: TglrVertexBuffer;
-    private _internalIB: TglrIndexBuffer;
-
-    private _blendingMode: TglrBlendingMode;
-    private _cullMode: TglrCullMode;
-    private _polygonMode: TglrPolygonMode;
-    
-    private _depthWrite: boolean; 
-    private _depthTest: boolean;
-    private _depthFunc: TglrFuncComparison;
-    
-    private _shader: TglrShaderId;
-    private _textureSampler: array[0..TEXURE_SAMPLERS_MAX - 1] of TglrTextureId;
-    private _activeSampler: number;
-    private _vertexBuffer: TglrVertexBufferId;
-    private _indexBuffer: TglrIndexBufferId;
-    private _frameBuffer: TglrFrameBufferId;
-
-    private _statTextureBind: number
-    private _statTriCount: number;
-    private _statDIPCount: number;
-    
-    private _width: number;
-    private _height: number;
-
-    
-
-
-    constructor(private canvasElement: HTMLCanvasElement) {
-        this._gl = <WebGLRenderingContext>(canvasElement.getContext('webgl') || canvasElement.getContext('experimental-webgl'));
-    }
-
-    
-    public clear(): void;
-    public Resize(aWidth, aHeight: number): void;
-    public ResetStates(): void;
-    public ResetStatistics(): void;
-    public Clear(aClearMask: TglrClearMask): void;
-    public SetClearColor(R, G, B: number): void;
-    public SetClearColor(Color: TglrVec4f): void;
-    public SetClearColor(Color: TglrVec3f): void;
-
-    public SetViewPort(aLeft, aTop, aWidth, aHeight: number): void;
-    public SetCullMode(aCullMode: TglrCullMode): void;
-    public SetPolygonMode(aPolygonMode: TglrPolygonMode): void;
-    public SetBlendingMode(aBlendingMode: TglrBlendingMode): void;
-    public SetDepthWrite(aEnabled: Boolean): void;
-    public SetDepthTest(aEnabled: Boolean): void;
-    public SetDepthFunc(aComparison: TglrFuncComparison): void;
-    public SetVerticalSync(aEnabled: Boolean): void;
-    public SetShader(aShader: TglrShaderProgramId): void;
-    public SetTexture(aTexture: TglrTextureId; aSampler: number): void;
-    public SetVertexBuffer(vBuffer: TglrVertexBuffer): void;
-    public SetIndexBuffer(iBuffer: TglrIndexBuffer): void;
-
-    public DrawTriangles(vBuffer: TglrVertexBuffer; iBuffer: TglrIndexBuffer;
-      aStartIndex, aIndicesCount: number): void;
-    public DrawPoints(vBuffer: TglrVertexBuffer; aStart, aVertCount: number): void;
-    public DrawScreenQuad(aMaterial: TglrMaterial): void;
-
     public textureBinds: number;
     public triCount: number;
     public dipCount: number;
     public width: number;
     public height: number;
-    
+
+    private _internalVB: VertexBuffer;
+    private _internalIB: IndexBuffer;
+
+    private _blendingMode: BlendingMode;
+    private _cullMode: CullMode;
+    private _polygonMode: PolygonMode;
+
+    private _depthWrite: boolean;
+    private _depthTest: boolean;
+    private _depthFunc: FuncComparison;
+
+    private _shader: ShaderId;
+    private _textureSampler: TextureId[] = new Array<TextureId>(TEXTURE_SAMPLERS_MAX);
+    private _activeSampler: number;
+    private _vertexBuffer: VertexBufferId;
+    private _indexBuffer: IndexBufferId;
+    private _frameBuffer: FrameBufferId;
+
+    private _statTextureBind: number
+    private _statTriCount: number;
+    private _statDIPCount: number;
+
+    private _width: number;
+    private _height: number;
+
+    constructor(private canvasElement: HTMLCanvasElement) {
+        const glContext = <WebGLRenderingContext>(canvasElement.getContext('webgl') || canvasElement.getContext('experimental-webgl'));
+        if (!glContext) {
+            console.log("GL initialize failed");
+            return;
+        }
+
+        WebGLRegisterService.registerWebGLContext(glContext);
+
+        this.initWebGL();
+    }
+
+    public resize(width: number, height: number): void {
+
+    }
+
+    public resetStates(): void {
+
+    }
+
+    public resetStatistics(): void {
+
+    }
+
+    public clear(clearMask: ClearMask): void {
+
+    }
+
+    public setClearColorRGB(r: number, g: number, b: number): void {
+
+    }
+
+    public setClearColorVec4(color: Vec4f): void {
+
+    }
+
+    public setClearColorVec3(color: Vec3f): void {
+
+    }
+
+    public setViewPort(left: number, top: number, width: number, height: number): void {
+
+    }
+
+    public setCullMode(cullMode: CullMode): void {
+
+    }
+
+    public setPolygonMode(polygonMode: PolygonMode): void {
+
+    }
+
+    public setBlendingMode(blendingMode: BlendingMode): void {
+
+    }
+
+    public setDepthWrite(enabled: boolean): void {
+
+    }
+
+    public setDepthTest(enabled: boolean): void {
+ 
+    }
+
+    public setDepthFunc(comparison: FuncComparison): void {
+
+    }
+
+    public setVerticalSync(enabled: boolean): void {
+
+    }
+
+    public setShader(shader: ShaderProgramId): void {
+
+    }
+
+    public setTexture(texture: TextureId, sampler: number): void {
+
+    }
+
+    public setVertexBuffer(vertexBuffer: VertexBuffer): void {
+
+    }
+
+    public setIndexBuffer(indexBuffer: IndexBuffer): void {
+
+    }
+
+    public drawTriangles(vertexBuffer: VertexBuffer, indexBuffer: IndexBuffer, startIndex: number, indicesCount: number): void {
+
+    }
+
+    public drawPoints(vertexBuffer: VertexBuffer, start: number, vertCount: number): void {
+
+    }
+
+    /*public drawScreenQuad(aMaterial: Material): void {
+        
+    }*/
 
     private initWebGL(): void {
 
     }
 
-    private createScreenQuad(): void;
-}*/
+    private createScreenQuad(): void {
+
+    }
+}

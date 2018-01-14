@@ -2,24 +2,29 @@ import { VertexFormat, VertexBufferId, VertexBufferUsage, VertexBufferMapAccess 
 import { gl } from "./webgl";
 
 export class VertexBuffer {
-  public id: VertexBufferId;
+  private buffer: WebGLBuffer;
 
-  private buffer: WebGLBuffer | null;
-/*
   private _vertexBufferUsage = [
-    VertexBufferUsage.StaticDraw: gl.STATIC_DRAW,
-
-  ];*/
+    {
+      key: VertexBufferUsage.StaticDraw,
+      value: gl.STATIC_DRAW,
+    },
+  ];
 
   constructor(
     data: number[],
     public count: number,
     public format: VertexFormat,
     public usage: VertexBufferUsage) {
-      this.buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+    
+      this.buffer = <WebGLBuffer>gl.createBuffer();
+    if (!this.buffer) {
+      console.log('Error while creating Vertex Buffer');
+      return;
+    }
 
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), usage)
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), usage);
   }
 
 
@@ -27,9 +32,8 @@ export class VertexBuffer {
 
   }
 
-
   public free(): void {
-
+    gl.deleteBuffer(this.buffer);
   }
 
   public update(data: any, start: number, count: number): void {

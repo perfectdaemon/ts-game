@@ -7,17 +7,24 @@ export type FrameBufferId = number;
 export type Index = number;
 
 
-export enum TextureFormat  { RGB8, RGBA8, BGR8, BGRA8 };
+export enum TextureFormat { RGB8, RGBA8, BGR8, BGRA8 };
 export enum VertexFormat { Pos2Tex2 = 0, Pos3Tex2, Pos3Tex2Nor3, Pos3Tex2Col4 };
-export enum IndexFormat  { Byte = 0, Short, ifInt };
+export enum IndexFormat { Byte = 0, Short, ifInt };
 
-export enum VertexAtrib { vaCoord = 0, vaNormal = 1, vaTexCoord0 = 2, vaTexCoord1 = 3, vaColor = 4};
+export enum VertexAtrib { vaCoord = 0, vaNormal = 1, vaTexCoord0 = 2, vaTexCoord1 = 3, vaColor = 4 };
 export enum VertexBufferMapAccess { Read, Write, ReadWrite };
 export enum VertexBufferUsage {
-    StreamDraw, StreamRead, StreamCopy,
-    StaticDraw, StaticRead, StaticCopy,
-    DynamicDraw, DynamicRead, DynamicCopy
+  StreamDraw, StreamRead, StreamCopy,
+  StaticDraw, StaticRead, StaticCopy,
+  DynamicDraw, DynamicRead, DynamicCopy
 };
+
+export enum BlendingMode { None, Alpha, Additive, Multiply, Screen };
+export enum CullMode { None, Back, Front };
+export enum FuncComparison { Never, Less, Equal, LessOrEqual, Greater, NotEqual, GreaterOrEqual, Always };
+export enum ClearMask { All, Color, Depth };
+export enum PolygonMode { Fill, Lines, Points };
+
 /*
   TglrVertexP2T2 = record
     vec, tex: TglrVec2f;
