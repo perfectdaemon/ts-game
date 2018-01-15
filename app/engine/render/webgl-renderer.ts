@@ -1,5 +1,5 @@
 import { Vector2 } from "../math/vector";
-import { BlendingMode, CullMode, FuncComparison, ShaderId, TextureId, VertexBufferId, IndexBufferId, FrameBufferId, ClearMask, ShaderProgramId, IndexFormat } from 'webgl-types';
+import { BlendingMode, CullMode, FuncComparison, ShaderId, TextureId, VertexBufferId, IndexBufferId, FrameBufferId, ClearMask, ShaderProgramId, IndexFormat, VertexFormat } from './webgl-types';
 import { VertexBuffer } from "./vertex-buffer";
 import { IndexBuffer } from "./index-buffer";
 import { WebGLRegisterService, gl } from "./webgl";
@@ -12,6 +12,8 @@ import { Texture } from "./texture";
 const TEXTURE_SAMPLERS_MAX = 8;
 
 export class WebGLRenderer {
+  public onMouseMove: (position: Vector2) => void;
+
   public renderParams: RenderParams = new RenderParams();
 
   public get textureBinds(): number { return this._statTextureBind; }
@@ -21,8 +23,8 @@ export class WebGLRenderer {
   public get width(): number { return this._width; }
   public get height(): number { return this._height; }
 
-  // private _internalVB: VertexBuffer;
-  // private _internalIB: IndexBuffer;
+  private _screenQuadVB: VertexBuffer;
+  private _screenQuadIB: IndexBuffer;
 
   private _blendingMode: BlendingMode;
   private _cullMode: CullMode;
@@ -59,6 +61,13 @@ export class WebGLRenderer {
     WebGLRegisterService.registerWebGLContext(glContext);
 
     this.initWebGL();
+    this.createScreenQuad();
+    this.initEvents();
+  }
+
+  public free(): void {
+    this._screenQuadVB.free();
+    this._screenQuadIB.free();
   }
 
   public resize(width: number, height: number): void {
@@ -95,11 +104,15 @@ export class WebGLRenderer {
   }
 
   public clear(clearMask: ClearMask): void {
-
+    switch (clearMask) {
+      case ClearMask.All: gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); break;
+      case ClearMask.Color: gl.clear(gl.COLOR_BUFFER_BIT); break;
+      case ClearMask.Depth: gl.clear(gl.DEPTH_BUFFER_BIT); break;
+    }
   }
 
-  public setClearColorRGB(r: number, g: number, b: number): void {
-    gl.clearColor(r, g, b, 1.0);
+  public setClearColorRGB(r: number, g: number, b: number, a: number): void {
+    gl.clearColor(r, g, b, a);
   }
 
   public setViewPort(left: number, top: number, width: number, height: number): void {
@@ -247,10 +260,49 @@ export class WebGLRenderer {
       GLSL: ${gl.getParameter(gl.SHADING_LANGUAGE_VERSION)}
       `;
     console.log(logInfo);
+
+    gl.viewport(0, 0, this.canvasElement.width, this.canvasElement.height);
+  }
+
+  private initEvents(): void {
+    const canvasWindowPosition = new Vector2(
+      this.canvasElement.getBoundingClientRect().left,
+      this.canvasElement.getBoundingClientRect().top
+    );
+
+    const canvasSize = new Vector2(
+        this.canvasElement.width,
+        this.canvasElement.height
+    );
+
+    this.canvasElement.onmousemove = event => {
+        if (!this.onMouseMove)
+            return;
+
+        this.onMouseMove(new Vector2(
+            event.pageX - canvasWindowPosition.x,
+            event.pageY - canvasWindowPosition.y
+        ));
+    }
   }
 
   private createScreenQuad(): void {
+    const vertexData = [
+      /*pos*/ 1, 1, 1, /*tex*/ 1, 0, /*col*/ 1, 1, 1, 1,
+      /*pos*/ 1, 0, 1, /*tex*/ 1, 1, /*col*/ 1, 1, 1, 1,
+      /*pos*/ 0, 0, 1, /*tex*/ 0, 1, /*col*/ 1, 1, 1, 1,
+      /*pos*/ 0, 1, 1, /*tex*/ 0, 0, /*col*/ 1, 1, 1, 1,
+    ];
 
+    const indexData = [
+      0, 1, 2, 2, 3, 0
+    ];
+
+    this._screenQuadVB = new VertexBuffer(VertexFormat.Pos3Tex2Col4, 4);
+    this._screenQuadIB = new IndexBuffer(IndexFormat.Byte, 6);
+
+    this._screenQuadVB.update(vertexData, 0);
+    this._screenQuadIB.update(indexData, 0);
   }
 
   private getWebGLComparison(comparison: FuncComparison): number {

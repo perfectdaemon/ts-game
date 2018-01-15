@@ -61,9 +61,9 @@ export class VertexBuffer {
     gl.deleteBuffer(this.buffer);
   }
 
-  public update(data: any, start: number): void {
+  public update(data: number[], start: number): void {
     this.bind();
-    gl.bufferSubData(gl.ARRAY_BUFFER, start, data);
+    gl.bufferSubData(gl.ARRAY_BUFFER, start, new Float32Array(data));
   }
 
   private getSizeFromFormat(format: VertexFormat): number {

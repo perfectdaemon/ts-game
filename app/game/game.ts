@@ -6,9 +6,9 @@ import { GameBase } from './../engine/game-base';
  * Main game class with game loop
  */
 export class Game extends GameBase {
-    
+
     private player: Player;
-    
+
     constructor (protected canvasElement: HTMLCanvasElement) {
         super(canvasElement);
     }
@@ -17,6 +17,7 @@ export class Game extends GameBase {
         console.log('Run, TypeScript, run!');
         this.player = new Player();
         this.player.position = new Vector2(400, 300);
+        this.renderer.setClearColorRGB(0.0, 0.2, 1.0, 0.5);
     }
 
     protected onUpdate(timestamp: number): void {
@@ -25,13 +26,12 @@ export class Game extends GameBase {
 
     protected onRender(timestamp: number): void {
         super.onRender(timestamp);
-
-        this.renderer.drawText(`Hello, world: ${timestamp}`, new Vector2(5, 10));
+        /*this.renderer.drawText(`Hello, world: ${timestamp}`, new Vector2(5, 10));
         this.renderer.drawText(`player position: ${this.player.position}`, new Vector2(5, 20));
         this.renderer.drawText(`player look: ${this.player.look}`, new Vector2(5, 30));
         this.renderer.drawText(`player look angle: ${this.player.look.toAngle()}`, new Vector2(5, 40));
-
-        this.player.render(this.renderer);
+        */
+        // this.player.render(this.renderer);
     }
 
     protected onMouseMove(position: Vector2): void {

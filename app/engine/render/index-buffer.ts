@@ -23,9 +23,21 @@ export class IndexBuffer {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffer);
   }
 
-  public update(data: any, start: number): void {
+  public update(data: number[], start: number): void {
     this.bind();
-    gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, start, data)
+
+    let iData: Uint8Array | Uint16Array | Uint32Array;
+
+    switch (this.format) {
+      case IndexFormat.Byte: iData = new Uint8Array(data); break;
+      case IndexFormat.Short: iData = new Uint16Array(data); break;
+      case IndexFormat.Int: iData = new Uint32Array(data); break;
+      default:
+        console.log(`IndexBuffer.update() - wrong format: ${this.format}`);
+        return;
+    }
+
+    gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, start, iData)
   }
 
   public static getSizeFromFormat(format: IndexFormat): number {
