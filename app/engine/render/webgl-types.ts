@@ -1,3 +1,6 @@
+import { Vector2, Vector3 } from "../math/vector";
+import { Vector4 } from "../math/vector4";
+
 export type TextureId = number;
 export type ShaderProgramId = number;
 export type ShaderId = number;
@@ -24,39 +27,22 @@ export enum CullMode { None, Back, Front };
 export enum FuncComparison { Never, Less, Equal, LessOrEqual, Greater, NotEqual, GreaterOrEqual, Always };
 export enum ClearMask { All, Color, Depth };
 
-/*
-  TglrVertexP2T2 = record
-    vec, tex: TglrVec2f;
-  end;
+export class VertexP2T2 {
+  vec: Vector2;
+  tex: Vector2;
+}
 
-  TglrVertexP3T2 = record
-    vec: TglrVec3f;
-    tex: TglrVec2f;
-  end;
+export class VertexP3T2 {
+  vec: Vector3;
+  tex: Vector2;
+}
 
-  TglrVertexP3T2N3 = record
-    vec: TglrVec3f;
-    tex: TglrVec2f;
-    nor: TglrVec3f;
-  end;
-  TglrVertexP3T2N3List = TglrList<TglrVertexP3T2N3>;
+export class VertexP3T2C4 {
+  vec: Vector3;
+  tex: Vector2;
+  col: Vector4;
+}
 
-  TglrVertexP3T2C4 = record
-    vec: TglrVec3f;
-    tex: TglrVec2f;
-    col: TglrVec4f;
-  end;
-
-  TglrQuadP3T2C4 = array[0..3] of TglrVertexP3T2C4;
-
-const VF_STRIDE: [{
-    [key: VertexFormat]: number
-}] = [
-
-]
-array[Low(TglrVertexFormat)..High(TglrVertexFormat)] of Integer =
-    (SizeOf(TglrVertexP2T2), SizeOf(TglrVertexP3T2), SizeOf(TglrVertexP3T2N3), SizeOf(TglrVertexP3T2C4));
-
-  IF_STRIDE: array[Low(TglrIndexFormat)..High(TglrIndexFormat)] of Integer =
-    (SizeOf(Byte), SizeOf(Word), SizeOf(LongWord));
-*/
+export class QuadP3T2C4 {
+  vertices: VertexP3T2C4[] = new Array<VertexP3T2C4>(4)
+}
