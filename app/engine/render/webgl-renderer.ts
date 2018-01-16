@@ -59,6 +59,7 @@ export class WebGLRenderer {
     }
 
     WebGLRegisterService.registerWebGLContext(glContext);
+    WebGLRegisterService.registerWebGLRenderer(this);
 
     this.initWebGL();
     this.createScreenQuad();
