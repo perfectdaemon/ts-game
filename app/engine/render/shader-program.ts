@@ -26,23 +26,28 @@ export class ShaderProgram {
       console.log('Shader Program create failed');
       return;
     }
-
   }
 
   public free(): void {
     gl.deleteProgram(this.program);
+    this.shaders.forEach(shader => {
+      gl.deleteShader(shader);
+    });
   }
 
   public bind(): void {
-    Render.SetShader(Self.Id);
+    gl.useProgram(this.program);
 
-    for i := 0 to Length(Uniforms) - 1 do
-      if Uniforms[i].fData <> nil then
-          SetUniform(i, Uniforms[i].fData);
+    for (let i = 0; i < this.uniforms.length; ++i) {
+      if (!this.uniforms[i].data) {
+        continue;
+      }
+      this.setUniform(i, this.uniforms[i].data);
+    }
   }
 
   public static unbind(): void {
-    Render.SetShader(0);
+    gl.useProgram(null);
   }
 
   public attach(source: string, shaderType: ShaderType, freeStreamOnFinish: boolean = true): void {
@@ -67,18 +72,14 @@ export class ShaderProgram {
     }
 
     if (shaderType === ShaderType.Vertex) {
-      for (let attribute in VertexAtrib) {
-        gl.bindAttribLocation()
+      // Gets only enum names
+      const vertexAttributes = Object.keys(VertexAtrib).filter(key => typeof VertexAtrib[key as any] === 'number');
+      for (let attribute in vertexAttributes) {
+        gl.bindAttribLocation(this.program, parseInt(VertexAtrib[attribute]), attribute);
       }
     }
 
     gl.attachShader(this.program, shader);
-
-    if (aShaderType = stVertex) then
-    for v := Low(TglrVertexAtrib) to High(TglrVertexAtrib) do
-      gl.BindAttribLocation(Self.Id, Ord(v), PAnsiChar(GetVertexAtribName(v)));
-
-  gl.AttachShader(Self.Id, ShadersId[i]);
   }
 
   public link(): void {
@@ -98,10 +99,6 @@ export class ShaderProgram {
 
   public setUniform(internalIndex: number, value: any): void {
 
-  }
-
-  private getVertexAtribName(attribute: VertexAtrib): string {
-    switch (att)
   }
 
   private getWebGLShaderType(shaderType: ShaderType): number {
