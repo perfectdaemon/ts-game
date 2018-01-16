@@ -23,7 +23,7 @@ export class ShaderProgram {
   constructor() {
     this.program = <WebGLProgram>gl.createProgram();
     if (!this.program) {
-      console.log('Shder Program create failed');
+      console.log('Shader Program create failed');
       return;
     }
 
