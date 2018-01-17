@@ -51,7 +51,7 @@ export class ShaderProgram {
     gl.useProgram(null);
   }
 
-  public attach(source: string, shaderType: ShaderType, freeStreamOnFinish: boolean = true): void {
+  public attach(shaderType: ShaderType, source: string): void {
     const glShaderType = this.getWebGLShaderType(shaderType);
     const shader = <WebGLShader>gl.createShader(glShaderType);
 
@@ -65,7 +65,7 @@ export class ShaderProgram {
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      console.log(`ShaderProgram.attach() failed - can't compile shader
+      console.log(`ShaderProgram.attach() failed - can't compile ${shaderType} shader
        InfoLog:`);
       const infoLog = gl.getShaderInfoLog(shader);
       console.log(infoLog);
@@ -76,6 +76,7 @@ export class ShaderProgram {
       // Gets only enum names
       const vertexAttributes = Object.keys(VertexAtrib).filter(key => typeof VertexAtrib[key as any] === 'number');
       for (let attribute in vertexAttributes) {
+        console.log(`Bind attrib ${attribute}, ${VertexAtrib[attribute]}`);
         gl.bindAttribLocation(this.program, parseInt(VertexAtrib[attribute]), attribute);
       }
     }
@@ -104,8 +105,8 @@ export class ShaderProgram {
     }
 
     // Set shared uniforms
-    this.addUniform(UniformType.Mat4, 1, 'uModelViewProj', renderer.renderParams.modelViewProjection);
-    this.addUniform(UniformType.Vec4, 1, 'uColor', renderer.renderParams.color);
+    // this.addUniform(UniformType.Mat4, 1, 'uModelViewProj', renderer.renderParams.modelViewProjection);
+    // this.addUniform(UniformType.Vec4, 1, 'uColor', renderer.renderParams.color);
 
     // Cleanup
     this.shaders.forEach(shader => gl.detachShader(this.program, shader));
