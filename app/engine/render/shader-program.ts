@@ -103,9 +103,12 @@ export class ShaderProgram {
       console.log(infoLog);
     }
 
-    //Set shared uniforms
+    // Set shared uniforms
     this.addUniform(UniformType.Mat4, 1, 'uModelViewProj', renderer.renderParams.modelViewProjection);
     this.addUniform(UniformType.Vec4, 1, 'uColor', renderer.renderParams.color);
+
+    // Cleanup
+    this.shaders.forEach(shader => gl.detachShader(this.program, shader));
   }
 
   public addUniform(uniformType: UniformType, count: number, name: string, data: any = null): number | null {
