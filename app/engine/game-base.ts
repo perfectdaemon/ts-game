@@ -42,6 +42,8 @@ export abstract class GameBase {
 
   protected onRender(timestamp: number): void {
     this.renderer.clear(ClearMask.All);
+    this.renderer.resetStates();
+    this.renderer.resetStatistics();
   }
 
   /**
