@@ -77,7 +77,7 @@ export class ShaderProgram {
       const vertexAttributes = Object.keys(VertexAtrib).filter(key => typeof VertexAtrib[key as any] === 'number');
       for (let attribute in vertexAttributes) {
         console.log(`Bind attrib ${attribute}, ${VertexAtrib[attribute]}`);
-        gl.bindAttribLocation(this.program, parseInt(VertexAtrib[attribute]), attribute);
+        gl.bindAttribLocation(this.program, parseInt(attribute), VertexAtrib[attribute]);
       }
     }
 
