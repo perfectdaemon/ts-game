@@ -11,6 +11,9 @@ export type Index = number;
 
 
 export enum TextureFormat { RGB8, RGBA8, BGR8, BGRA8 };
+export enum TextureWrap { Clamp, Repeat, ClampToEdge, ClampToBorder, MirrorRepeat };
+export enum TextureFilter { Nearest, Linear };
+
 export enum VertexFormat { Pos2Tex2 = 0, Pos3Tex2, Pos3Tex2Nor3, Pos3Tex2Col4 };
 export enum IndexFormat { Byte = 0, Short, Int };
 
