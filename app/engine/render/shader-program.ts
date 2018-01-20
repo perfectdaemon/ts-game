@@ -76,7 +76,6 @@ export class ShaderProgram {
       // Gets only enum names
       const vertexAttributes = Object.keys(VertexAtrib).filter(key => typeof VertexAtrib[key as any] === 'number');
       for (let attribute in vertexAttributes) {
-        console.log(`Bind attrib ${attribute}, ${VertexAtrib[attribute]}`);
         gl.bindAttribLocation(this.program, parseInt(attribute), VertexAtrib[attribute]);
       }
     }
@@ -123,6 +122,7 @@ export class ShaderProgram {
     let uniformInfo = new UniformInfo(uniformType, name, count, index, data);
     return this.uniforms.push(uniformInfo);
   }
+
   public getUniformIndexByName(name: string): WebGLUniformLocation | null {
     return this.uniforms.filter(uniform => uniform.name === name)[0].index || null;
   }
