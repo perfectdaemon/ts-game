@@ -34,7 +34,7 @@ export class WebGLRenderer {
   private _depthFunc: FuncComparison;
 
   private _shader: ShaderProgram | null;
-  private _textureSampler: Texture[] = new Array<Texture>(TEXTURE_SAMPLERS_MAX);
+  private _textureSampler: (Texture | null)[] = new Array<Texture>(TEXTURE_SAMPLERS_MAX);
   private _activeSampler: number;
   private _vertexBuffer: VertexBuffer | null;
   private _indexBuffer: IndexBuffer | null;
@@ -85,7 +85,7 @@ export class WebGLRenderer {
     this._activeSampler = -1;
 
     for (let i = 0; i < TEXTURE_SAMPLERS_MAX; ++i) {
-      this._textureSampler[i] = 0;
+      this._textureSampler[i] = null;
     }
 
     this._shader = null;
@@ -191,7 +191,7 @@ export class WebGLRenderer {
     this._shader = shader;
   }
 
-  public setTexture(texture: Texture, sampler: number): void {
+  public setTexture(texture: Texture | null, sampler: number): void {
     if (this._textureSampler[sampler] === texture) { return; }
 
     if (this._activeSampler !== sampler) {
