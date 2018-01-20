@@ -1,4 +1,4 @@
-import { Vector2 } from './math/vector';
+import { Vector2 } from './math/vector2';
 import { WebGLRenderer } from './render/webgl-renderer';
 import { ClearMask } from './render/webgl-types';
 
