@@ -1,4 +1,5 @@
 const path = require('path');
+const copy = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './app/main.ts',
@@ -17,5 +18,11 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
-  }
+  },
+  plugins: [
+    new copy([
+      {from: 'assets', to: 'assets', ignore: '.gitkeep'},
+      {from: 'index.html'}
+    ])
+  ]
 };
