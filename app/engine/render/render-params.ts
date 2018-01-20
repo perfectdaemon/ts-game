@@ -8,6 +8,6 @@ export class RenderParams {
   color: Vector4 = new Vector4(1, 1, 1, 1);
 
   public calculateMVP(): void {
-    this.modelViewProjection = this.viewProjection.multiply(this.model);
+    this.modelViewProjection = this.viewProjection.multiplyMat(this.model);
   }
 }
