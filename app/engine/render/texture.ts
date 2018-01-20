@@ -1,46 +1,46 @@
-import { TextureFormat, TextureWrap, TextureFilter } from "./webgl-types";
+import { TextureWrap, TextureFilter } from "./webgl-types";
 import { gl, renderer } from "./webgl";
 import { isPowerOf2 } from "../math/math-base";
 
 export class Texture {
   public texture: WebGLTexture;
+  public width: number;
+  public height: number;
 
-  constructor(file: string,
-    public width: number,
-    public height: number,
-    public format: TextureFormat) {
+  constructor(file: string) {
 
     this.texture = <WebGLTexture>gl.createTexture();
     if (this.texture === null) {
       console.log('Texture create failed - null returned');
       return;
     }
-
-    const [iFormat, cFormat, dType] = this.getWebGLFormats((format));
-
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
     const pixel = new Uint8Array([0, 0, 255, 255]);
-    gl.texImage2D(gl.TEXTURE_2D, 0, iFormat,
-      width, height, 0, cFormat, dType, pixel);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA,
+      1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
 
     // load
     const image = new Image();
     image.onload = event => {
-      gl.bindTexture(gl.TEXTURE_2D, this.texture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, iFormat,
-        cFormat, dType, image);
+      this.width = image.width;
+      this.height = image.height;
 
-      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-        gl.generateMipmap(gl.TEXTURE_2D);
-      } else {
+      gl.bindTexture(gl.TEXTURE_2D, this.texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+       if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+         gl.generateMipmap(gl.TEXTURE_2D);
+       } else {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      }
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+       }
 
       this.trySetAnisotropic(16);
-      gl.bindTexture(gl.TEXTURE_2D, null);
+
+      console.log(`Texture '${file}' loaded, width: ${this.width}, height: ${this.height}`);
     };
     image.src = file;
   }
@@ -86,10 +86,6 @@ export class Texture {
       default:
       case TextureFilter.Nearest: return gl.NEAREST;
     }
-  }
-
-  private getWebGLFormats(format: TextureFormat): [number, number, number] {
-    return [gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE];
   }
 
   private trySetAnisotropic(desiredAnisotropyLevel: number): void {

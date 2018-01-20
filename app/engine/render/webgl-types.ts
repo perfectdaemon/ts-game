@@ -9,8 +9,6 @@ export type VertexBufferId = number;
 export type FrameBufferId = number;
 export type Index = number;
 
-
-export enum TextureFormat { RGB8, RGBA8, BGR8, BGRA8 };
 export enum TextureWrap { Repeat, ClampToEdge, MirrorRepeat };
 export enum TextureFilter { Nearest, Linear };
 
