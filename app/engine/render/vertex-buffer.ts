@@ -1,4 +1,4 @@
-import { VertexFormat, VertexBufferId, VertexBufferUsage, VertexBufferMapAccess, VertexAtrib } from "./webgl-types";
+import { VertexFormat, VertexAtrib } from "./webgl-types";
 import { gl } from "./webgl";
 
 export class VertexBuffer {
@@ -74,13 +74,4 @@ export class VertexBuffer {
       case VertexFormat.Pos3Tex2Col4: return 36;
     }
   }
-  /*
-    public map(access: VertexBufferMapAccess = VertexBufferMapAccess.ReadWrite): any {
-      console.log('VertexBuffer.map is not implemented');
-      return null;
-    }
-
-    public unmap(): void {
-      console.log('VertexBuffer.unmap is not implemented');
-    }*/
 }

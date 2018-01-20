@@ -1,4 +1,4 @@
-import { VertexAtrib, ShaderProgramId, ShaderId } from "./webgl-types";
+import { VertexAtrib } from "./webgl-types";
 import { gl, renderer } from "./webgl";
 
 export enum ShaderType { Vertex, Fragment };

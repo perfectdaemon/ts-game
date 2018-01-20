@@ -1,5 +1,5 @@
 import { gl } from "./webgl";
-import { TextureId } from "./webgl-types";
+import { Texture } from "./texture";
 
 export class FrameBuffer {
   public buffer: WebGLBuffer;
@@ -24,10 +24,10 @@ export class FrameBuffer {
     gl.deleteBuffer(this.buffer);
   }
 
-  public attachTexture(textureId: TextureId): void {
+  public attachTexture(texture: Texture): void {
 
     this.bind();
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, textureId, 0);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture.texture, 0);
     FrameBuffer.unbind();
   }
 
