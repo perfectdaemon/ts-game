@@ -1,4 +1,4 @@
-import { Vector2 } from './../engine/math/vector';
+import { Vector2 } from './../engine/math/vector2';
 import { GameBase } from './../engine/game-base';
 import { VertexBuffer } from '../engine/render/vertex-buffer';
 import { IndexBuffer } from '../engine/render/index-buffer';

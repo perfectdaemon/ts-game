@@ -1,4 +1,4 @@
-import { Vector2 } from "../math/vector";
+import { Vector2 } from "../math/vector2";
 import { BlendingMode, CullMode, FuncComparison, ClearMask, IndexFormat, VertexFormat } from './webgl-types';
 import { VertexBuffer } from "./vertex-buffer";
 import { IndexBuffer } from "./index-buffer";
