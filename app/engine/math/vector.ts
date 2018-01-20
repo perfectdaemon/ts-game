@@ -29,18 +29,14 @@ export class Vector2 {
 
     normal(): Vector2 {
         const len = this.length();
-        
-        if (len < MathBase.eps) 
+
+        if (len < MathBase.eps)
             return new Vector2(0, 0);
-        
+
         return this.multiply(1 / len);
     }
 
     toString(): string {
         return `x: ${this.x}, y:${this.y}`;
     }
-}
-
-export class Vector3 {
-    constructor(public x: number, public y: number, public z: number) {}
 }
