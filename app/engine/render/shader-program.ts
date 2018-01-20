@@ -43,7 +43,7 @@ export class ShaderProgram {
       if (!this.uniforms[i].data) {
         continue;
       }
-      this.setUniform(i, this.uniforms[i].data);
+      this.setUniform(i);
     }
   }
 
@@ -131,10 +131,12 @@ export class ShaderProgram {
 
   }*/
 
-  public setUniform(internalIndex: number, value: any): void {
+  public setUniform(internalIndex: number, value?: any): void {
     let uniform = this.uniforms[internalIndex];
 
-    uniform.data = value;
+    if (value) {
+      uniform.data = value;
+    }
 
     switch (uniform.type) {
       case UniformType.Vec1: gl.uniform1fv(uniform.index, value); break;
