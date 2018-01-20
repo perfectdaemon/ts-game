@@ -26,7 +26,7 @@ export class WebGLRenderer {
   private _screenQuadVB: VertexBuffer;
   private _screenQuadIB: IndexBuffer;
 
-  private _blendingMode: BlendingMode;
+  private _blendingMode: BlendingMode = BlendingMode.None;
   private _cullMode: CullMode;
 
   private _depthWrite: boolean;
@@ -199,7 +199,8 @@ export class WebGLRenderer {
       this._activeSampler = sampler;
     }
 
-    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    gl.bindTexture(gl.TEXTURE_2D, texture === null ? null : texture.texture);
 
     this._textureSampler[sampler] = texture;
     ++this._statTextureBind;
