@@ -68,4 +68,14 @@ export class Matrix4 {
       - (right + left) / (right - left), -(top + bottom) / (top - bottom), -(zFar + zNear) / (zFar - zNear), 1
     ];
   }
+
+  public get position(): Vector3 {
+    return new Vector3(this.e[12], this.e[13], this.e[14]);
+  }
+
+  public set position(pos: Vector3) {
+    this.e[12] = pos.x;
+    this.e[13] = pos.y;
+    this.e[14] = pos.z;
+  }
 }
