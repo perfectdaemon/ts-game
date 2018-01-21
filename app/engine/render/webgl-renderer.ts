@@ -7,7 +7,7 @@ import { FrameBuffer } from "./frame-buffer";
 import { RenderParams } from "./render-params";
 import { ShaderProgram } from "./shader-program";
 import { Texture } from "./texture";
-
+import { Material } from "./material";
 
 const TEXTURE_SAMPLERS_MAX = 8;
 
@@ -249,9 +249,14 @@ export class WebGLRenderer {
 
   }
 
-  /*public drawScreenQuad(aMaterial: Material): void {
+  public drawScreenQuad(material: Material): void {
+    this.renderParams.viewProjection.ortho(0, 1, 1, 0, -1, 1);
+    this.renderParams.modelViewProjection = this.renderParams.viewProjection;
 
-  }*/
+    material.bind();
+    this.clear(ClearMask.All);
+    this.drawTriangles(this._screenQuadVB, this._screenQuadIB, 0, 6);
+  }
 
   private initWebGL(): void {
     const logInfo = `
