@@ -59,4 +59,13 @@ export class Matrix4 {
       0, 0, 0, 1
     ];
   }
+
+  public ortho(left: number, right: number, bottom: number, top: number, zNear: number, zFar: number): void {
+    this.e = [
+      2 / (right - left), 0, 0, 0,
+      0, 2 / (top - bottom), 0, 0,
+      0, 0, -2 / (zFar - zNear), 0
+      - (right + left) / (right - left), -(top + bottom) / (top - bottom), -(zFar + zNear) / (zFar - zNear), 1
+    ];
+  }
 }
