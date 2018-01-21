@@ -1,6 +1,6 @@
 import { MathBase } from './math-base';
 
-export class Vector {
+export class Vector2 {
     constructor(public x: number, public y: number) {}
 
     toAngle(): number {
@@ -15,24 +15,24 @@ export class Vector {
         return Math.sqrt(this.lengthQ());
     }
 
-    add(other: Vector): Vector {
-        return new Vector(this.x + other.x, this.y + other.y);
+    add(other: Vector2): Vector2 {
+        return new Vector2(this.x + other.x, this.y + other.y);
     }
 
-    subtract(other: Vector): Vector {
-        return new Vector(this.x - other.x, this.y - other.y);
+    subtract(other: Vector2): Vector2 {
+        return new Vector2(this.x - other.x, this.y - other.y);
     }
 
     multiply(value: number) {
-        return new Vector(this.x * value, this.y * value);
+        return new Vector2(this.x * value, this.y * value);
     }
 
-    normal(): Vector {
+    normal(): Vector2 {
         const len = this.length();
-        
-        if (len < MathBase.eps) 
-            return new Vector(0, 0);
-        
+
+        if (len < MathBase.eps)
+            return new Vector2(0, 0);
+
         return this.multiply(1 / len);
     }
 
