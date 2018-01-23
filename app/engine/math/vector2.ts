@@ -1,7 +1,17 @@
 import { MathBase } from './math-base';
+import { Vector3 } from './vector3';
 
 export class Vector2 {
     constructor(public x: number, public y: number) {}
+
+    static fromVector3(vector: Vector3): Vector2 {
+      return new Vector2(vector.x, vector.y);
+    }
+
+    set(x: number, y: number): void {
+      this.x = x;
+      this.y = y;
+    }
 
     toAngle(): number {
         return Math.atan2(this.y, this.x) * MathBase.rad2deg;
@@ -19,8 +29,22 @@ export class Vector2 {
         return new Vector2(this.x + other.x, this.y + other.y);
     }
 
+    addToSelf(other: Vector2): Vector2 {
+      this.x += other.x;
+      this.y += other.y;
+
+      return this;
+  }
+
     subtract(other: Vector2): Vector2 {
         return new Vector2(this.x - other.x, this.y - other.y);
+    }
+
+    subtractFromSelf(other: Vector2): Vector2 {
+      this.x -= other.x;
+      this.y -= other.y;
+
+      return this;
     }
 
     multiply(value: number) {

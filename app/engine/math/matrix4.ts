@@ -1,4 +1,5 @@
 import { Vector3 } from "./vector3";
+import { MathBase } from "./math-base";
 
 export class Matrix4 {
   public e: number[] = new Array<number>(
@@ -7,6 +8,33 @@ export class Matrix4 {
     0, 0, 1, 0,
     0, 0, 0, 1
   );
+
+  public static fromVectorAngle(delta: number, axis: Vector3): Matrix4 {
+    const sine = Math.sin(delta);
+    const cosine = Math.cos(delta);
+
+    const ic = 1 - cosine;
+
+    const xy = axis.x * axis.y,
+      yz = axis.y * axis.z,
+      zx = axis.z * axis.x,
+      xs = axis.x * sine,
+      ys = axis.y * sine,
+      zs = axis.z * sine,
+      icxy = ic * xy,
+      icyz = ic * yz,
+      iczx = ic * zx;
+
+    const matrix = new Matrix4();
+    matrix.e = [
+      ic * axis.x * axis.x + cosine, icxy + zs, iczx - ys, 0,
+      icxy - zs, ic * axis.y * axis.y + cosine, icyz + xs, 0,
+      iczx + ys, icyz - xs, ic * axis.z * axis.z + cosine, 0,
+      0, 0, 0, 1
+    ];
+
+    return matrix;
+  }
 
   public multiplyMat(other: Matrix4): Matrix4 {
     const result = new Matrix4();
@@ -33,6 +61,12 @@ export class Matrix4 {
     ];
 
     return result;
+  }
+
+  public multiplyMatSelf(other: Matrix4): Matrix4 {
+    this.e = this.multiplyMat(other).e;
+
+    return this;
   }
 
   public multiplyVec(vec: Vector3): Vector3 {
@@ -67,6 +101,38 @@ export class Matrix4 {
       0, 0, -2 / (zFar - zNear), 0
       - (right + left) / (right - left), -(top + bottom) / (top - bottom), -(zFar + zNear) / (zFar - zNear), 1
     ];
+  }
+
+  public perspective(fov: number, aspect: number, zNear: number, zFar: number): void {
+    fov = Math.min(179.9, Math.max(0, fov));
+    const y = zNear * Math.tan(fov * MathBase.deg2rad * 0.5);
+    const x = y * aspect;
+    this.frustum(-x, x, -y, y, zNear, zFar);
+  }
+
+  public frustum(left: number, right: number, bottom: number, top: number, zNear: number, zFar: number): void {
+    this.e = [
+      2 * zNear / (right - left), 0, 0, 0,
+      0, 2 * zNear / (top - bottom), 0, 0,
+      (right + left) / (right - left), (top + bottom) / (top - bottom), (zFar + zNear) / (zNear - zFar), -1,
+      0, 0, 2 * zFar * zNear / (zNear - zFar), 0
+    ];
+  }
+
+  public transpose(): Matrix4 {
+    const transposed = new Matrix4();
+
+    for (let row = 0; row < 4; ++row)
+      for (let col = 0; col < 4; ++col) {
+        transposed.e[row * 4 + col] = this.e[col * 4 + row];
+      }
+
+    return transposed;
+  }
+
+  public rotate(delta: number, axis: Vector3): void {
+    const rotateMatrix = Matrix4.fromVectorAngle(delta, axis);
+    this.multiplyMatSelf(rotateMatrix);
   }
 
   public get position(): Vector3 {

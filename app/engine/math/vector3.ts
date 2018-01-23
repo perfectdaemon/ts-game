@@ -36,6 +36,14 @@ export class Vector3 {
     return new Vector3(this.x + vector.x, this.y + vector.y, this.z + vector.z);
   }
 
+  public addToSelf(vector: Vector3): Vector3 {
+    this.x += vector.x;
+    this.y += vector.y;
+    this.z += vector.z;
+
+    return this;
+  }
+
   public subtract(vector: Vector3): Vector3 {
     return new Vector3(this.x - vector.x, this.y - vector.y, this.z - vector.z);
   }
@@ -83,5 +91,9 @@ export class Vector3 {
     this.z = -this.z;
 
     return this;
+  }
+
+  public negateVector(): Vector3 {
+    return new Vector3(-this.x, -this.y, -this.z);
   }
 }
