@@ -10,30 +10,30 @@ export class Matrix4 {
   );
 
   public static fromVectorAngle(delta: number, axis: Vector3): Matrix4 {
-    console.error("Matrix.fromVectorAngle is not implemented")
-    return new Matrix4();
+    const sine = Math.sin(delta);
+    const cosine = Math.cos(delta);
 
-    const sinus = Math.sin(delta);
-    const cosinus = Math.cos(delta);
+    const ic = 1 - cosine;
 
-    const ic = 1 - cosinus;
+    const xy = axis.x * axis.y,
+      yz = axis.y * axis.z,
+      zx = axis.z * axis.x,
+      xs = axis.x * sine,
+      ys = axis.y * sine,
+      zs = axis.z * sine,
+      icxy = ic * xy,
+      icyz = ic * yz,
+      iczx = ic * zx;
 
-    /*with Result, v.Normal do
-    begin
-      xy := x * y;
-      yz := y * z;
-      zx := z * x;
-      xs := x * s;
-      ys := y * s;
-      zs := z * s;
-      icxy := ic * xy;
-      icyz := ic * yz;
-      iczx := ic * zx;
-      e00 := ic * x * x + c;  e01 := icxy - zs;       e02 := iczx + ys;       e03 := 0.0;
-      e10 := icxy + zs;       e11 := ic * y * y + c;  e12 := icyz - xs;       e13 := 0.0;
-      e20 := iczx - ys;       e21 := icyz + xs;       e22 := ic * z * z + c;  e23 := 0.0;
-      e30 := 0.0;             e31 := 0.0;             e32 := 0.0;             e33 := 1.0;
-    end;*/
+    const matrix = new Matrix4();
+    matrix.e = [
+      ic * axis.x * axis.x + cosine, icxy + zs, iczx - ys, 0,
+      icxy - zs, ic * axis.y * axis.y + cosine, icyz + xs, 0,
+      iczx + ys, icyz - xs, ic * axis.z * axis.z + cosine, 0,
+      0, 0, 0, 1
+    ];
+
+    return matrix;
   }
 
   public multiplyMat(other: Matrix4): Matrix4 {
@@ -131,7 +131,7 @@ export class Matrix4 {
   }
 
   public rotate(delta: number, axis: Vector3): void {
-    const rotateMatrix = Matrix.FromVectorAngle(delta, axis);
+    const rotateMatrix = Matrix4.fromVectorAngle(delta, axis);
     this.multiplyMatSelf(rotateMatrix);
   }
 
