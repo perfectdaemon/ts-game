@@ -9,6 +9,16 @@ export enum CameraProjectionMode { Ortho, Perspective };
 export enum CameraPivot { TopLeft, Center, BottomRight };
 
 export class Camera extends Node {
+  public projectionMatrix: Matrix4;
+
+  public get scale(): number { return this._scale; }
+  public set scale(scale: number) {
+    if (scale === this._scale) { return; }
+
+    this._scale = scale;
+    this.rebuildProjectionMatrix();
+  }
+
   protected _projectionMode: CameraProjectionMode;
   protected _pivotMode: CameraPivot;
 
@@ -19,37 +29,35 @@ export class Camera extends Node {
 
   protected _x: number;
   protected _y: number;
-  protected _w: number;
-  protected _h: number;
+  protected _width: number;
+  protected _height: number;
 
   protected rebuildProjectionMatrix(): void {
     this.projectionMatrix.identity();
 
     switch (this._projectionMode) {
       case CameraProjectionMode.Perspective:
-        this.projectionMatrix.perspective(this._fov, this._w / this._h, this._zNear, this._zFar); break;
+        this.projectionMatrix.perspective(this._fov, this._width / this._height, this._zNear, this._zFar); break;
 
       case CameraProjectionMode.Ortho:
         const scale2 = 2 * this._scale;
 
         switch (this._pivotMode) {
           case CameraPivot.TopLeft:
-            this.projectionMatrix.ortho(0, this._w / this._scale, this._h / this._scale, 0, this._zNear, this._zFar);
+            this.projectionMatrix.ortho(0, this._width / this._scale, this._height / this._scale, 0, this._zNear, this._zFar);
             break;
 
           case CameraPivot.Center:
-            this.projectionMatrix.ortho(- this._w / scale2, this._w / scale2, this._h / scale2, - this._h / scale2, this._zNear, this._zFar);
+            this.projectionMatrix.ortho(- this._width / scale2, this._width / scale2, this._height / scale2, - this._height / scale2, this._zNear, this._zFar);
             break;
 
           case CameraPivot.BottomRight:
-            this.projectionMatrix.ortho(- this._w / scale2, 0, 0, - this._h / scale2, this._zNear, this._zFar);
+            this.projectionMatrix.ortho(- this._width / scale2, 0, 0, - this._height / scale2, this._zNear, this._zFar);
             break;
         }
         break;
     }
   }
-
-  public projectionMatrix: Matrix4;
 
   constructor() {
     super();
@@ -57,19 +65,19 @@ export class Camera extends Node {
     this.setViewParams(new Vector3(0, 0, 100), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
   }
 
-  public setProjectionParams(x: number, y: number, w: number, h: number): void {
-    w = w < 0 ? 1 : w;
-    h = h < 0 ? 1 : h;
+  public setProjectionParams(x: number, y: number, width: number, height: number): void {
+    width = width < 0 ? 1 : width;
+    height = height < 0 ? 1 : height;
 
     this._x = x;
     this._y = y;
-    this._w = w;
-    this._h = h;
+    this._width = width;
+    this._height = height;
 
     this.rebuildProjectionMatrix();
   }
 
-  public setProjectionParamsFull(x: number, y: number, w: number, h: number,
+  public setProjectionParamsFull(x: number, y: number, width: number, height: number,
     fov: number, zNear: number, zFar: number,
     projectionMode: CameraProjectionMode, pivotMode: CameraPivot): void {
     this._fov = fov;
@@ -78,7 +86,7 @@ export class Camera extends Node {
     this._projectionMode = projectionMode;
     this._pivotMode = pivotMode;
 
-    this.setProjectionParams(x, y, w, h);
+    this.setProjectionParams(x, y, width, height);
   }
 
   public setViewParams(position: Vector3, targetPosition: Vector3, up: Vector3): void {
@@ -115,23 +123,47 @@ export class Camera extends Node {
     this.updateVectorsFromMatrix();
   }
 
-  public get scale(): number { return this._scale; }
-  public set scale(scale: number) {
-    if (scale === this._scale) { return; }
-
-    this._scale = scale;
-    this.rebuildProjectionMatrix();
-  }
-
   public screenToWorld(screenPosition: Vector2): Vector3 {
+    if (this._projectionMode === CameraProjectionMode.Perspective) {
+      console.error('Camera.ScreenToWorld() with perpective camera is not implemented');
+      return new Vector3(0, 0, 0);
+    }
 
+    const result = Vector2
+      .fromVector3(this.position)
+      .addToSelf(screenPosition.multiply(1 / this._scale));
+
+    const pivotOffset = new Vector2(0, 0);
+
+    switch (this._pivotMode) {
+      case CameraPivot.Center:
+        pivotOffset.set(this._width / (2 * this._scale), this._height / (2 * this._scale));
+        break;
+
+      case CameraPivot.BottomRight:
+        pivotOffset.set(this._width / this._scale, this._height / this._scale);
+        break;
+    }
+
+    result.subtractFromSelf(pivotOffset);
+
+    return new Vector3(result.x, result.y, 0);
   }
 
   public renderSelf(): void {
-    super.renderSelf();
+    // nothing
   }
 
   public update(): void {
+    this.matrix.position.set(0, 0, 0);
+    this.matrix.position = this.matrix.multiplyVec(this.position.negateVector());
 
+    renderer.renderParams.viewProjection = this.projectionMatrix.multiplyMat(this.matrix);
+    renderer.renderParams.modelViewProjection = renderer.renderParams.viewProjection;
+    this.updateVectorsFromMatrix();
+
+    if (renderer.width !== this._width || renderer.height !== this._height) {
+      this.setProjectionParams(0, 0, renderer.width, renderer.height);
+    }
   }
 }
