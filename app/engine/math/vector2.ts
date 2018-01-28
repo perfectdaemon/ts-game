@@ -1,4 +1,4 @@
-import { MathBase } from './math-base';
+import { MathBase, isEqual } from './math-base';
 import { Vector3 } from './vector3';
 
 export class Vector2 {
@@ -11,6 +11,10 @@ export class Vector2 {
     set(x: number, y: number): void {
       this.x = x;
       this.y = y;
+    }
+
+    equalTo(other: Vector2): boolean {
+      return isEqual(this.x, other.x) && isEqual(this.y, other.y);
     }
 
     toAngle(): number {
