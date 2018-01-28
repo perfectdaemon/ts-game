@@ -1,6 +1,9 @@
 import { Node } from "./node";
 import { Vector2 } from "../math/vector2";
 import { TextureRegion } from "../render/texture-atlas";
+import { Vector4 } from "../math/vector4";
+import { isEqual, MathBase } from "../math/math-base";
+import { AXIS_Z } from "../math/vector3";
 
 export class Sprite extends Node {
   protected _rotation: number;
@@ -12,27 +15,180 @@ export class Sprite extends Node {
 
   constructor(width: number | null, height: number | null, pivotPoint: Vector2 | null) {
     super();
+    this._width = width || 1.0;
+    this._height = height || 1.0;
+    this._pivotPoint = pivotPoint || new Vector2(0.5, 0.5);
+
+    this.setDefaultVertices();
+    this.setDefaultTexCoords();
+    this.setVerticesColor(new Vector4(1, 1, 1, 1));
   }
 
   free(): void {
     super.free();
   }
-  /*
-      property Rotation: Single read fRot write SetRot;
-      property Width: Single read fWidth write SetWidth;
-      property Height: Single read fHeight write SetHeight;
-      property PivotPoint: TglrVec2f read fPP write SetPP;
 
-      procedure SetDefaultVertices(); virtual;//Sets vertices due to width, height, pivot point and rotation
-      procedure SetDefaultTexCoords(); //Sets default texture coords
-      procedure SetFlippedTexCoords();
-      procedure SetVerticesColor(aColor: TglrVec4f); virtual;
-      procedure SetVerticesAlpha(aAlpha: Single); virtual;
-      procedure SetSize(aWidth, aHeight: Single); overload;
-      procedure SetSize(aSize: TglrVec2f); overload;
+  get rotation(): number { return this._rotation; }
+  set rotation(value: number) {
+    if (isEqual(this._rotation, value)) { return; }
 
-      procedure SetTextureRegion(aRegion: PglrTextureRegion; aAdjustSpriteSize: Boolean = True); virtual;
-      function GetTextureRegion(): PglrTextureRegion;
-      procedure RenderSelf(); override;*/
-  end;
+    this.matrix.identity();
+    this.matrix.rotate(value * MathBase.deg2rad, AXIS_Z)
+
+    this._rotation = value;
+
+    if (this._rotation > 360) {
+      this._rotation -= 360;
+    } else if (this._rotation < -360) {
+      this._rotation += 360;
+    }
+  }
+
+  get width(): number { return this._width; }
+  set width(value: number) {
+    if (isEqual(this._width, value)) { return; }
+
+    this._width = value;
+    this.setDefaultVertices();
+  }
+
+  get height(): number { return this._height; }
+  set height(value: number) {
+    if (isEqual(this._height, value)) { return; }
+
+    this._height = value;
+    this.setDefaultVertices();
+  }
+
+  get pivotPoint(): Vector2 { return this._pivotPoint; }
+  set pivotPoint(value: Vector2) {
+    if (this._pivotPoint.equalTo(value)) { return; }
+
+    this._pivotPoint.set(value.x, value.y);
+    this.setDefaultVertices();
+  }
+
+  setDefaultVertices(): void {
+    this.vertices[0] = (1 - this.pivotPoint.x) * this._width;
+    this.vertices[1] = (1 - this.pivotPoint.y) * this._height;
+    this.vertices[2] = 0;
+
+    this.vertices[9] = (1 - this.pivotPoint.x) * this._width;
+    this.vertices[10] = (0 - this.pivotPoint.y) * this._height;
+    this.vertices[11] = 0;
+
+    this.vertices[18] = (0 - this.pivotPoint.x) * this._width;
+    this.vertices[19] = (0 - this.pivotPoint.y) * this._height;
+    this.vertices[20] = 0;
+
+    this.vertices[27] = (0 - this.pivotPoint.x) * this._width;
+    this.vertices[28] = (1 - this.pivotPoint.y) * this._height;
+    this.vertices[29] = 0;
+  }
+
+  setDefaultTexCoords(): void {
+    this.vertices[3] = 1;
+    this.vertices[4] = 1;
+
+    this.vertices[12] = 1;
+    this.vertices[13] = 0;
+
+    this.vertices[21] = 0;
+    this.vertices[22] = 0;
+
+    this.vertices[30] = 0;
+    this.vertices[31] = 1;
+  }
+
+  setFlippedTexCoords(): void {
+
+    this.vertices[3] = 1;
+    this.vertices[4] = 0;
+
+    this.vertices[12] = 1;
+    this.vertices[13] = 1;
+
+    this.vertices[21] = 0;
+    this.vertices[22] = 1;
+
+    this.vertices[30] = 0;
+    this.vertices[31] = 0;
+  }
+
+  setVerticesColor(color: Vector4): void {
+    for (let i = 5; i < 33; i += 9) {
+      this.vertices[i + 0] = color.x;
+      this.vertices[i + 1] = color.y;
+      this.vertices[i + 2] = color.z;
+      this.vertices[i + 3] = color.w;
+    }
+  }
+
+  setVerticesAlpha(alpha: number): void {
+    this.vertices[8] = alpha;
+    this.vertices[17] = alpha;
+    this.vertices[26] = alpha;
+    this.vertices[35] = alpha;
+  }
+
+  setSize(width: number, height: number): void {
+    if (isEqual(this._width, width) && isEqual(this._height, height)) {
+      return;
+    }
+
+    this._width = width;
+    this._height = height;
+    this.setDefaultVertices();
+  }
+
+  setSizeFromVector2(size: Vector2): void {
+    this.setSize(size.x, size.y);
+  }
+
+  setTextureRegion(region: TextureRegion, adjustSpriteSize: boolean = true): void {
+    this._textureRegion = region;
+
+    if (region.rotated) {
+      this.vertices[3] = region.tx;
+      this.vertices[4] = region.ty + region.th;
+
+      this.vertices[12] = region.tx + region.tw;
+      this.vertices[13] = region.ty + region.th;
+
+      this.vertices[21] = region.tx + region.tw;
+      this.vertices[22] = region.ty;
+
+      this.vertices[30] = region.tx;
+      this.vertices[31] = region.ty;
+
+      if (adjustSpriteSize) {
+        this.setSize(region.th * region.texture.height, region.tw * region.texture.width);
+      }
+    } else {
+      this.vertices[3] = region.tx + region.tw;
+      this.vertices[4] = region.ty + region.th;
+
+      this.vertices[12] = region.tx + region.tw;;
+      this.vertices[13] = region.ty;
+
+      this.vertices[21] = region.tx;
+      this.vertices[22] = region.ty;
+
+      this.vertices[30] = region.tx;
+      this.vertices[31] = region.ty + region.th;
+
+      if (adjustSpriteSize) {
+        this.setSize(region.tw * region.texture.width, region.th * region.texture.height);
+      }
+    }
+  }
+
+  getTextureRegion(): TextureRegion {
+    return this._textureRegion;
+  }
+
+  renderSelf(): void {
+    // nothing
+  }
+
 }
