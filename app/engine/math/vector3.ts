@@ -97,3 +97,5 @@ export class Vector3 {
     return new Vector3(-this.x, -this.y, -this.z);
   }
 }
+
+export const AXIS_Z: Vector3 = new Vector3(0, 0, 1);
