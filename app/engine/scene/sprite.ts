@@ -11,7 +11,7 @@ export class Sprite extends Node {
   protected _height: number;
   protected _pivotPoint: Vector2;
   protected _textureRegion: TextureRegion;
-  public vertices: number[];
+  public vertices: number[] = new Array(36);
 
   constructor(width: number | null, height: number | null, pivotPoint: Vector2 | null) {
     super();
@@ -26,6 +26,10 @@ export class Sprite extends Node {
 
   free(): void {
     super.free();
+  }
+
+  static getVerticesSize(): number {
+    return 36;
   }
 
   get rotation(): number { return this._rotation; }
