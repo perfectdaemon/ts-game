@@ -60,8 +60,9 @@ export class SpriteBatch {
   drawSingle(sprite: Sprite): void {
     if (!sprite.visible) { return; }
 
+    const vertices = sprite.getVerticesWithAbsoluteMatrix();
     for (let i = 0; i < SPRITE_VERTICES_SIZE; ++i) {
-      this._vertexData[this._count * SPRITE_VERTICES_SIZE + i] = sprite.vertices[i];
+      this._vertexData[this._count * SPRITE_VERTICES_SIZE + i] = vertices[i];
     }
 
     for (let i = 0; i < 6; ++i) {

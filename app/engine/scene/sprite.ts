@@ -3,7 +3,7 @@ import { Vector2 } from "../math/vector2";
 import { TextureRegion } from "../render/texture-atlas";
 import { Vector4 } from "../math/vector4";
 import { isEqual, MathBase } from "../math/math-base";
-import { AXIS_Z } from "../math/vector3";
+import { AXIS_Z, Vector3 } from "../math/vector3";
 
 export class Sprite extends Node {
   protected _rotation: number;
@@ -189,6 +189,39 @@ export class Sprite extends Node {
 
   getTextureRegion(): TextureRegion {
     return this._textureRegion;
+  }
+
+  getVerticesWithAbsoluteMatrix(): number[] {
+    const absMatrix = this.absoluteMatrix;
+
+    const vectors = [
+      new Vector3(this.vertices[0], this.vertices[1], this.vertices[2]),
+      new Vector3(this.vertices[9], this.vertices[10], this.vertices[11]),
+      new Vector3(this.vertices[18], this.vertices[19], this.vertices[20]),
+      new Vector3(this.vertices[27], this.vertices[28], this.vertices[29]),
+    ];
+
+    vectors.forEach(vector => vector = absMatrix.multiplyVec(vector));
+
+    const result = this.vertices.slice();
+
+    result[0] = vectors[0].x;
+    result[1] = vectors[0].y;
+    result[2] = vectors[0].z;
+
+    result[09] = vectors[1].x;
+    result[10] = vectors[1].y;
+    result[11] = vectors[1].z;
+
+    result[18] = vectors[2].x;
+    result[19] = vectors[2].y;
+    result[20] = vectors[2].z;
+
+    result[27] = vectors[3].x;
+    result[28] = vectors[3].y;
+    result[29] = vectors[3].z;
+
+    return result;
   }
 
   renderSelf(): void {
