@@ -14,7 +14,11 @@
       "check-format",
       "allow-leading-underscore"
     ],
-    "no-console": false
+    "no-console": false,
+    "max-classes-per-file": false,
+    "arrow-parens": false,
+    "forin": false,
+    "radix": false
   },
   "rulesDirectory": []
 }
