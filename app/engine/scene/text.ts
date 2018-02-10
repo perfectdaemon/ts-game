@@ -1,27 +1,27 @@
-import { Node } from "./node";
-import { Vector4 } from "../math/vector4";
-import { Vector2 } from "../math/vector2";
-import { isEqual } from "../math/math-base";
+import { isEqual } from '../math/math-base';
+import { Vector2 } from '../math/vector2';
+import { Vector4 } from '../math/vector4';
+import { Node } from './node';
 
-export enum HorizontalAlignment { Left, Center, Right };
+export enum HorizontalAlignment { Left, Center, Right }
 
 export class Text extends Node {
+  public text: string;
+
+  public horizontalAlignment: HorizontalAlignment;
+  public letterSpacing: number;
+  public lineSpacing: number;
+
+  public color: Vector4;
+  public scale: number;
+  public pivotPoint: Vector2;
+
+  public shadowEnabled: boolean;
+  public shadowOffset: Vector2;
+  public shadowColor: Vector4;
+
   private _textWidth: number;
   private _isTextWidthChanged: boolean;
-
-  text: string;
-
-  horizontalAlignment: HorizontalAlignment;
-  letterSpacing: number;
-  lineSpacing: number;
-
-  color: Vector4;
-  scale: number;
-  pivotPoint: Vector2;
-
-  shadowEnabled: boolean;
-  shadowOffset: Vector2;
-  shadowColor: Vector4;
 
   constructor(text: string = '') {
     super();
@@ -41,7 +41,7 @@ export class Text extends Node {
     this._isTextWidthChanged = false;
   }
 
-  free(): void {
+  public free(): void {
     super.free();
   }
 
@@ -53,7 +53,7 @@ export class Text extends Node {
     this._isTextWidthChanged = true;
   }
 
-  renderSelf(): void {
+  public renderSelf(): void {
     // nothing;
   }
 }
