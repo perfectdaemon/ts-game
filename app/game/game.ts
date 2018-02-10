@@ -1,10 +1,10 @@
-import { Vector2 } from './../engine/math/vector2';
-import { GameBase } from './../engine/game-base';
-import { VertexBuffer } from '../engine/render/vertex-buffer';
 import { IndexBuffer } from '../engine/render/index-buffer';
 import { ShaderProgram, ShaderType, UniformType } from '../engine/render/shader-program';
-import { VertexFormat, IndexFormat } from '../engine/render/webgl-types';
 import { Texture } from '../engine/render/texture';
+import { VertexBuffer } from '../engine/render/vertex-buffer';
+import { IndexFormat, VertexFormat } from '../engine/render/webgl-types';
+import { GameBase } from './../engine/game-base';
+import { Vector2 } from './../engine/math/vector2';
 
 /**
  * Main game class with game loop
@@ -14,7 +14,7 @@ export class Game extends GameBase {
   private vertexData = [
     0.0,  0.5, 0.0, 0.5, 0.0,   1.0, 1.0, 1.0, 1.0,
    -0.5, -0.5, 0.0, 0.0, 1.0,   1.0, 1.0, 1.0, 1.0,
-    0.5, -0.5, 0.0, 1.0, 1.0,   1.0, 1.0, 1.0, 1.0
+    0.5, -0.5, 0.0, 1.0, 1.0,   1.0, 1.0, 1.0, 1.0,
   ];
 
   private vertexShader = `
@@ -68,17 +68,17 @@ export class Game extends GameBase {
     this._shader.attach(ShaderType.Vertex, this.vertexShader);
     this._shader.attach(ShaderType.Fragment, this.fragmentShader);
     this._shader.link();
-    this._textureNumber = <number> this._shader.addUniform(UniformType.Sampler, 1, 'uDiffuse', 0);
+    this._textureNumber = this._shader.addUniform(UniformType.Sampler, 1, 'uDiffuse', 0) as number;
 
     this._texture = new Texture('assets/webgl.png');
   }
 
-  protected onUpdate(timestamp: number): void {
-
+  protected onUpdate(deltaTime: number): void {
+    // nothing
   }
 
-  protected onRender(timestamp: number): void {
-    super.onRender(timestamp);
+  protected onRender(): void {
+    super.onRender();
     this._vb.bind();
     this._texture.bind(0);
     this._shader.bind();
@@ -87,6 +87,6 @@ export class Game extends GameBase {
   }
 
   protected onMouseMove(position: Vector2): void {
-
+    // nothing
   }
 }
