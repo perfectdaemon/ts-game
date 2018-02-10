@@ -1,8 +1,8 @@
-import { VertexAtrib } from "./webgl-types";
-import { gl, renderer } from "./webgl";
+import { gl, renderer } from './webgl';
+import { VertexAtrib } from './webgl-types';
 
-export enum ShaderType { Vertex, Fragment };
-export enum UniformType { Vec1, Vec2, Vec3, Vec4, Mat4, Sampler, Int };
+export enum ShaderType { Vertex, Fragment }
+export enum UniformType { Vec1, Vec2, Vec3, Vec4, Mat4, Sampler, Int }
 
 export class UniformInfo {
   constructor(
@@ -14,17 +14,15 @@ export class UniformInfo {
 }
 
 export class ShaderProgram {
-  private linkStatus: number;
 
   public program: WebGLProgram;
   public shaders: WebGLShader[] = [];
   public uniforms: UniformInfo[] = [];
 
-
   constructor() {
-    this.program = <WebGLProgram>gl.createProgram();
+    this.program = gl.createProgram() as WebGLProgram;
     if (!this.program) {
-      console.log('ShaderProgram create failed');
+      console.error('ShaderProgram create failed');
       return;
     }
   }
@@ -53,7 +51,7 @@ export class ShaderProgram {
 
   public attach(shaderType: ShaderType, source: string): void {
     const glShaderType = this.getWebGLShaderType(shaderType);
-    const shader = <WebGLShader>gl.createShader(glShaderType);
+    const shader = gl.createShader(glShaderType) as WebGLShader;
 
     if (!shader) {
       console.log(`ShaderProgram.attach() failed - can't create shader with type ${glShaderType} (${shaderType})`);
@@ -75,7 +73,7 @@ export class ShaderProgram {
     if (shaderType === ShaderType.Vertex) {
       // Gets only enum names
       const vertexAttributes = Object.keys(VertexAtrib).filter(key => typeof VertexAtrib[key as any] === 'number');
-      for (let attribute in vertexAttributes) {
+      for (const attribute in vertexAttributes) {
         gl.bindAttribLocation(this.program, parseInt(attribute), VertexAtrib[attribute]);
       }
     }
@@ -94,7 +92,7 @@ export class ShaderProgram {
       console.log(infoLog);
     }
 
-    //Validate
+    // Validate
     gl.validateProgram(this.program);
     if (!gl.getProgramParameter(this.program, gl.VALIDATE_STATUS)) {
       console.log(`ShaderProgram.link() failed at validate
@@ -119,7 +117,7 @@ export class ShaderProgram {
       return null;
     }
 
-    let uniformInfo = new UniformInfo(uniformType, name, count, index, data);
+    const uniformInfo = new UniformInfo(uniformType, name, count, index, data);
     return this.uniforms.push(uniformInfo);
   }
 
@@ -132,7 +130,7 @@ export class ShaderProgram {
   }*/
 
   public setUniform(internalIndex: number, value?: any): void {
-    let uniform = this.uniforms[internalIndex];
+    const uniform = this.uniforms[internalIndex];
 
     if (value) {
       uniform.data = value;
