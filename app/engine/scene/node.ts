@@ -8,43 +8,30 @@ export class Node {
   public visible: boolean = true;
 
   public get parent(): Node | null { return this._parent; }
-  public get up(): Vector3 { return this._up; }
-  public get direction(): Vector3 { return this._dir; }
-  public get right(): Vector3 { return this._right; }
-
-  public get absoluteMatrix(): Matrix4 {
-    this.matrix.position = this.position;
-
-    this._absoluteMatrix = this._parent === null
-      ? this.matrix
-      : this._parent.absoluteMatrix.multiplyMat(this.matrix);
-
-    return this._absoluteMatrix;
-  }
-
-  protected _dir: Vector3 = new Vector3(0, 0, 0);
-  protected _right: Vector3 = new Vector3(0, 0, 0);
-  protected _up: Vector3 = new Vector3(0, 0, 0);
-  protected _parent: Node | null = null;
-  protected _absoluteMatrix: Matrix4;
-
-  constructor() {
-    this.matrix.identity();
-    this.parent = null;
-    this.updateVectorsFromMatrix();
-  }
-
-  public free(): void {
-    // nothing
-  }
-
-  public set absoluteMatrix(matrix: Matrix4) { this._absoluteMatrix = matrix; }
 
   public set parent(parent: Node | null) {
     if (this._parent === parent) { return; }
 
     this._parent = parent;
   }
+
+  public get up(): Vector3 { return this._up; }
+
+  public set up(up: Vector3) {
+    if (up === this._up) { return; }
+
+    up.normalize();
+    const newRight = up
+      .cross(this._dir)
+      .negate()
+      .normalize();
+    const newDirection = newRight
+      .cross(this._up)
+      .normalize();
+    this.updateModelMatrix(newDirection, up, newRight);
+  }
+
+  public get direction(): Vector3 { return this._dir; }
 
   public set direction(direction: Vector3) {
     if (direction === this._dir) { return; }
@@ -60,6 +47,8 @@ export class Node {
     this.updateModelMatrix(direction, newUp, newRight);
   }
 
+  public get right(): Vector3 { return this._right; }
+
   public set right(right: Vector3) {
     if (right === this._right) { return; }
 
@@ -73,18 +62,32 @@ export class Node {
     this.updateModelMatrix(newDirection, newUp, right);
   }
 
-  public set up(up: Vector3) {
-    if (up === this._up) { return; }
+  public get absoluteMatrix(): Matrix4 {
+    this.matrix.position = this.position;
 
-    up.normalize();
-    const newRight = up
-      .cross(this._dir)
-      .negate()
-      .normalize();
-    const newDirection = newRight
-      .cross(this._up)
-      .normalize();
-    this.updateModelMatrix(newDirection, up, newRight);
+    this._absoluteMatrix = this._parent === null
+      ? this.matrix
+      : this._parent.absoluteMatrix.multiplyMat(this.matrix);
+
+    return this._absoluteMatrix;
+  }
+
+  public set absoluteMatrix(matrix: Matrix4) { this._absoluteMatrix = matrix; }
+
+  protected _dir: Vector3 = new Vector3(0, 0, 0);
+  protected _right: Vector3 = new Vector3(0, 0, 0);
+  protected _up: Vector3 = new Vector3(0, 0, 0);
+  protected _parent: Node | null = null;
+  protected _absoluteMatrix: Matrix4 = new Matrix4();
+
+  constructor() {
+    this.matrix.identity();
+    this.parent = null;
+    this.updateVectorsFromMatrix();
+  }
+
+  public free(): void {
+    // nothing
   }
 
   public renderSelf(): void {
@@ -103,7 +106,7 @@ export class Node {
       right.x, up.x, dir.x, 0,
       right.y, up.y, dir.y, 0,
       right.z, up.z, dir.z, 0,
-      this.position.dot(right), this.position.dot(up), this.position.dot(dir)
+      this.position.dot(right), this.position.dot(up), this.position.dot(dir),
     ];
 
     this._dir = dir;
@@ -117,5 +120,7 @@ export class Node {
     this._dir.set(this.matrix.e[2], this.matrix.e[6], this.matrix.e[10]);
   }
 
-  protected doRender(): void { }
+  protected doRender(): void {
+    // nothing
+  }
 }

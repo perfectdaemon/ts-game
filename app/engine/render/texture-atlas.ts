@@ -1,14 +1,14 @@
-import { Texture } from "./texture";
-import { AssetLoader } from "../helpers/asset-loader";
+import { AssetLoader } from '../helpers/asset-loader';
+import { Texture } from './texture';
 
 export class TextureRegion {
-  texture: Texture;
-  name: string;
-  tx: number;
-  ty: number;
-  tw: number;
-  th: number;
-  rotated: boolean;
+  public texture: Texture;
+  public name: string;
+  public tx: number;
+  public ty: number;
+  public tw: number;
+  public th: number;
+  public rotated: boolean;
 }
 
 export class TextureAtlas extends Texture {
@@ -22,11 +22,11 @@ export class TextureAtlas extends Texture {
     console.error(`new TextureAtlas() is not implemented`);
   }
 
-  free(): void {
+  public free(): void {
     super.free();
   }
 
-  getRegion(name: string): TextureRegion {
+  public getRegion(name: string): TextureRegion {
     const result = this._regions.filter(region => region.name === name);
 
     if (result.length === 0) {

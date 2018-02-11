@@ -6,6 +6,11 @@ import { TextureRegion } from '../render/texture-atlas';
 import { Node } from './node';
 
 export class Sprite extends Node {
+
+  public static getVerticesSize(): number {
+    return 36;
+  }
+
   public vertices: number[] = new Array<number>(36);
 
   protected _rotation: number = 0;
@@ -29,16 +34,12 @@ export class Sprite extends Node {
     super.free();
   }
 
-  public static getVerticesSize(): number {
-    return 36;
-  }
-
   get rotation(): number { return this._rotation; }
   set rotation(value: number) {
     if (isEqual(this._rotation, value)) { return; }
 
     this.matrix.identity();
-    this.matrix.rotate(value * MathBase.deg2rad, AXIS_Z)
+    this.matrix.rotate(value * MathBase.deg2rad, AXIS_Z);
 
     this._rotation = value;
 

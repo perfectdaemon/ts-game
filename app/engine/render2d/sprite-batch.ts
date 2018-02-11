@@ -1,8 +1,8 @@
-import { Sprite } from "../scene/sprite";
-import { VertexBuffer } from "../render/vertex-buffer";
-import { IndexBuffer } from "../render/index-buffer";
-import { VertexFormat, IndexFormat } from "../render/webgl-types";
-import { renderer } from "../render/webgl";
+import { IndexBuffer } from '../render/index-buffer';
+import { VertexBuffer } from '../render/vertex-buffer';
+import { renderer } from '../render/webgl';
+import { IndexFormat, VertexFormat } from '../render/webgl-types';
+import { Sprite } from '../scene/sprite';
 
 const SPRITE_INDICES: number[] = [0, 1, 2, 2, 3, 0];
 const SPRITE_VERTICES_SIZE = Sprite.getVerticesSize();
@@ -48,7 +48,7 @@ export class SpriteBatch {
     if (this._count === 0) { return; }
 
     this._vertexBuffer.update(this._vertexData, 0);
-    this._indexBuffer.update(this._indexData, 0)
+    this._indexBuffer.update(this._indexData, 0);
     renderer.renderParams.modelViewProjection = renderer.renderParams.viewProjection;
     renderer.drawTriangles(this._vertexBuffer, this._indexBuffer, 0, this._count * 6);
   }

@@ -1,4 +1,4 @@
-import { WebGLRenderer } from "./webgl-renderer";
+import { WebGLRenderer } from './webgl-renderer';
 
 export let gl: WebGLRenderingContext;
 export let renderer: WebGLRenderer;

@@ -1,12 +1,12 @@
-import { Node } from "./node";
-import { Matrix4 } from "../math/matrix4";
-import { Vector3 } from "../math/vector3";
-import { Vector2 } from "../math/vector2";
-import { renderer } from "../render/webgl";
+import { Matrix4 } from '../math/matrix4';
+import { Vector2 } from '../math/vector2';
+import { Vector3 } from '../math/vector3';
+import { renderer } from '../render/webgl';
+import { Node } from './node';
 
-export enum CameraProjectionMode { Ortho, Perspective };
+export enum CameraProjectionMode { Ortho, Perspective }
 
-export enum CameraPivot { TopLeft, Center, BottomRight };
+export enum CameraPivot { TopLeft, Center, BottomRight }
 
 export class Camera extends Node {
   public projectionMatrix: Matrix4 = new Matrix4();
@@ -34,7 +34,9 @@ export class Camera extends Node {
 
   constructor() {
     super();
-    this.setProjectionParamsFull(0, 0, renderer.width, renderer.height, 45, 0.01, 100, CameraProjectionMode.Ortho, CameraPivot.TopLeft);
+    this.setProjectionParamsFull(0, 0, renderer.width, renderer.height,
+      45, 0.01, 100,
+      CameraProjectionMode.Ortho, CameraPivot.TopLeft);
     this.setViewParams(new Vector3(0, 0, 100), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
   }
 
@@ -77,7 +79,7 @@ export class Camera extends Node {
       this._right.x, this._right.y, this._right.z, this._right.negateVector().dot(this.position),
       this._up.x, this._up.y, this._up.z, this._up.negateVector().dot(this.position),
       this._dir.x, this._dir.y, this._dir.z, this._dir.negateVector().dot(this.position),
-      0, 0, 0, 1
+      0, 0, 0, 1,
     ];
 
     this.matrix = this.matrix.transpose();
@@ -152,11 +154,15 @@ export class Camera extends Node {
 
         switch (this._pivotMode) {
           case CameraPivot.TopLeft:
-            this.projectionMatrix.ortho(0, this._width / this._scale, this._height / this._scale, 0, this._zNear, this._zFar);
+            this.projectionMatrix.ortho(0, this._width / this._scale, this._height / this._scale, 0,
+              this._zNear, this._zFar);
             break;
 
           case CameraPivot.Center:
-            this.projectionMatrix.ortho(- this._width / scale2, this._width / scale2, this._height / scale2, - this._height / scale2, this._zNear, this._zFar);
+            this.projectionMatrix.ortho(
+              -this._width / scale2, this._width / scale2,
+              this._height / scale2, -this._height / scale2,
+              this._zNear, this._zFar);
             break;
 
           case CameraPivot.BottomRight:

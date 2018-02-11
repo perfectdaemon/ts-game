@@ -7,7 +7,7 @@ export class AssetLoader {
    * Return empty string if no element found
    */
   public static getElementDataOrEmpty(elementId: string): string {
-    const element = <HTMLElement>document.getElementById(elementId);
+    const element = document.getElementById(elementId) as HTMLElement;
 
     if (!element) {
       return '';
@@ -32,7 +32,7 @@ export class AssetLoader {
         } else {
           reject({
             status: request.status,
-            statusText: request.statusText
+            statusText: request.statusText,
           });
         }
       };
@@ -40,7 +40,7 @@ export class AssetLoader {
       request.onerror = () => {
         reject({
           status: request.status,
-          statusText: request.statusText
+          statusText: request.statusText,
         });
       };
 

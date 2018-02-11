@@ -1,13 +1,13 @@
-import { Vector2 } from "../math/vector2";
-import { BlendingMode, CullMode, FuncComparison, ClearMask, IndexFormat, VertexFormat } from './webgl-types';
-import { VertexBuffer } from "./vertex-buffer";
-import { IndexBuffer } from "./index-buffer";
-import { WebGLRegisterService, gl } from "./webgl";
-import { FrameBuffer } from "./frame-buffer";
-import { RenderParams } from "./render-params";
-import { ShaderProgram } from "./shader-program";
-import { Texture } from "./texture";
-import { Material } from "./material";
+import { Vector2 } from '../math/vector2';
+import { FrameBuffer } from './frame-buffer';
+import { IndexBuffer } from './index-buffer';
+import { Material } from './material';
+import { RenderParams } from './render-params';
+import { ShaderProgram } from './shader-program';
+import { Texture } from './texture';
+import { VertexBuffer } from './vertex-buffer';
+import { gl, WebGLRegisterService } from './webgl';
+import { BlendingMode, ClearMask, CullMode, FuncComparison, IndexFormat, VertexFormat } from './webgl-types';
 
 const TEXTURE_SAMPLERS_MAX = 8;
 
@@ -35,27 +35,27 @@ export class WebGLRenderer {
   private _depthFunc: FuncComparison;
 
   private _shader: ShaderProgram | null;
-  private _textureSampler: (Texture | null)[] = new Array<Texture>(TEXTURE_SAMPLERS_MAX);
+  private _textureSampler: Array<Texture | null> = new Array<Texture>(TEXTURE_SAMPLERS_MAX);
   private _activeSampler: number;
   private _vertexBuffer: VertexBuffer | null;
   private _indexBuffer: IndexBuffer | null;
   private _frameBuffer: FrameBuffer | null;
 
-  private _statTextureBind: number
-  private _statTriCount: number;
-  private _statDIPCount: number;
+  private _statTextureBind: number = 0;
+  private _statTriCount: number = 0;
+  private _statDIPCount: number = 0;
 
   private _width: number;
   private _height: number;
 
   constructor(private canvasElement: HTMLCanvasElement) {
-    const glContext = <WebGLRenderingContext>(
+    const glContext = (
       canvasElement.getContext('webgl') ||
       canvasElement.getContext('experimental-webgl')
-    );
+    ) as WebGLRenderingContext;
 
     if (!glContext) {
-      console.log("GL initialize failed");
+      console.log('GL initialize failed');
       return;
     }
 
@@ -107,6 +107,7 @@ export class WebGLRenderer {
 
   public clear(clearMask: ClearMask): void {
     switch (clearMask) {
+      // tslint:disable-next-line:no-bitwise
       case ClearMask.All: gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); break;
       case ClearMask.Color: gl.clear(gl.COLOR_BUFFER_BIT); break;
       case ClearMask.Depth: gl.clear(gl.DEPTH_BUFFER_BIT); break;
@@ -231,7 +232,10 @@ export class WebGLRenderer {
     this._indexBuffer = indexBuffer;
   }
 
-  public drawTriangles(vertexBuffer: VertexBuffer, indexBuffer: IndexBuffer, startIndex: number, indicesCount: number): void {
+  public drawTriangles(
+    vertexBuffer: VertexBuffer, indexBuffer: IndexBuffer,
+    startIndex: number, indicesCount: number,
+  ): void {
     this.setVertexBuffer(vertexBuffer);
     this.setIndexBuffer(indexBuffer);
 
@@ -244,10 +248,6 @@ export class WebGLRenderer {
 
     ++this._statDIPCount;
     this._statTriCount += Math.floor(indicesCount / 3);
-  }
-
-  public drawPoints(vertexBuffer: VertexBuffer, start: number, vertCount: number): void {
-
   }
 
   public drawScreenQuad(material: Material): void {
@@ -275,22 +275,23 @@ export class WebGLRenderer {
   private initEvents(): void {
     const canvasWindowPosition = new Vector2(
       this.canvasElement.getBoundingClientRect().left,
-      this.canvasElement.getBoundingClientRect().top
+      this.canvasElement.getBoundingClientRect().top,
     );
 
     const canvasSize = new Vector2(
-        this.canvasElement.width,
-        this.canvasElement.height
+      this.canvasElement.width,
+      this.canvasElement.height,
     );
 
     this.canvasElement.onmousemove = event => {
-        if (!this.onMouseMove)
-            return;
+      if (!this.onMouseMove) {
+        return;
+      }
 
-        this.onMouseMove(new Vector2(
-            event.pageX - canvasWindowPosition.x,
-            event.pageY - canvasWindowPosition.y
-        ));
+      this.onMouseMove(new Vector2(
+        event.pageX - canvasWindowPosition.x,
+        event.pageY - canvasWindowPosition.y,
+      ));
     };
 
     this.canvasElement.onmousedown = event => {
@@ -300,7 +301,8 @@ export class WebGLRenderer {
 
       this.onMouseDown(new Vector2(
         event.pageX - canvasWindowPosition.x,
-        event.pageY - canvasWindowPosition.y));
+        event.pageY - canvasWindowPosition.y,
+      ));
     };
   }
 
@@ -312,9 +314,7 @@ export class WebGLRenderer {
       /*pos*/ 0, 1, 1, /*tex*/ 0, 0, /*col*/ 1, 1, 1, 1,
     ];
 
-    const indexData = [
-      0, 1, 2, 2, 3, 0
-    ];
+    const indexData = [0, 1, 2, 2, 3, 0];
 
     this._screenQuadVB = new VertexBuffer(VertexFormat.Pos3Tex2Col4, 4);
     this._screenQuadIB = new IndexBuffer(IndexFormat.Byte, 6);
