@@ -1,12 +1,12 @@
 import { Vector2 } from '../../engine/math/vector2';
+import { Vector3 } from '../../engine/math/vector3';
 import { Material } from '../../engine/render/material';
-import { SpriteBatch } from '../../engine/render2d/sprite-batch';
-import { GameBase } from './../../engine/game-base';
 import { ShaderProgram, ShaderType } from '../../engine/render/shader-program';
 import { Texture } from '../../engine/render/texture';
+import { SpriteBatch } from '../../engine/render2d/sprite-batch';
+import { Camera, CameraPivot, CameraProjectionMode } from '../../engine/scene/camera';
 import { Sprite } from '../../engine/scene/sprite';
-import { Camera, CameraProjectionMode, CameraPivot } from '../../engine/scene/camera';
-import { Vector3 } from '../../engine/math/vector3';
+import { GameBase } from './../../engine/game-base';
 
 export class Game extends GameBase {
 
@@ -53,7 +53,7 @@ export class Game extends GameBase {
   }
 
   protected onInit(): void {
-    this.renderer.setClearColorRGB(0.0, 0.2, 1.0, 0.5);
+    this.renderer.setClearColorRGB(0.1, 0.2, 0.2, 0.5);
 
     this._shader = new ShaderProgram();
     this._shader.attach(ShaderType.Vertex, this.vertexShader);
@@ -65,10 +65,10 @@ export class Game extends GameBase {
     this._material = new Material(this._shader);
     this._material.addTexture(this._texture, 'uDiffuse');
 
-    for (let i = 0; i < 100; ++i) {
+    for (let i = 0; i < 300; ++i) {
       const sprite = new Sprite(30, 30);
       sprite.rotation = Math.random() * 360;
-      sprite.position.set(800 * Math.random(), 600 * Math.random(), 1);
+      sprite.position.set(this.renderer.width * Math.random(), this.renderer.height * Math.random(), 1);
       this._sprites.push(sprite);
     }
 
