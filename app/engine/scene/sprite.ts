@@ -202,7 +202,9 @@ export class Sprite extends Node {
       new Vector3(this.vertices[27], this.vertices[28], this.vertices[29]),
     ];
 
-    vectors.forEach(vector => vector = absMatrix.multiplyVec(vector));
+    for (let i = 0; i < vectors.length; ++i) {
+      vectors[i] = absMatrix.multiplyVec(vectors[i]);
+    }
 
     const result = this.vertices.slice();
 
