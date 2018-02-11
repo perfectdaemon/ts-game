@@ -2,12 +2,12 @@ import { Vector3 } from "./vector3";
 import { MathBase } from "./math-base";
 
 export class Matrix4 {
-  public e: number[] = new Array<number>(
+  public e: number[] = [
     1, 0, 0, 0,
     0, 1, 0, 0,
     0, 0, 1, 0,
-    0, 0, 0, 1
-  );
+    0, 0, 0, 1,
+  ];
 
   public static fromVectorAngle(delta: number, axis: Vector3): Matrix4 {
     const sine = Math.sin(delta);
@@ -98,7 +98,7 @@ export class Matrix4 {
     this.e = [
       2 / (right - left), 0, 0, 0,
       0, 2 / (top - bottom), 0, 0,
-      0, 0, -2 / (zFar - zNear), 0
+      0, 0, -2 / (zFar - zNear), 0,
       - (right + left) / (right - left), -(top + bottom) / (top - bottom), -(zFar + zNear) / (zFar - zNear), 1
     ];
   }

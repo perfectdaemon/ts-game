@@ -89,4 +89,8 @@ export class Game extends GameBase {
   protected onMouseMove(position: Vector2): void {
     // nothing
   }
+
+  protected onMouseDown(position: Vector2): void {
+    // nothing
+  }
 }

@@ -8,4 +8,8 @@ export class Vector4 {
     this.z = z;
     this.w = w;
   }
+
+  public asArray(): number[] {
+    return [this.x, this.y, this.z, this.w];
+  }
 }

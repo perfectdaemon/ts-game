@@ -102,8 +102,8 @@ export class ShaderProgram {
     }
 
     // Set shared uniforms
-    // this.addUniform(UniformType.Mat4, 1, 'uModelViewProj', renderer.renderParams.modelViewProjection);
-    // this.addUniform(UniformType.Vec4, 1, 'uColor', renderer.renderParams.color);
+    this.addUniform(UniformType.Mat4, 1, 'uModelViewProj', renderer.renderParams.modelViewProjection.e);
+    this.addUniform(UniformType.Vec4, 1, 'uColor', renderer.renderParams.color.asArray());
 
     // Cleanup
     this.shaders.forEach(shader => gl.detachShader(this.program, shader));
@@ -137,14 +137,31 @@ export class ShaderProgram {
     }
 
     switch (uniform.type) {
-      case UniformType.Vec1: gl.uniform1fv(uniform.index, value); break;
-      case UniformType.Vec2: gl.uniform2fv(uniform.index, value); break;
-      case UniformType.Vec3: gl.uniform3fv(uniform.index, value); break;
-      case UniformType.Vec4: gl.uniform4fv(uniform.index, value); break;
-      case UniformType.Mat4: gl.uniformMatrix4fv(uniform.index, false, value); break;
-      case UniformType.Sampler: gl.uniform1iv(uniform.index, value); break;
-      case UniformType.Int: gl.uniform1iv(uniform.index, value); break;
+      case UniformType.Vec1: gl.uniform1fv(uniform.index, uniform.data); break;
+      case UniformType.Vec2: gl.uniform2fv(uniform.index, uniform.data); break;
+      case UniformType.Vec3: gl.uniform3fv(uniform.index, uniform.data); break;
+      case UniformType.Vec4: gl.uniform4fv(uniform.index, uniform.data); break;
+      case UniformType.Mat4: gl.uniformMatrix4fv(uniform.index, false, uniform.data); break;
+      case UniformType.Sampler: gl.uniform1iv(uniform.index, uniform.data); break;
+      case UniformType.Int: gl.uniform1iv(uniform.index, uniform.data); break;
     }
+  }
+
+  public updateUniformValue(name: string, value: any): void {
+    let index = -1;
+    for (let i = 0; i < this.uniforms.length; ++i) {
+      if (this.uniforms[i].name === name) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index === -1) {
+      console.error(`Uniform of name '${name}' was not found`);
+      return;
+    }
+
+    this.uniforms[index].data = value;
   }
 
   private getWebGLShaderType(shaderType: ShaderType): number {

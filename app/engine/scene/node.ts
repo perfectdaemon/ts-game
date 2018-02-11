@@ -1,11 +1,11 @@
-import { Vector3 } from "../math/vector3";
-import { Matrix4 } from "../math/matrix4";
-import { renderer } from "../render/webgl";
+import { Matrix4 } from '../math/matrix4';
+import { Vector3 } from '../math/vector3';
+import { renderer } from '../render/webgl';
 
 export class Node {
-  public matrix: Matrix4;
-  public position: Vector3;
-  public visible: boolean;
+  public matrix: Matrix4 = new Matrix4();
+  public position: Vector3 = new Vector3(0, 0, 0);
+  public visible: boolean = true;
 
   public get parent(): Node | null { return this._parent; }
   public get up(): Vector3 { return this._up; }
@@ -22,12 +22,11 @@ export class Node {
     return this._absoluteMatrix;
   }
 
-  protected _dir: Vector3;
-  protected _right: Vector3;
-  protected _up: Vector3;
-  protected _parent: Node | null;
+  protected _dir: Vector3 = new Vector3(0, 0, 0);
+  protected _right: Vector3 = new Vector3(0, 0, 0);
+  protected _up: Vector3 = new Vector3(0, 0, 0);
+  protected _parent: Node | null = null;
   protected _absoluteMatrix: Matrix4;
-  protected _visible: boolean;
 
   constructor() {
     this.matrix.identity();
@@ -35,7 +34,9 @@ export class Node {
     this.updateVectorsFromMatrix();
   }
 
-  public free(): void { }
+  public free(): void {
+    // nothing
+  }
 
   public set absoluteMatrix(matrix: Matrix4) { this._absoluteMatrix = matrix; }
 

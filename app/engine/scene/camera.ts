@@ -9,7 +9,7 @@ export enum CameraProjectionMode { Ortho, Perspective };
 export enum CameraPivot { TopLeft, Center, BottomRight };
 
 export class Camera extends Node {
-  public projectionMatrix: Matrix4;
+  public projectionMatrix: Matrix4 = new Matrix4();
 
   public get scale(): number { return this._scale; }
   public set scale(scale: number) {
@@ -32,33 +32,6 @@ export class Camera extends Node {
   protected _width: number;
   protected _height: number;
 
-  protected rebuildProjectionMatrix(): void {
-    this.projectionMatrix.identity();
-
-    switch (this._projectionMode) {
-      case CameraProjectionMode.Perspective:
-        this.projectionMatrix.perspective(this._fov, this._width / this._height, this._zNear, this._zFar); break;
-
-      case CameraProjectionMode.Ortho:
-        const scale2 = 2 * this._scale;
-
-        switch (this._pivotMode) {
-          case CameraPivot.TopLeft:
-            this.projectionMatrix.ortho(0, this._width / this._scale, this._height / this._scale, 0, this._zNear, this._zFar);
-            break;
-
-          case CameraPivot.Center:
-            this.projectionMatrix.ortho(- this._width / scale2, this._width / scale2, this._height / scale2, - this._height / scale2, this._zNear, this._zFar);
-            break;
-
-          case CameraPivot.BottomRight:
-            this.projectionMatrix.ortho(- this._width / scale2, 0, 0, - this._height / scale2, this._zNear, this._zFar);
-            break;
-        }
-        break;
-    }
-  }
-
   constructor() {
     super();
     this.setProjectionParamsFull(0, 0, renderer.width, renderer.height, 45, 0.01, 100, CameraProjectionMode.Ortho, CameraPivot.TopLeft);
@@ -77,7 +50,8 @@ export class Camera extends Node {
     this.rebuildProjectionMatrix();
   }
 
-  public setProjectionParamsFull(x: number, y: number, width: number, height: number,
+  public setProjectionParamsFull(
+    x: number, y: number, width: number, height: number,
     fov: number, zNear: number, zFar: number,
     projectionMode: CameraProjectionMode, pivotMode: CameraPivot): void {
     this._fov = fov;
@@ -157,13 +131,42 @@ export class Camera extends Node {
   public update(): void {
     this.matrix.position.set(0, 0, 0);
     this.matrix.position = this.matrix.multiplyVec(this.position.negateVector());
-
+    console.log(`camera`, this);
+    console.log(`projectionMatrix: `, this.projectionMatrix.e);
+    console.log(`cameraModelMatrix: `, this.matrix.e);
     renderer.renderParams.viewProjection = this.projectionMatrix.multiplyMat(this.matrix);
     renderer.renderParams.modelViewProjection = renderer.renderParams.viewProjection;
     this.updateVectorsFromMatrix();
 
     if (renderer.width !== this._width || renderer.height !== this._height) {
       this.setProjectionParams(0, 0, renderer.width, renderer.height);
+    }
+  }
+
+  protected rebuildProjectionMatrix(): void {
+    this.projectionMatrix.identity();
+
+    switch (this._projectionMode) {
+      case CameraProjectionMode.Perspective:
+        this.projectionMatrix.perspective(this._fov, this._width / this._height, this._zNear, this._zFar); break;
+
+      case CameraProjectionMode.Ortho:
+        const scale2 = 2 * this._scale;
+
+        switch (this._pivotMode) {
+          case CameraPivot.TopLeft:
+            this.projectionMatrix.ortho(0, this._width / this._scale, this._height / this._scale, 0, this._zNear, this._zFar);
+            break;
+
+          case CameraPivot.Center:
+            this.projectionMatrix.ortho(- this._width / scale2, this._width / scale2, this._height / scale2, - this._height / scale2, this._zNear, this._zFar);
+            break;
+
+          case CameraPivot.BottomRight:
+            this.projectionMatrix.ortho(- this._width / scale2, 0, 0, - this._height / scale2, this._zNear, this._zFar);
+            break;
+        }
+        break;
     }
   }
 }

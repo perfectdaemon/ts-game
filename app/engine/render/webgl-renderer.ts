@@ -13,6 +13,7 @@ const TEXTURE_SAMPLERS_MAX = 8;
 
 export class WebGLRenderer {
   public onMouseMove: (position: Vector2) => void;
+  public onMouseDown: (position: Vector2) => void;
 
   public renderParams: RenderParams = new RenderParams();
 
@@ -290,7 +291,17 @@ export class WebGLRenderer {
             event.pageX - canvasWindowPosition.x,
             event.pageY - canvasWindowPosition.y
         ));
-    }
+    };
+
+    this.canvasElement.onmousedown = event => {
+      if (!this.onMouseDown) {
+        return;
+      }
+
+      this.onMouseDown(new Vector2(
+        event.pageX - canvasWindowPosition.x,
+        event.pageY - canvasWindowPosition.y));
+    };
   }
 
   private createScreenQuad(): void {

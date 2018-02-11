@@ -1,19 +1,20 @@
-import { Node } from "./node";
-import { Vector2 } from "../math/vector2";
-import { TextureRegion } from "../render/texture-atlas";
-import { Vector4 } from "../math/vector4";
-import { isEqual, MathBase } from "../math/math-base";
-import { AXIS_Z, Vector3 } from "../math/vector3";
+import { isEqual, MathBase } from '../math/math-base';
+import { Vector2 } from '../math/vector2';
+import { AXIS_Z, Vector3 } from '../math/vector3';
+import { Vector4 } from '../math/vector4';
+import { TextureRegion } from '../render/texture-atlas';
+import { Node } from './node';
 
 export class Sprite extends Node {
-  protected _rotation: number;
+  public vertices: number[] = new Array<number>(36);
+
+  protected _rotation: number = 0;
   protected _width: number;
   protected _height: number;
   protected _pivotPoint: Vector2;
-  protected _textureRegion: TextureRegion;
-  public vertices: number[] = new Array(36);
+  protected _textureRegion: TextureRegion | null = null;
 
-  constructor(width: number | null, height: number | null, pivotPoint: Vector2 | null) {
+  constructor(width?: number, height?: number, pivotPoint?: Vector2) {
     super();
     this._width = width || 1.0;
     this._height = height || 1.0;
@@ -24,11 +25,11 @@ export class Sprite extends Node {
     this.setVerticesColor(new Vector4(1, 1, 1, 1));
   }
 
-  free(): void {
+  public free(): void {
     super.free();
   }
 
-  static getVerticesSize(): number {
+  public static getVerticesSize(): number {
     return 36;
   }
 
@@ -72,7 +73,7 @@ export class Sprite extends Node {
     this.setDefaultVertices();
   }
 
-  setDefaultVertices(): void {
+  public setDefaultVertices(): void {
     this.vertices[0] = (1 - this.pivotPoint.x) * this._width;
     this.vertices[1] = (1 - this.pivotPoint.y) * this._height;
     this.vertices[2] = 0;
@@ -90,7 +91,7 @@ export class Sprite extends Node {
     this.vertices[29] = 0;
   }
 
-  setDefaultTexCoords(): void {
+  public setDefaultTexCoords(): void {
     this.vertices[3] = 1;
     this.vertices[4] = 1;
 
@@ -104,7 +105,7 @@ export class Sprite extends Node {
     this.vertices[31] = 1;
   }
 
-  setFlippedTexCoords(): void {
+  public setFlippedTexCoords(): void {
 
     this.vertices[3] = 1;
     this.vertices[4] = 0;
@@ -119,7 +120,7 @@ export class Sprite extends Node {
     this.vertices[31] = 0;
   }
 
-  setVerticesColor(color: Vector4): void {
+  public setVerticesColor(color: Vector4): void {
     for (let i = 5; i < 33; i += 9) {
       this.vertices[i + 0] = color.x;
       this.vertices[i + 1] = color.y;
@@ -128,14 +129,14 @@ export class Sprite extends Node {
     }
   }
 
-  setVerticesAlpha(alpha: number): void {
+  public setVerticesAlpha(alpha: number): void {
     this.vertices[8] = alpha;
     this.vertices[17] = alpha;
     this.vertices[26] = alpha;
     this.vertices[35] = alpha;
   }
 
-  setSize(width: number, height: number): void {
+  public setSize(width: number, height: number): void {
     if (isEqual(this._width, width) && isEqual(this._height, height)) {
       return;
     }
@@ -145,11 +146,11 @@ export class Sprite extends Node {
     this.setDefaultVertices();
   }
 
-  setSizeFromVector2(size: Vector2): void {
+  public setSizeFromVector2(size: Vector2): void {
     this.setSize(size.x, size.y);
   }
 
-  setTextureRegion(region: TextureRegion, adjustSpriteSize: boolean = true): void {
+  public setTextureRegion(region: TextureRegion, adjustSpriteSize: boolean = true): void {
     this._textureRegion = region;
 
     if (region.rotated) {
@@ -172,7 +173,7 @@ export class Sprite extends Node {
       this.vertices[3] = region.tx + region.tw;
       this.vertices[4] = region.ty + region.th;
 
-      this.vertices[12] = region.tx + region.tw;;
+      this.vertices[12] = region.tx + region.tw;
       this.vertices[13] = region.ty;
 
       this.vertices[21] = region.tx;
@@ -187,11 +188,11 @@ export class Sprite extends Node {
     }
   }
 
-  getTextureRegion(): TextureRegion {
+  public getTextureRegion(): TextureRegion | null {
     return this._textureRegion;
   }
 
-  getVerticesWithAbsoluteMatrix(): number[] {
+  public getVerticesWithAbsoluteMatrix(): number[] {
     const absMatrix = this.absoluteMatrix;
 
     const vectors = [
@@ -209,7 +210,7 @@ export class Sprite extends Node {
     result[1] = vectors[0].y;
     result[2] = vectors[0].z;
 
-    result[09] = vectors[1].x;
+    result[9] = vectors[1].x;
     result[10] = vectors[1].y;
     result[11] = vectors[1].z;
 
@@ -224,7 +225,7 @@ export class Sprite extends Node {
     return result;
   }
 
-  renderSelf(): void {
+  public renderSelf(): void {
     // nothing
   }
 
