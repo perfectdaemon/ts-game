@@ -3,12 +3,21 @@
 In theory it is small code-oriented framework for building html5 games.  
 In fact it is just a beginning of that.
 
-## Roadmap
+## What have we got?
+* WebGL renderer with base classes for Vertex/Index/Frame buffers, Texture, Shader and so on
+* Scene management: Camera, Node
+* 2D graphics - Sprite, Text, SpriteBatch renderer
+* Math classes - Vectors, Matrix
 
-* WebGL Renderer (SUDDENLY!) — rewrite tinyglr graphics (https://github.com/perfectdaemon/tiny-glr) from opengl and free pascal into webgl and typescript
-* 2d graphics - sprites, texts, etc
-* some other infrastructure
-* performance tests
+## What is in progress
+* Font, TextBatch
+* TextureAtlas
+
+## Roadmap
+* 2D graphics full support
+* more maths, sound, physics
+* games
+* 3d graphics
 * ...
 
 ## Quick start
