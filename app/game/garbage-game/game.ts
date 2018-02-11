@@ -66,36 +66,28 @@ export class Game extends GameBase {
     this._material.addTexture(this._texture, 'uDiffuse');
 
     for (let i = 0; i < 100; ++i) {
-      const sprite = new Sprite(10, 10);
+      const sprite = new Sprite(30, 30);
       sprite.rotation = Math.random() * 360;
-      sprite.position.set(400 * Math.random(), 300 * Math.random(), 0);
+      sprite.position.set(800 * Math.random(), 600 * Math.random(), 1);
       this._sprites.push(sprite);
     }
 
     this._spriteBatch = new SpriteBatch();
 
     this._camera = new Camera();
-    this._camera.setProjectionParamsFull(
-      0, 0, 800, 600,
-      90,
-      -0.1, 100,
-      CameraProjectionMode.Ortho,
-      CameraPivot.TopLeft);
-
-    this._camera.setViewParams(
-      new Vector3(0, 0, -1),
-      new Vector3(0, 0, 0),
-      new Vector3(0, 1, 0));
   }
 
   protected onUpdate(deltaTime: number): void {
-    // nothing
+    for (const sprite of this._sprites) {
+      sprite.rotation += deltaTime * 10;
+    }
   }
 
   protected onRender(): void {
     super.onRender();
     this._camera.update();
     this._shader.updateUniformValue('uModelViewProj', this.renderer.renderParams.modelViewProjection.e);
+    this._shader.updateUniformValue('uColor', [1, 1, 1, 1]);
 
     this._material.bind();
     this._spriteBatch.start();
