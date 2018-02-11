@@ -1,12 +1,12 @@
-import { VertexFormat, VertexAtrib } from "./webgl-types";
-import { gl } from "./webgl";
+import { gl } from './webgl';
+import { VertexAtrib, VertexFormat } from './webgl-types';
 
 export class VertexBuffer {
   public buffer: WebGLBuffer;
 
   constructor(public format: VertexFormat, public count: number) {
 
-    this.buffer = <WebGLBuffer>gl.createBuffer();
+    this.buffer = gl.createBuffer() as WebGLBuffer;
     if (!this.buffer) {
       console.log('Error while creating Vertex Buffer');
       return;

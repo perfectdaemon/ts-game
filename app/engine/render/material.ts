@@ -1,57 +1,59 @@
-import { Texture } from "./texture";
-import { ShaderProgram, UniformType } from "./shader-program";
-import { Vector4 } from "../math/vector4";
-import { BlendingMode, FuncComparison, CullMode } from "./webgl-types";
-import { renderer } from "./webgl";
+import { Vector4 } from '../math/vector4';
+import { ShaderProgram, UniformType } from './shader-program';
+import { Texture } from './texture';
+import { renderer } from './webgl';
+import { BlendingMode, CullMode, FuncComparison } from './webgl-types';
 
 export class TextureMaterialInfo {
-  constructor (
+  constructor(
     public texture: Texture,
     public uniformName: string,
-    public shaderInternalIndex: number
-  ) {}
+    public shaderInternalIndex: number,
+  ) { }
 }
 
 export class Material {
-    textures: TextureMaterialInfo[] = [];
-    color: Vector4 = new Vector4(1, 1, 1, 1);
-  	blend: BlendingMode = BlendingMode.Alpha;
-  	depthWrite: boolean = true;
-    depthTest: boolean = true;
-    depthTestFunc: FuncComparison = FuncComparison.Less;
-  	cull: CullMode = CullMode.Back;
+  public textures: TextureMaterialInfo[] = [];
+  public color: Vector4 = new Vector4(1, 1, 1, 1);
+  public blend: BlendingMode = BlendingMode.Alpha;
+  public depthWrite: boolean = true;
+  public depthTest: boolean = true;
+  public depthTestFunc: FuncComparison = FuncComparison.Less;
+  public cull: CullMode = CullMode.Back;
 
-    constructor (public shader: ShaderProgram) { }
+  constructor(public shader: ShaderProgram) { }
 
-    public free(): void { }
+  public free(): void {
+    // nothing
+  }
 
-    public addTexture(texture: Texture, uniformName: string): void {
-      const shaderIndex = <number>this.shader.addUniform(UniformType.Sampler, 1, uniformName, this.textures.length);
+  public addTexture(texture: Texture, uniformName: string): void {
+    const shaderIndex = this.shader.addUniform(UniformType.Sampler, 1, uniformName, this.textures.length) as number;
 
-      if (shaderIndex === null) {
-        console.error(`Material.addTexture() failed - can't determine shader index for '${uniformName}'`);
-        return;
-      }
-
-      this.textures.push(new TextureMaterialInfo(texture, uniformName, shaderIndex));
+    if (shaderIndex === null) {
+      console.error(`Material.addTexture() failed - can't determine shader index for '${uniformName}'`);
+      return;
     }
 
-    public bind(): void {
-      renderer.setBlendingMode(this.blend);
-      renderer.setCullMode(this.cull);
-      renderer.setDepthWrite(this.depthWrite);
-      renderer.setDepthTest(this.depthTest);
-      renderer.setDepthFunc(this.depthTestFunc);
+    this.textures.push(new TextureMaterialInfo(texture, uniformName, shaderIndex));
+  }
 
-      renderer.renderParams.color = this.color;
-      this.textures.forEach((tex, i) => {
-        tex.texture.bind(i);
-      });
+  public bind(): void {
+    renderer.setBlendingMode(this.blend);
+    renderer.setCullMode(this.cull);
+    renderer.setDepthWrite(this.depthWrite);
+    renderer.setDepthTest(this.depthTest);
+    renderer.setDepthFunc(this.depthTestFunc);
 
-      this.shader.bind();
-    }
+    renderer.renderParams.color = this.color;
+    this.textures.forEach((tex, i) => {
+      tex.texture.bind(i);
+    });
 
-    public unbind(): void {
-      ShaderProgram.unbind();
-    }
+    this.shader.bind();
+  }
+
+  public unbind(): void {
+    ShaderProgram.unbind();
+  }
 }

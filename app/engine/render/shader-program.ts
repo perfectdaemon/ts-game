@@ -1,8 +1,8 @@
-import { VertexAtrib } from "./webgl-types";
-import { gl, renderer } from "./webgl";
+import { gl, renderer } from './webgl';
+import { VertexAtrib } from './webgl-types';
 
-export enum ShaderType { Vertex, Fragment };
-export enum UniformType { Vec1, Vec2, Vec3, Vec4, Mat4, Sampler, Int };
+export enum ShaderType { Vertex, Fragment }
+export enum UniformType { Vec1, Vec2, Vec3, Vec4, Mat4, Sampler, Int }
 
 export class UniformInfo {
   constructor(
@@ -14,17 +14,15 @@ export class UniformInfo {
 }
 
 export class ShaderProgram {
-  private linkStatus: number;
 
   public program: WebGLProgram;
   public shaders: WebGLShader[] = [];
   public uniforms: UniformInfo[] = [];
 
-
   constructor() {
-    this.program = <WebGLProgram>gl.createProgram();
+    this.program = gl.createProgram() as WebGLProgram;
     if (!this.program) {
-      console.log('ShaderProgram create failed');
+      console.error('ShaderProgram create failed');
       return;
     }
   }
@@ -53,7 +51,7 @@ export class ShaderProgram {
 
   public attach(shaderType: ShaderType, source: string): void {
     const glShaderType = this.getWebGLShaderType(shaderType);
-    const shader = <WebGLShader>gl.createShader(glShaderType);
+    const shader = gl.createShader(glShaderType) as WebGLShader;
 
     if (!shader) {
       console.log(`ShaderProgram.attach() failed - can't create shader with type ${glShaderType} (${shaderType})`);
@@ -75,7 +73,7 @@ export class ShaderProgram {
     if (shaderType === ShaderType.Vertex) {
       // Gets only enum names
       const vertexAttributes = Object.keys(VertexAtrib).filter(key => typeof VertexAtrib[key as any] === 'number');
-      for (let attribute in vertexAttributes) {
+      for (const attribute in vertexAttributes) {
         gl.bindAttribLocation(this.program, parseInt(attribute), VertexAtrib[attribute]);
       }
     }
@@ -94,7 +92,7 @@ export class ShaderProgram {
       console.log(infoLog);
     }
 
-    //Validate
+    // Validate
     gl.validateProgram(this.program);
     if (!gl.getProgramParameter(this.program, gl.VALIDATE_STATUS)) {
       console.log(`ShaderProgram.link() failed at validate
@@ -104,8 +102,8 @@ export class ShaderProgram {
     }
 
     // Set shared uniforms
-    // this.addUniform(UniformType.Mat4, 1, 'uModelViewProj', renderer.renderParams.modelViewProjection);
-    // this.addUniform(UniformType.Vec4, 1, 'uColor', renderer.renderParams.color);
+    this.addUniform(UniformType.Mat4, 1, 'uModelViewProj', renderer.renderParams.modelViewProjection.e);
+    this.addUniform(UniformType.Vec4, 1, 'uColor', renderer.renderParams.color.asArray());
 
     // Cleanup
     this.shaders.forEach(shader => gl.detachShader(this.program, shader));
@@ -119,7 +117,7 @@ export class ShaderProgram {
       return null;
     }
 
-    let uniformInfo = new UniformInfo(uniformType, name, count, index, data);
+    const uniformInfo = new UniformInfo(uniformType, name, count, index, data);
     return this.uniforms.push(uniformInfo);
   }
 
@@ -132,21 +130,38 @@ export class ShaderProgram {
   }*/
 
   public setUniform(internalIndex: number, value?: any): void {
-    let uniform = this.uniforms[internalIndex];
+    const uniform = this.uniforms[internalIndex];
 
     if (value) {
       uniform.data = value;
     }
 
     switch (uniform.type) {
-      case UniformType.Vec1: gl.uniform1fv(uniform.index, value); break;
-      case UniformType.Vec2: gl.uniform2fv(uniform.index, value); break;
-      case UniformType.Vec3: gl.uniform3fv(uniform.index, value); break;
-      case UniformType.Vec4: gl.uniform4fv(uniform.index, value); break;
-      case UniformType.Mat4: gl.uniformMatrix4fv(uniform.index, false, value); break;
-      case UniformType.Sampler: gl.uniform1iv(uniform.index, value); break;
-      case UniformType.Int: gl.uniform1iv(uniform.index, value); break;
+      case UniformType.Vec1: gl.uniform1fv(uniform.index, uniform.data); break;
+      case UniformType.Vec2: gl.uniform2fv(uniform.index, uniform.data); break;
+      case UniformType.Vec3: gl.uniform3fv(uniform.index, uniform.data); break;
+      case UniformType.Vec4: gl.uniform4fv(uniform.index, uniform.data); break;
+      case UniformType.Mat4: gl.uniformMatrix4fv(uniform.index, false, uniform.data); break;
+      case UniformType.Sampler: gl.uniform1iv(uniform.index, uniform.data); break;
+      case UniformType.Int: gl.uniform1iv(uniform.index, uniform.data); break;
     }
+  }
+
+  public updateUniformValue(name: string, value: any): void {
+    let index = -1;
+    for (let i = 0; i < this.uniforms.length; ++i) {
+      if (this.uniforms[i].name === name) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index === -1) {
+      console.error(`Uniform of name '${name}' was not found`);
+      return;
+    }
+
+    this.uniforms[index].data = value;
   }
 
   private getWebGLShaderType(shaderType: ShaderType): number {
