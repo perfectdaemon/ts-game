@@ -129,11 +129,8 @@ export class Camera extends Node {
   }
 
   public update(): void {
-    this.matrix.position.set(0, 0, 0);
+    this.matrix.position = new Vector3(0, 0, 0);
     this.matrix.position = this.matrix.multiplyVec(this.position.negateVector());
-    console.log(`camera`, this);
-    console.log(`projectionMatrix: `, this.projectionMatrix.e);
-    console.log(`cameraModelMatrix: `, this.matrix.e);
     renderer.renderParams.viewProjection = this.projectionMatrix.multiplyMat(this.matrix);
     renderer.renderParams.modelViewProjection = renderer.renderParams.viewProjection;
     this.updateVectorsFromMatrix();
