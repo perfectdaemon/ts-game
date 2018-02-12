@@ -1,4 +1,4 @@
-# TypeScript HTML5 Canvas Game Template
+# TypeScript WebGL Game Framework
 
 In theory it is small code-oriented framework for building html5 games.  
 In fact it is just a beginning of that.
