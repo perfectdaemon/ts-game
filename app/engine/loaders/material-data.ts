@@ -6,12 +6,12 @@ import { ShaderProgramData } from './shader-program-data';
 import { TextureData } from './texture-data';
 
 export class MaterialData {
-  shaderProgram: ShaderProgram | null = null;
-  shaderProgramData: ShaderProgramData | null = null;
+  shaderProgram?: ShaderProgram;
+  shaderProgramData?: ShaderProgramData | null = null;
 
   textures: {
-    textureData: TextureData | null;
-    texture: Texture | null;
+    textureData?: TextureData | null;
+    texture?: Texture | null;
     uniformName: string;
   }[] = [];
 
