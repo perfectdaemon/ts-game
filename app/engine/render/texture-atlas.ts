@@ -11,15 +11,17 @@ export class TextureRegion {
   public rotated: boolean;
 }
 
+const LINE_REGEXP = /^(.*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t([r]?)$/;
+
 export class TextureAtlas extends Texture {
 
   protected _regions: TextureRegion[] = [];
 
-  constructor(imageFileSrc: string, infoFileId: string) {
+  constructor(
+    imageFileSrc: string,
+    private infoFileElementId: string,
+  ) {
     super(imageFileSrc);
-
-    const infodata = AssetLoader.getElementDataOrEmpty(infoFileId);
-    console.error(`new TextureAtlas() is not implemented`);
   }
 
   public free(): void {
@@ -36,5 +38,31 @@ export class TextureAtlas extends Texture {
     }
 
     return result[0];
+  }
+
+  protected onImageLoad(image: HTMLImageElement, event: any): void {
+    super.onImageLoad(image, event);
+
+    const infodata = AssetLoader.getElementDataOrEmpty(this.infoFileElementId);
+
+    const lines = infodata.split('\n').slice(1);
+
+    for (const line of lines) {
+      const match = LINE_REGEXP.exec(line);
+      if (!match) {
+        console.error(`TextureAtlas - can't parse line '${line}'`);
+        continue;
+      }
+
+      this._regions.push({
+        texture: this,
+        name: match[1],
+        tx: parseInt(match[2]) / this.width,
+        ty: parseInt(match[3]) / this.height,
+        tw: parseInt(match[4]) / this.width,
+        th: parseInt(match[5]) / this.height,
+        rotated: (match.length > 10 && match[10] === 'r'),
+      });
+    }
   }
 }
