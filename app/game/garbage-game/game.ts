@@ -7,6 +7,8 @@ import { SpriteBatch } from '../../engine/render2d/sprite-batch';
 import { Camera, CameraPivot, CameraProjectionMode } from '../../engine/scene/camera';
 import { Sprite } from '../../engine/scene/sprite';
 import { GameBase } from './../../engine/game-base';
+import { TextureAtlas } from '../../engine/render/texture-atlas';
+import { TextureAtlasLoader } from '../../engine/loaders/texture-atlas-loader';
 
 export class Game extends GameBase {
 
@@ -42,7 +44,7 @@ export class Game extends GameBase {
 
   private _material: Material;
   private _shader: ShaderProgram;
-  private _texture: Texture;
+  private _texture: TextureAtlas;
   private _sprites: Sprite[] = [];
   private _spriteBatch: SpriteBatch;
 
@@ -60,17 +62,24 @@ export class Game extends GameBase {
     this._shader.attach(ShaderType.Fragment, this.fragmentShader);
     this._shader.link();
 
-    this._texture = new Texture('assets/webgl.png');
-
     this._material = new Material(this._shader);
-    this._material.addTexture(this._texture, 'uDiffuse');
 
-    for (let i = 0; i < 300; ++i) {
-      const sprite = new Sprite(30, 30);
-      sprite.rotation = Math.random() * 360;
-      sprite.position.set(this.renderer.width * Math.random(), this.renderer.height * Math.random(), 1);
-      this._sprites.push(sprite);
-    }
+    const loader = new TextureAtlasLoader();
+    loader.load(['assets/atlas.png', 'assets/atlas.atlas'])
+      .then(texture => {
+        this._texture = texture;
+
+        const landerRegion = this._texture.getRegion('lander.png');
+        this._material.addTexture(this._texture, 'uDiffuse');
+
+        for (let i = 0; i < 300; ++i) {
+          const sprite = new Sprite(30, 30);
+          sprite.setTextureRegion(landerRegion);
+          sprite.rotation = Math.random() * 360;
+          sprite.position.set(this.renderer.width * Math.random(), this.renderer.height * Math.random(), 1);
+          this._sprites.push(sprite);
+        }
+      });
 
     this._spriteBatch = new SpriteBatch();
 

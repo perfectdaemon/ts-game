@@ -3,12 +3,16 @@ import { gl, renderer } from './webgl';
 import { TextureFilter, TextureWrap } from './webgl-types';
 
 export class Texture {
+
+  public static unbind(): void {
+    renderer.setTexture(null, 0);
+  }
+
   public texture: WebGLTexture;
   public width: number = 1;
   public height: number = 1;
 
-  constructor(file: string) {
-
+  constructor() {
     this.texture = gl.createTexture() as WebGLTexture;
     if (this.texture === null) {
       console.log('Texture create failed - null returned');
@@ -19,15 +23,6 @@ export class Texture {
     const pixel = new Uint8Array([0, 0, 255, 255]);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA,
       1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
-
-    // load
-    const image = new Image();
-    image.onload = event => {
-      this.onImageLoad(image, event);
-      console.log(`Texture '${file}' loaded, width: ${this.width}, height: ${this.height}`);
-    };
-
-    image.src = file;
   }
 
   public free(): void {
@@ -52,11 +47,7 @@ export class Texture {
     renderer.setTexture(this, sampler);
   }
 
-  public static unbind(): void {
-    renderer.setTexture(null, 0)
-  }
-
-  protected onImageLoad(image: HTMLImageElement, event: any): void {
+  public loadFromImage(image: HTMLImageElement): void {
     this.width = image.width;
     this.height = image.height;
 

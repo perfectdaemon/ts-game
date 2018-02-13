@@ -17,13 +17,6 @@ export class TextureAtlas extends Texture {
 
   protected _regions: TextureRegion[] = [];
 
-  constructor(
-    imageFileSrc: string,
-    private infoFileSrc: string,
-  ) {
-    super(imageFileSrc);
-  }
-
   public free(): void {
     super.free();
   }
@@ -40,15 +33,7 @@ export class TextureAtlas extends Texture {
     return result[0];
   }
 
-  protected onImageLoad(image: HTMLImageElement, event: any): void {
-    super.onImageLoad(image, event);
-
-    AssetLoader.getTextFromUrl(this.infoFileSrc)
-    .then(infoData => this.loadRegionInfo(infoData))
-    .catch(err => console.error(err));
-  }
-
-  private loadRegionInfo(infoData: string): void {
+  public loadRegionInfo(infoData: string): void {
     const lines = infoData.split('\n').slice(1);
 
     for (const line of lines) {

@@ -27,9 +27,10 @@ export class MaterialLoader {
            to material - no texture or texture data provided`);
       }
 
-      const texture = textureInfo.texture || TextureLoader.load(textureInfo.textureData as TextureData);
+      // const texture = textureInfo.texture || TextureLoader.load(textureInfo.textureData as TextureData);
 
-      material.addTexture(texture, textureInfo.uniformName);
+      // material.addTexture(texture, textureInfo.uniformName);
+      throw new Error('MaterialLoader.load() is not implemented');
     }
 
     return material;
