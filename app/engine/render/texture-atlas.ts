@@ -11,7 +11,7 @@ export class TextureRegion {
   public rotated: boolean;
 }
 
-const LINE_REGEXP = /^(.*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t([r]?)$/;
+const LINE_REGEXP = /(.*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t(\d*?)\t([r]?)/;
 
 export class TextureAtlas extends Texture {
 
@@ -19,7 +19,7 @@ export class TextureAtlas extends Texture {
 
   constructor(
     imageFileSrc: string,
-    private infoFileElementId: string,
+    private infoFileSrc: string,
   ) {
     super(imageFileSrc);
   }
@@ -43,11 +43,19 @@ export class TextureAtlas extends Texture {
   protected onImageLoad(image: HTMLImageElement, event: any): void {
     super.onImageLoad(image, event);
 
-    const infodata = AssetLoader.getElementDataOrEmpty(this.infoFileElementId);
+    AssetLoader.getTextFromUrl(this.infoFileSrc)
+    .then(infoData => this.loadRegionInfo(infoData))
+    .catch(err => console.error(err));
+  }
 
-    const lines = infodata.split('\n').slice(1);
+  private loadRegionInfo(infoData: string): void {
+    const lines = infoData.split('\n').slice(1);
 
     for (const line of lines) {
+      if (!line || line.length === 0) {
+        continue;
+      }
+
       const match = LINE_REGEXP.exec(line);
       if (!match) {
         console.error(`TextureAtlas - can't parse line '${line}'`);
@@ -64,5 +72,7 @@ export class TextureAtlas extends Texture {
         rotated: (match.length > 10 && match[10] === 'r'),
       });
     }
+
+    console.log(this._regions);
   }
 }
