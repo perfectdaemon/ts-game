@@ -1,8 +1,8 @@
 import { AssetLoader } from '../helpers/asset-loader';
 import { TextureAtlas } from '../render/texture-atlas';
-import { IRemoteResourceLoader } from './i-remote-resource-loader';
+import { BaseLoader, IRemoteResourceLoader } from './remote-resource.loader';
 
-export class TextureAtlasLoader implements IRemoteResourceLoader<TextureAtlas> {
+export class TextureAtlasLoader extends BaseLoader implements IRemoteResourceLoader<TextureAtlas> {
   load(sources: string[]): Promise<TextureAtlas> {
     return new Promise<TextureAtlas>((resolve: any, reject: any) => {
       const texture = new TextureAtlas();

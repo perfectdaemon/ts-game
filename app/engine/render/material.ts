@@ -13,6 +13,7 @@ export class TextureMaterialInfo {
 }
 
 export class Material {
+  public shader?: ShaderProgram;
   public textures: TextureMaterialInfo[] = [];
   public color: Vector4 = new Vector4(1, 1, 1, 1);
   public blend: BlendingMode = BlendingMode.Alpha;
@@ -21,13 +22,16 @@ export class Material {
   public depthTestFunc: FuncComparison = FuncComparison.Less;
   public cull: CullMode = CullMode.Back;
 
-  constructor(public shader: ShaderProgram) { }
-
   public free(): void {
     // nothing
   }
 
   public addTexture(texture: Texture, uniformName: string): void {
+    if (!this.shader) {
+      console.error(`Material.addTexture() failed - no shader at material`);
+      return;
+    }
+
     const shaderIndex = this.shader.addUniform(UniformType.Sampler, 1, uniformName, this.textures.length) as number;
 
     if (shaderIndex === null) {
@@ -50,7 +54,9 @@ export class Material {
       tex.texture.bind(i);
     });
 
-    this.shader.bind();
+    if (this.shader) {
+      this.shader.bind();
+    }
   }
 
   public unbind(): void {
