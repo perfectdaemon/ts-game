@@ -1,20 +1,21 @@
 import { Texture } from '../render/texture';
 import { BaseLoader, IRemoteResourceLoader } from './remote-resource.loader';
+import { TextureData } from './texture.data';
 
 export class TextureLoader extends BaseLoader implements IRemoteResourceLoader<Texture> {
-  load(sources: string[]): Promise<Texture> {
+  load(data: TextureData): Promise<Texture> {
     return new Promise<Texture>((resolve: any, reject: any) => {
       const texture = new Texture();
 
       const image = new Image();
       image.onload = event => {
         texture.loadFromImage(image);
-        console.log(`Texture '${sources[0]}' loaded, width: ${image.width}, height: ${image.height}`);
+        console.log(`Texture '${data.imageFileSrc}' loaded, width: ${image.width}, height: ${image.height}`);
         resolve(texture);
       };
       image.onerror = error => reject(error);
 
-      image.src = sources[0];
+      image.src = data.imageFileSrc;
     });
   }
 }

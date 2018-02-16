@@ -5,10 +5,10 @@ import { DEFAULT_ATLAS_DATA } from './default-atlas';
 import { DEFAULT_SHADER_DATA } from './default-shader';
 
 export const DEFAULT_MATERIAL_DATA: MaterialData = {
-  shaderProgram: DEFAULT_SHADER_DATA,
+  shaderProgramData: DEFAULT_SHADER_DATA,
 
   textures: [
-    { texture: DEFAULT_ATLAS_DATA, uniformName: 'uDiffuse' },
+    { textureAtlasData: DEFAULT_ATLAS_DATA, uniformName: 'uDiffuse' },
   ],
 
   color: new Vector4(1, 1, 1, 1),

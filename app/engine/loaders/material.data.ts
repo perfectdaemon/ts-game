@@ -10,10 +10,14 @@ import { TextureAtlasData } from './texture-atlas.data';
 import { TextureData } from './texture.data';
 
 export class MaterialData extends BaseData implements IDataFor<Material> {
-  shaderProgram?: ShaderProgram | ShaderProgramData;
+  shaderProgram?: ShaderProgram;
+  shaderProgramData?: ShaderProgramData;
 
   textures?: {
-    texture: Texture | TextureAtlas | TextureData | TextureAtlasData;
+    texture?: Texture;
+    textureAtlas?: TextureAtlas;
+    textureData?: TextureData;
+    textureAtlasData?: TextureAtlasData;
     uniformName: string;
   }[];
 

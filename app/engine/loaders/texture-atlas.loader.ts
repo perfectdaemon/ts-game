@@ -1,17 +1,18 @@
 import { AssetLoader } from '../helpers/asset-loader';
 import { TextureAtlas } from '../render/texture-atlas';
 import { BaseLoader, IRemoteResourceLoader } from './remote-resource.loader';
+import { TextureAtlasData } from './texture-atlas.data';
 
 export class TextureAtlasLoader extends BaseLoader implements IRemoteResourceLoader<TextureAtlas> {
-  load(sources: string[]): Promise<TextureAtlas> {
+  load(data: TextureAtlasData): Promise<TextureAtlas> {
     return new Promise<TextureAtlas>((resolve: any, reject: any) => {
       const texture = new TextureAtlas();
 
       const image = new Image();
       image.onload = event => {
         texture.loadFromImage(image);
-        console.log(`Texture '${sources[0]}' loaded, width: ${image.width}, height: ${image.height}`);
-        AssetLoader.getTextFromUrl(sources[1])
+        console.log(`Texture '${data.imageFileSrc}' loaded, width: ${image.width}, height: ${image.height}`);
+        AssetLoader.getTextFromUrl(data.atlasFileSrc)
           .then(result => {
             texture.loadRegionInfo(result);
             resolve(texture);
@@ -20,7 +21,7 @@ export class TextureAtlasLoader extends BaseLoader implements IRemoteResourceLoa
       };
       image.onerror = error => reject(error);
 
-      image.src = sources[0];
+      image.src = data.imageFileSrc;
     });
   }
 }

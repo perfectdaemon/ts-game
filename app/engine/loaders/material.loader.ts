@@ -16,13 +16,13 @@ export class MaterialLoader extends BaseLoader implements IRemoteResourceLoader<
     return new Promise<Material>((resolve, reject) => {
       const material = new Material();
 
-      if (!data.shaderProgram) {
+      if (!data.shaderProgram && !data.shaderProgramData) {
         throw new Error(`Can't create material - no shader or shader data provided`);
       }
 
-      const shaderPromise = data.shaderProgram instanceof ShaderProgram
+      const shaderPromise = data.shaderProgram
         ? new Promise<ShaderProgram>((res, rej) => res(data.shaderProgram as ShaderProgram))
-        : new ShaderProgramLoader().load(data.shaderProgram as ShaderProgramData);
+        : new ShaderProgramLoader().load(data.shaderProgramData as ShaderProgramData);
 
       shaderPromise.then(shaderProgram => material.shader = shaderProgram);
 
@@ -35,27 +35,24 @@ export class MaterialLoader extends BaseLoader implements IRemoteResourceLoader<
 
       const textureAddedPromises: Promise<void>[] = [];
       for (const textureInfo of data.textures || []) {
-        if (!textureInfo.texture) {
+        if (textureInfo.texture) {
+          material.addTexture(textureInfo.texture, textureInfo.uniformName);
+        } else if (textureInfo.textureAtlas) {
+          material.addTexture(textureInfo.textureAtlas, textureInfo.uniformName);
+        } else if (textureInfo.textureData) {
+          const loader = new TextureLoader();
+          const promise = loader.load(textureInfo.textureData)
+            .then(texture => material.addTexture(texture, textureInfo.uniformName));
+          textureAddedPromises.push(promise);
+        } else if (textureInfo.textureAtlasData) {
+          const loader = new TextureAtlasLoader();
+          const promise = loader.load(textureInfo.textureAtlasData)
+            .then(texture => material.addTexture(texture, textureInfo.uniformName));
+          textureAddedPromises.push(promise);
+        } else {
           throw new Error(
             `Can't add texture with uniformName '${textureInfo.uniformName}'
              to material - no texture or texture data provided`);
-        }
-
-        if (textureInfo.texture instanceof Texture || textureInfo.texture instanceof TextureAtlas) {
-          material.addTexture(textureInfo.texture, textureInfo.uniformName);
-        } else if (textureInfo.texture instanceof TextureAtlasData) {
-          const loader = new TextureAtlasLoader();
-          const atlasData = textureInfo.texture as TextureAtlasData;
-          const promise = loader.load([atlasData.imageFileSrc, atlasData.atlasFileSrc])
-            .then(texture => material.addTexture(texture, textureInfo.uniformName));
-          textureAddedPromises.push(promise);
-
-        } else if (textureInfo.texture instanceof TextureData) {
-          const loader = new TextureLoader();
-          const textureData = textureInfo.texture as TextureData;
-          const promise = loader.load([textureData.imageFileSrc])
-            .then(texture => material.addTexture(texture, textureInfo.uniformName));
-          textureAddedPromises.push(promise);
         }
       }
 
