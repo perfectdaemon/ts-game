@@ -30,6 +30,6 @@ export class GameAssetLoader {
   }
 
   loadMaterial(data: MaterialData): Promise<Material> {
-    return this._materialLoader.load(data);
+    return this._materialLoader.load(data, this._shaderLoader, this._textureLoader, this._textureAtlasLoader);
   }
 }

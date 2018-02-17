@@ -11,7 +11,12 @@ import { TextureData } from './texture.data';
 import { TextureLoader } from './texture.loader';
 
 export class MaterialLoader {
-  load(data: MaterialData): Promise<Material> {
+  load(
+    data: MaterialData,
+    shaderProgramLoader: ShaderProgramLoader,
+    textureLoader: TextureLoader,
+    textureAtlasLoader: TextureAtlasLoader,
+  ): Promise<Material> {
     return new Promise<Material>((resolve, reject) => {
       const material = new Material();
 
@@ -21,7 +26,7 @@ export class MaterialLoader {
 
       const shaderPromise = data.shaderProgram
         ? new Promise<ShaderProgram>((res, rej) => res(data.shaderProgram as ShaderProgram))
-        : new ShaderProgramLoader().load(data.shaderProgramData as ShaderProgramData);
+        : shaderProgramLoader.load(data.shaderProgramData as ShaderProgramData);
 
       shaderPromise.then(shaderProgram => material.shader = shaderProgram);
 
@@ -39,13 +44,11 @@ export class MaterialLoader {
         } else if (textureInfo.textureAtlas) {
           material.addTexture(textureInfo.textureAtlas, textureInfo.uniformName);
         } else if (textureInfo.textureData) {
-          const loader = new TextureLoader();
-          const promise = loader.load(textureInfo.textureData)
+          const promise = textureLoader.load(textureInfo.textureData)
             .then(texture => material.addTexture(texture, textureInfo.uniformName));
           textureAddedPromises.push(promise);
         } else if (textureInfo.textureAtlasData) {
-          const loader = new TextureAtlasLoader();
-          const promise = loader.load(textureInfo.textureAtlasData)
+          const promise = textureAtlasLoader.load(textureInfo.textureAtlasData)
             .then(texture => material.addTexture(texture, textureInfo.uniformName));
           textureAddedPromises.push(promise);
         } else {
