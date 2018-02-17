@@ -1,8 +1,7 @@
 import { Texture } from '../render/texture';
-import { BaseLoader, IRemoteResourceLoader } from './remote-resource.loader';
 import { TextureData } from './texture.data';
 
-export class TextureLoader extends BaseLoader implements IRemoteResourceLoader<Texture> {
+export class TextureLoader {
   load(data: TextureData): Promise<Texture> {
     return new Promise<Texture>((resolve: any, reject: any) => {
       const texture = new Texture();

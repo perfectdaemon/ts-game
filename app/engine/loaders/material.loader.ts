@@ -3,7 +3,6 @@ import { ShaderProgram } from '../render/shader-program';
 import { Texture } from '../render/texture';
 import { TextureAtlas } from '../render/texture-atlas';
 import { MaterialData } from './material.data';
-import { BaseLoader, IRemoteResourceLoader } from './remote-resource.loader';
 import { ShaderProgramData } from './shader-program.data';
 import { ShaderProgramLoader } from './shader-program.loader';
 import { TextureAtlasData } from './texture-atlas.data';
@@ -11,7 +10,7 @@ import { TextureAtlasLoader } from './texture-atlas.loader';
 import { TextureData } from './texture.data';
 import { TextureLoader } from './texture.loader';
 
-export class MaterialLoader extends BaseLoader implements IRemoteResourceLoader<Material> {
+export class MaterialLoader {
   load(data: MaterialData): Promise<Material> {
     return new Promise<Material>((resolve, reject) => {
       const material = new Material();

@@ -1,8 +1,7 @@
 import { ShaderProgram, ShaderType } from '../render/shader-program';
-import { BaseLoader, IRemoteResourceLoader } from './remote-resource.loader';
 import { ShaderProgramData } from './shader-program.data';
 
-export class ShaderProgramLoader extends BaseLoader implements IRemoteResourceLoader<ShaderProgram> {
+export class ShaderProgramLoader {
   load(data: ShaderProgramData): Promise<ShaderProgram> {
     return new Promise<ShaderProgram>((resolve: any, reject: any) => {
       const shader = new ShaderProgram();

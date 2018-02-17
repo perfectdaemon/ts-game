@@ -1,7 +1,5 @@
-import { TextureAtlas } from '../render/texture-atlas';
-import { IDataFor } from './base.data';
 import { TextureData } from './texture.data';
 
-export class TextureAtlasData extends TextureData implements IDataFor<TextureAtlas> {
+export class TextureAtlasData extends TextureData {
   atlasFileSrc: string = '';
 }

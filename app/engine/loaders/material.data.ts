@@ -1,15 +1,13 @@
 import { Vector4 } from '../math/vector4';
-import { Material } from '../render/material';
 import { ShaderProgram } from '../render/shader-program';
 import { Texture } from '../render/texture';
 import { TextureAtlas } from '../render/texture-atlas';
 import { BlendingMode, CullMode, FuncComparison } from '../render/webgl-types';
-import { BaseData, IDataFor } from './base.data';
 import { ShaderProgramData } from './shader-program.data';
 import { TextureAtlasData } from './texture-atlas.data';
 import { TextureData } from './texture.data';
 
-export class MaterialData extends BaseData implements IDataFor<Material> {
+export class MaterialData {
   shaderProgram?: ShaderProgram;
   shaderProgramData?: ShaderProgramData;
 
