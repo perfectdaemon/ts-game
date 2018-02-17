@@ -1,3 +1,7 @@
+import { Input } from '../input/input';
+import { InputEvent } from '../input/input-event';
+import { InputType } from '../input/input-type.enum';
+import { Keys } from '../input/keys.enum';
 import { Vector2 } from '../math/vector2';
 import { FrameBuffer } from './frame-buffer';
 import { IndexBuffer } from './index-buffer';
@@ -48,7 +52,10 @@ export class WebGLRenderer {
   private _width: number;
   private _height: number;
 
-  constructor(private canvasElement: HTMLCanvasElement) {
+  constructor(
+    private canvasElement: HTMLCanvasElement,
+    private inputProcessor: Input,
+  ) {
     const glContext = (
       canvasElement.getContext('webgl') ||
       canvasElement.getContext('experimental-webgl')
@@ -201,7 +208,6 @@ export class WebGLRenderer {
       this._activeSampler = sampler;
     }
 
-
     gl.bindTexture(gl.TEXTURE_2D, texture === null ? null : texture.texture);
 
     this._textureSampler[sampler] = texture;
@@ -243,7 +249,7 @@ export class WebGLRenderer {
       gl.TRIANGLES,
       indicesCount,
       IndexBuffer.getWebGLFormat(indexBuffer.format),
-      startIndex * IndexBuffer.getSizeFromFormat(indexBuffer.format)
+      startIndex * IndexBuffer.getSizeFromFormat(indexBuffer.format),
     );
 
     ++this._statDIPCount;
@@ -284,6 +290,9 @@ export class WebGLRenderer {
     );
 
     this.canvasElement.onmousemove = event => {
+      const inputEvent = this.getInputEventFromMouseEvent(event);
+      this.inputProcessor.process(inputEvent);
+
       if (!this.onMouseMove) {
         return;
       }
@@ -295,6 +304,9 @@ export class WebGLRenderer {
     };
 
     this.canvasElement.onmousedown = event => {
+      const inputEvent = this.getInputEventFromMouseEvent(event);
+      this.inputProcessor.process(inputEvent);
+
       if (!this.onMouseDown) {
         return;
       }
@@ -304,6 +316,22 @@ export class WebGLRenderer {
         event.pageY - canvasWindowPosition.y,
       ));
     };
+
+    this.canvasElement.onwheel = event => {
+      const inputEvent = this.getInputEventFromMouseEvent(event);
+      this.inputProcessor.process(inputEvent);
+    };
+
+    this.canvasElement.onkeydown = event => {
+      const inputEvent = this.getInputEventFromKeyEvent(event);
+      this.inputProcessor.process(inputEvent);
+    };
+
+    this.canvasElement.onkeyup = event => {
+      const inputEvent = this.getInputEventFromKeyEvent(event);
+      this.inputProcessor.process(inputEvent);
+    };
+
   }
 
   private createScreenQuad(): void {
@@ -334,5 +362,44 @@ export class WebGLRenderer {
       case FuncComparison.GreaterOrEqual: return gl.GEQUAL;
       case FuncComparison.Always: return gl.ALWAYS;
     }
+  }
+
+  private getInputEventFromMouseEvent(event: MouseEvent | WheelEvent): InputEvent {
+    let key: Keys;
+    switch (event.button) {
+      case 0: key = Keys.LeftButton; break;
+      case 1: key = Keys.MiddleButton; break;
+      case 2: key = Keys.RightButton; break;
+      default: key = Keys.NoInput; break;
+    }
+    const x = event.pageX - this.canvasElement.getBoundingClientRect().left;
+    const y = event.pageY - this.canvasElement.getBoundingClientRect().top;
+
+    let type = InputType.TouchMove;
+    let wheelDelta = 0;
+    switch (event.type) {
+      case 'mousedown': type = InputType.TouchDown; break;
+      case 'mouseup': type = InputType.TouchUp; break;
+      case 'mousemove': type = InputType.TouchMove; break;
+      case 'wheel':
+        type = InputType.Wheel;
+        wheelDelta = (event as WheelEvent).deltaY;
+        break;
+    }
+
+    return new InputEvent(type, key, x, y, wheelDelta);
+  }
+
+  private getInputEventFromKeyEvent(event: KeyboardEvent): InputEvent {
+    let type = InputType.TouchMove;
+
+    switch (event.type) {
+      case 'keydown': type = InputType.KeyDown; break;
+      case 'keyup': type = InputType.KeyUp; break;
+    }
+
+    const key: Keys = event.keyCode;
+
+    return new InputEvent(type, key, 0, 0, 0);
   }
 }

@@ -1,3 +1,4 @@
+import { Input } from './input/input';
 import { Vector2 } from './math/vector2';
 import { WebGLRenderer } from './render/webgl-renderer';
 import { ClearMask } from './render/webgl-types';
@@ -11,9 +12,10 @@ export abstract class GameBase {
   protected lastTime: number = 0.0;
   protected currentTime: number = 0.0;
   protected pauseAll: boolean = false;
+  protected input: Input = new Input();
 
   constructor(canvasElement: HTMLCanvasElement) {
-    this.renderer = new WebGLRenderer(canvasElement);
+    this.renderer = new WebGLRenderer(canvasElement, this.input);
     this.renderer.onMouseMove = (position) => this.onMouseMove(position);
     this.renderer.onMouseDown = (position) => this.onMouseDown(position);
     this.renderer.setViewPort(0, 0, canvasElement.width, canvasElement.height);
