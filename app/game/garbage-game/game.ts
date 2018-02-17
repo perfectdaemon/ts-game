@@ -59,10 +59,10 @@ export class Game extends GameBase {
 
   protected onRender(): void {
     super.onRender();
-    if (!this.ready) { console.log('not ready'); return; }
+    if (!this.ready) { return; }
     this._camera.update();
     this._material.shader.updateUniformValue('uModelViewProj', this.renderer.renderParams.modelViewProjection.e);
-    this._material.shader.updateUniformValue('uColor', [1, 1, 1, 1]);
+    this._material.shader.updateUniformValue('uColor', this.renderer.renderParams.color.asArray());
 
     this._material.bind();
     this._spriteBatch.start();
