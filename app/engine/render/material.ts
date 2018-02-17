@@ -13,7 +13,7 @@ export class TextureMaterialInfo {
 }
 
 export class Material {
-  public shader?: ShaderProgram;
+  public shader: ShaderProgram;
   public textures: TextureMaterialInfo[] = [];
   public color: Vector4 = new Vector4(1, 1, 1, 1);
   public blend: BlendingMode = BlendingMode.Alpha;
