@@ -57,7 +57,5 @@ export class TextureAtlas extends Texture {
         rotated: (match.length > 10 && match[10] === 'r'),
       });
     }
-
-    console.log(this._regions);
   }
 }
