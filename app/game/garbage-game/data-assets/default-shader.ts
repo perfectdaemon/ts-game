@@ -1,6 +1,4 @@
 import { ShaderProgramData } from '../../../engine/loaders/shader-program.data';
-import { ShaderProgramLoader } from '../../../engine/loaders/shader-program.loader';
-import { ShaderProgram } from '../../../engine/render/shader-program';
 
 export const DEFAULT_SHADER_DATA: ShaderProgramData = {
   vertexShaderText: `
