@@ -189,6 +189,21 @@ export class Sprite extends Node {
     }
   }
 
+  /** RightBottom, RightTop, LeftTop, LeftBottom */
+  public setTextureCoords(coords: number[]): void {
+    this.vertices[3] = coords[0];
+    this.vertices[4] = coords[1];
+
+    this.vertices[12] = coords[2];
+    this.vertices[13] = coords[3];
+
+    this.vertices[21] = coords[4];
+    this.vertices[22] = coords[5];
+
+    this.vertices[30] = coords[6];
+    this.vertices[31] = coords[7];
+  }
+
   public getTextureRegion(): TextureRegion | null {
     return this._textureRegion;
   }
