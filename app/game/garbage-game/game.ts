@@ -14,6 +14,7 @@ import { Player } from './player';
 
 export class Game extends GameBase {
   spriteBatch: SpriteBatch = new SpriteBatch();
+  spriteBatch2: SpriteBatch = new SpriteBatch();
 
   camera: Camera = new Camera();
   assets: Assets = new Assets();
@@ -27,9 +28,12 @@ export class Game extends GameBase {
 
   protected onInit(): void {
     this.player.body.position.set(this.renderer.width / 2, this.renderer.height / 2, 1);
+    this.player.weapon.position.set(24, 0, -1);
     this.assets.loadAll()
       .then(() => {
         this.ready = true;
+        this.player.weapon.setTextureRegion(this.assets.textureAtlas.getRegion('pistol2.png'), true);
+        this.player.weapon.multSize(2);
       });
 
     this.renderer.setClearColorRGB(0.1, 0.2, 0.2, 0.5);
@@ -45,6 +49,11 @@ export class Game extends GameBase {
     this.camera.update();
     this.assets.shader.updateUniformValue('uModelViewProj', this.renderer.renderParams.modelViewProjection.e);
     this.assets.shader.updateUniformValue('uColor', this.renderer.renderParams.color.asArray());
+
+    this.assets.material.bind();
+    this.spriteBatch2.start();
+    this.spriteBatch2.drawSingle(this.player.weapon);
+    this.spriteBatch2.finish();
 
     this.assets.characterMaterial.bind();
     this.spriteBatch.start();
