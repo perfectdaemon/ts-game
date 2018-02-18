@@ -1,10 +1,17 @@
 textures: atlas.png
-lander.png	1	1	84	81	0	0	84	81	
-particle.png	87	1	36	36	0	0	36	36	
-flag.png	1	84	48	35	0	0	35	48	r
-flame.png	51	84	45	33	0	0	45	33	
-arrow.png	98	39	24	24	0	0	24	24	
-fuel_level_back.png	1	121	106	21	0	0	106	21	
-star.png	87	65	17	17	0	0	17	17	
-blank.png	109	65	16	16	0	0	16	16	
-fuel_level.png	1	144	102	6	0	0	102	6	
+wall3.png	0	0	32	32	0	0	32	32	
+wall2.png	33	0	32	32	0	0	32	32	
+wall1.png	66	0	32	32	0	0	32	32	
+wall6.png	0	33	32	32	0	0	32	32	
+wall4.png	33	33	32	32	0	0	32	32	
+wall5.png	66	33	32	32	0	0	32	32	
+gold1.png	0	66	29	29	0	0	29	29	
+mana1.png	99	0	11	29	0	0	11	29	
+health1.png	111	0	11	29	0	0	11	29	
+knife3.png	99	30	5	25	0	0	5	25	
+knife1.png	105	30	11	24	0	0	11	24	
+knife2.png	117	30	9	24	0	0	9	24	
+pistol4.png	118	55	9	23	0	0	9	23	
+pistol3.png	108	55	9	23	0	0	9	23	
+pistol2.png	30	66	10	22	0	0	10	22	
+pistol1.png	41	66	9	22	0	0	9	22	
