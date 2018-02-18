@@ -4,7 +4,10 @@ import { InputType } from './input-type.enum';
 import { Touch } from './touch';
 
 export class Input {
-  touches: Touch[] = new Array<Touch>(10);
+  touches: Touch[] = [
+    new Touch(), new Touch(), new Touch(), new Touch(), new Touch(),
+    new Touch(), new Touch(), new Touch(), new Touch(), new Touch(),
+  ];
   mousePos: Vector2 = new Vector2(0, 0);
   isKeyDown: boolean[] = new Array<boolean>(256);
   lastWheelDelta: number = 0;
