@@ -121,6 +121,30 @@ export class Sprite extends Node {
     this.vertices[31] = 0;
   }
 
+  public flipVerticallyCurrentTexCoords(): void {
+    let tmp = 0;
+
+    tmp = this.vertices[30];
+    this.vertices[30] = this.vertices[3];
+    this.vertices[3] = tmp;
+
+    tmp = this.vertices[12];
+    this.vertices[12] = this.vertices[21];
+    this.vertices[21] = tmp;
+  }
+
+  public flipHorizontallyCurrentTexCoords(): void {
+    let tmp = 0;
+
+    tmp = this.vertices[4];
+    this.vertices[4] = this.vertices[13];
+    this.vertices[13] = tmp;
+
+    tmp = this.vertices[22];
+    this.vertices[22] = this.vertices[31];
+    this.vertices[31] = tmp;
+  }
+
   public setVerticesColor(color: Vector4): void {
     for (let i = 5; i < 33; i += 9) {
       this.vertices[i + 0] = color.x;
@@ -149,6 +173,10 @@ export class Sprite extends Node {
 
   public setSizeFromVector2(size: Vector2): void {
     this.setSize(size.x, size.y);
+  }
+
+  public multSize(scale: number): void {
+    this.setSize(this._width * scale, this._height * scale);
   }
 
   public setTextureRegion(region: TextureRegion, adjustSpriteSize: boolean = true): void {
