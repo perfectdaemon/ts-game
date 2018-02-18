@@ -3,9 +3,9 @@ import { Material } from '../../engine/render/material';
 import { ShaderProgram } from '../../engine/render/shader-program';
 import { Texture } from '../../engine/render/texture';
 import { TextureAtlas } from '../../engine/render/texture-atlas';
-import { DEFAULT_ATLAS_DATA, CHARACTER_TEXTURE_DATE } from './data-assets/default-atlas';
 import { DEFAULT_MATERIAL_DATA } from './data-assets/default-material';
 import { DEFAULT_SHADER_DATA } from './data-assets/default-shader';
+import { CHARACTER_TEXTURE_DATE, DEFAULT_ATLAS_DATA } from './data-assets/textures';
 
 export class Assets {
   shader: ShaderProgram;
