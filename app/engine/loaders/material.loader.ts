@@ -18,17 +18,12 @@ export class MaterialLoader {
     textureAtlasLoader: TextureAtlasLoader,
   ): Promise<Material> {
     return new Promise<Material>((resolve, reject) => {
-      const material = new Material();
 
       if (!data.shaderProgram && !data.shaderProgramData) {
         throw new Error(`Can't create material - no shader or shader data provided`);
       }
 
-      const shaderPromise = data.shaderProgram
-        ? new Promise<ShaderProgram>((res, rej) => res(data.shaderProgram as ShaderProgram))
-        : shaderProgramLoader.load(data.shaderProgramData as ShaderProgramData);
-
-      shaderPromise.then(shaderProgram => material.shader = shaderProgram);
+      const material = new Material();
 
       material.blend = data.blend;
       material.color = data.color;
@@ -37,29 +32,37 @@ export class MaterialLoader {
       material.depthTestFunc = data.depthTestFunc;
       material.depthWrite = data.depthWrite;
 
-      const textureAddedPromises: Promise<void>[] = [];
-      for (const textureInfo of data.textures || []) {
-        if (textureInfo.texture) {
-          material.addTexture(textureInfo.texture, textureInfo.uniformName);
-        } else if (textureInfo.textureAtlas) {
-          material.addTexture(textureInfo.textureAtlas, textureInfo.uniformName);
-        } else if (textureInfo.textureData) {
-          const promise = textureLoader.load(textureInfo.textureData)
-            .then(texture => material.addTexture(texture, textureInfo.uniformName));
-          textureAddedPromises.push(promise);
-        } else if (textureInfo.textureAtlasData) {
-          const promise = textureAtlasLoader.load(textureInfo.textureAtlasData)
-            .then(texture => material.addTexture(texture, textureInfo.uniformName));
-          textureAddedPromises.push(promise);
-        } else {
-          throw new Error(
-            `Can't add texture with uniformName '${textureInfo.uniformName}'
-             to material - no texture or texture data provided`);
-        }
-      }
+      const shaderPromise = data.shaderProgram
+        ? new Promise<ShaderProgram>((res, rej) => res(data.shaderProgram as ShaderProgram))
+        : shaderProgramLoader.load(data.shaderProgramData as ShaderProgramData);
 
-      Promise.all(textureAddedPromises)
-        .then(() => resolve(material));
+      shaderPromise
+        .then(shaderProgram => material.shader = shaderProgram)
+        .then(() => {
+          const textureAddedPromises: Promise<void>[] = [];
+          for (const textureInfo of data.textures) {
+            if (textureInfo.texture) {
+              material.addTexture(textureInfo.texture, textureInfo.uniformName);
+            } else if (textureInfo.textureAtlas) {
+              material.addTexture(textureInfo.textureAtlas, textureInfo.uniformName);
+            } else if (textureInfo.textureData) {
+              const promise = textureLoader.load(textureInfo.textureData)
+                .then(texture => material.addTexture(texture, textureInfo.uniformName));
+              textureAddedPromises.push(promise);
+            } else if (textureInfo.textureAtlasData) {
+              const promise = textureAtlasLoader.load(textureInfo.textureAtlasData)
+                .then(texture => material.addTexture(texture, textureInfo.uniformName));
+              textureAddedPromises.push(promise);
+            } else {
+              throw new Error(
+                `Can't add texture with uniformName '${textureInfo.uniformName}'
+                 to material - no texture or texture data provided`);
+            }
+          }
+
+          Promise.all(textureAddedPromises)
+            .then(() => resolve(material));
+        });
     });
   }
 

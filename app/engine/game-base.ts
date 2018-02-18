@@ -1,4 +1,5 @@
 import { Input } from './input/input';
+import { Keys } from './input/keys.enum';
 import { Vector2 } from './math/vector2';
 import { WebGLRenderer } from './render/webgl-renderer';
 import { ClearMask } from './render/webgl-types';
@@ -72,4 +73,8 @@ export abstract class GameBase {
    * Mouse down callback
    */
   protected abstract onMouseDown(position: Vector2): void;
+
+  protected abstract onKeyDown(key: Keys): void;
+
+  protected abstract onKeyUp(key: Keys): void;
 }

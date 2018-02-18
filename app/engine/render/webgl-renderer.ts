@@ -72,6 +72,8 @@ export class WebGLRenderer {
     this.initWebGL();
     this.createScreenQuad();
     this.initEvents();
+
+    canvasElement.focus();
   }
 
   public free(): void {

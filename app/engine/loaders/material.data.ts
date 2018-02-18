@@ -11,13 +11,13 @@ export class MaterialData {
   shaderProgram?: ShaderProgram;
   shaderProgramData?: ShaderProgramData;
 
-  textures?: {
+  textures: {
     texture?: Texture;
     textureAtlas?: TextureAtlas;
     textureData?: TextureData;
     textureAtlasData?: TextureAtlasData;
     uniformName: string;
-  }[];
+  }[] = [];
 
   color: Vector4 = new Vector4(1, 1, 1, 1);
 
