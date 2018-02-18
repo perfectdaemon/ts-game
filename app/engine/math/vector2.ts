@@ -52,17 +52,32 @@ export class Vector2 {
     return this;
   }
 
-  multiply(value: number) {
+  multiplyNum(value: number) {
     return new Vector2(this.x * value, this.y * value);
   }
 
+  multiplyNumSelf(num: number): Vector2 {
+    this.x *= num;
+    this.y *= num;
+    return this;
+  }
+
   normal(): Vector2 {
-    const len = this.length();
+    const length = this.length();
 
-    if (len < MathBase.eps)
-      return new Vector2(0, 0);
+    return length < MathBase.eps
+      ? new Vector2(0, 0)
+      : this.multiplyNum(1 / length);
+  }
 
-    return this.multiply(1 / len);
+  normalize(): Vector2 {
+    const length = this.length();
+
+    length < MathBase.eps
+      ? this.set(0, 0)
+      : this.multiplyNumSelf(1 / length);
+
+    return this;
   }
 
   toString(): string {

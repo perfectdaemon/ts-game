@@ -1,4 +1,5 @@
 import { MathBase } from './math-base';
+import { Vector2 } from './vector2';
 
 export class Vector3 {
   constructor(public x: number, public y: number, public z: number) { }
@@ -40,6 +41,13 @@ export class Vector3 {
     this.x += vector.x;
     this.y += vector.y;
     this.z += vector.z;
+
+    return this;
+  }
+
+  addVector2ToSelf(vector: Vector2): Vector3 {
+    this.x += vector.x;
+    this.y += vector.y;
 
     return this;
   }
