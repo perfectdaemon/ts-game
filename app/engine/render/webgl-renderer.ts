@@ -34,9 +34,9 @@ export class WebGLRenderer {
   private _blendingMode: BlendingMode = BlendingMode.None;
   private _cullMode: CullMode;
 
-  private _depthWrite: boolean;
-  private _depthTest: boolean;
-  private _depthFunc: FuncComparison;
+  private _depthWrite: boolean = false;
+  private _depthTest: boolean = false;
+  private _depthFunc: FuncComparison = FuncComparison.Never;
 
   private _shader: ShaderProgram | null;
   private _textureSampler: Array<Texture | null> = new Array<Texture>(TEXTURE_SAMPLERS_MAX);
