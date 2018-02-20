@@ -10,10 +10,16 @@ export class TextureAtlasLoader {
       const image = new Image();
       image.onload = event => {
         texture.loadFromImage(image);
+        texture.setFilter(data.filter);
+        if (data.anisotropic > 0) {
+          texture.trySetAnisotropic(data.anisotropic);
+        }
         console.log(`Texture '${data.imageFileSrc}' loaded, width: ${image.width}, height: ${image.height}`);
+
         AssetLoader.getTextFromUrl(data.atlasFileSrc)
           .then(result => {
             texture.loadRegionInfo(result);
+
             resolve(texture);
           })
           .catch(error => reject(error));

@@ -62,8 +62,20 @@ export class Texture {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     }
+  }
 
-    this.trySetAnisotropic(16);
+  public trySetAnisotropic(desiredAnisotropyLevel: number): void {
+    const anisotropicExt = (
+      gl.getExtension('EXT_texture_filter_anisotropic') ||
+      gl.getExtension('MOZ_EXT_texture_filter_anisotropic') ||
+      gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic')
+    );
+
+    if (!anisotropicExt) { return; }
+
+    const maxAnisotropyLevel = gl.getParameter(anisotropicExt.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+    const anisotropyLevel = Math.min(desiredAnisotropyLevel, maxAnisotropyLevel);
+    gl.texParameterf(gl.TEXTURE_2D, anisotropicExt.TEXTURE_MAX_ANISOTROPY_EXT, anisotropyLevel);
   }
 
   private getWebGLWrap(wrap: TextureWrap): number {
@@ -83,17 +95,5 @@ export class Texture {
     }
   }
 
-  private trySetAnisotropic(desiredAnisotropyLevel: number): void {
-    const anisotropicExt = (
-      gl.getExtension('EXT_texture_filter_anisotropic') ||
-      gl.getExtension('MOZ_EXT_texture_filter_anisotropic') ||
-      gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic')
-    );
 
-    if (!anisotropicExt) { return; }
-
-    const maxAnisotropyLevel = gl.getParameter(anisotropicExt.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-    const anisotropyLevel = Math.min(desiredAnisotropyLevel, maxAnisotropyLevel);
-    gl.texParameterf(gl.TEXTURE_2D, anisotropicExt.TEXTURE_MAX_ANISOTROPY_EXT, anisotropyLevel);
-  }
 }
