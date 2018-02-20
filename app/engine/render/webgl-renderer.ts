@@ -292,6 +292,7 @@ export class WebGLRenderer {
     );
 
     this.canvasElement.onmousemove = event => {
+      event.preventDefault();
       const inputEvent = this.getInputEventFromMouseEvent(event);
       this.inputProcessor.process(inputEvent);
 
@@ -306,6 +307,7 @@ export class WebGLRenderer {
     };
 
     this.canvasElement.onmousedown = event => {
+      event.preventDefault();
       const inputEvent = this.getInputEventFromMouseEvent(event);
       this.inputProcessor.process(inputEvent);
 
@@ -320,16 +322,19 @@ export class WebGLRenderer {
     };
 
     this.canvasElement.onwheel = event => {
+      event.preventDefault();
       const inputEvent = this.getInputEventFromMouseEvent(event);
       this.inputProcessor.process(inputEvent);
     };
 
     this.canvasElement.onkeydown = event => {
+      event.preventDefault();
       const inputEvent = this.getInputEventFromKeyEvent(event);
       this.inputProcessor.process(inputEvent);
     };
 
     this.canvasElement.onkeyup = event => {
+      event.preventDefault();
       const inputEvent = this.getInputEventFromKeyEvent(event);
       this.inputProcessor.process(inputEvent);
     };
