@@ -31,20 +31,21 @@ export class Player {
 
   onUpdate(deltaTime: number): void {
     this.moveVector.set(0, 0);
-    if (this.input.isKeyDown[Keys.Down]) {
+    if (this.input.isKeyDown[Keys.Down] || this.input.isKeyDown[Keys.S]) {
       this.currentAnimationYCoord = frameSize * 0;
       this.moveVector.y = 1;
       this.setAnimation();
       this.weaponUpCorrection = 6;
       this.weaponZ = 1;
-    } else if (this.input.isKeyDown[Keys.Up]) {
+    } else if (this.input.isKeyDown[Keys.Up] || this.input.isKeyDown[Keys.W]) {
       this.currentAnimationYCoord = frameSize * 3;
       this.moveVector.y = -1;
       this.setAnimation();
       this.weaponUpCorrection = 12;
       this.weaponZ = -0.5;
     }
-    if (this.input.isKeyDown[Keys.Left]) {
+
+    if (this.input.isKeyDown[Keys.Left] || this.input.isKeyDown[Keys.A]) {
       this.currentAnimationYCoord = frameSize * 1;
       this.moveVector.x = -1;
       this.setAnimation();
@@ -54,7 +55,7 @@ export class Player {
       }
 
       this.weaponPosition.x = -32;
-    } else if (this.input.isKeyDown[Keys.Right]) {
+    } else if (this.input.isKeyDown[Keys.Right] || this.input.isKeyDown[Keys.D]) {
       this.currentAnimationYCoord = frameSize * 2;
       this.moveVector.x = 1;
       this.setAnimation();
