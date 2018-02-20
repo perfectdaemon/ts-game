@@ -10,6 +10,8 @@ import { Camera, CameraPivot, CameraProjectionMode } from '../../engine/scene/ca
 import { Sprite } from '../../engine/scene/sprite';
 import { GameBase } from './../../engine/game-base';
 import { Assets } from './assets';
+import { LEVEL_DATA } from './data-assets/level.data';
+import { Level } from './level';
 import { Player } from './player';
 
 export class Game extends GameBase {
@@ -19,6 +21,7 @@ export class Game extends GameBase {
   camera: Camera = new Camera();
   assets: Assets = new Assets();
   player: Player = new Player(this.input);
+  level: Level = new Level();
 
   private ready: boolean = false;
 
@@ -31,9 +34,13 @@ export class Game extends GameBase {
     this.player.weapon.position.set(24, 0, -1);
     this.assets.loadAll()
       .then(() => {
-        this.ready = true;
         this.player.weapon.setTextureRegion(this.assets.textureAtlas.getRegion('pistol2.png'), true);
         this.player.weapon.multSize(2);
+
+        this.level.material = this.assets.material;
+        this.level.loadFromData(LEVEL_DATA[0], this.player);
+
+        this.ready = true;
       });
 
     this.renderer.setClearColorRGB(0.1, 0.2, 0.2, 0.5);
@@ -49,6 +56,8 @@ export class Game extends GameBase {
     this.camera.update();
     this.assets.shader.updateUniformValue('uModelViewProj', this.renderer.renderParams.modelViewProjection.e);
     this.assets.shader.updateUniformValue('uColor', this.renderer.renderParams.color.asArray());
+
+    this.level.draw();
 
     this.assets.material.bind();
     this.spriteBatch2.start();
