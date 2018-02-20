@@ -1,9 +1,9 @@
 import { Input } from '../../engine/input/input';
 import { Keys } from '../../engine/input/keys.enum';
+import { MathBase } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector3 } from '../../engine/math/vector3';
 import { Sprite } from '../../engine/scene/sprite';
-import { MathBase } from '../../engine/math/math-base';
 
 const textureSize = [96, 128];
 const frameSize = 32;
