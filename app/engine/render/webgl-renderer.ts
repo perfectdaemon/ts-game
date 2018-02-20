@@ -292,7 +292,6 @@ export class WebGLRenderer {
     );
 
     this.canvasElement.onmousemove = event => {
-      event.preventDefault();
       const inputEvent = this.getInputEventFromMouseEvent(event);
       this.inputProcessor.process(inputEvent);
 
@@ -307,7 +306,6 @@ export class WebGLRenderer {
     };
 
     this.canvasElement.onmousedown = event => {
-      event.preventDefault();
       const inputEvent = this.getInputEventFromMouseEvent(event);
       this.inputProcessor.process(inputEvent);
 
