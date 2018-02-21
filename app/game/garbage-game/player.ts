@@ -4,6 +4,7 @@ import { MathBase } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector3 } from '../../engine/math/vector3';
 import { Sprite } from '../../engine/scene/sprite';
+import { Circle } from './physics/circle';
 
 const textureSize = [96, 128];
 const frameSize = 32;
@@ -14,6 +15,7 @@ export class Player {
   speed: number = defaultSpeed;
   body: Sprite = new Sprite(frameSize * 2, frameSize * 2);
   weapon: Sprite = new Sprite();
+  collider: Circle = new Circle(new Vector2(this.body.position.x, this.body.position.y), this.body.width / 2);
 
   private currentAnimationYCoord: number = 0;
   private currentAnimationXCoord: number = 0;
@@ -80,6 +82,8 @@ export class Player {
       this.animationTimer = 0;
       this.currentAnimationXCoord = (this.currentAnimationXCoord + frameSize) % textureSize[0];
     }
+
+    this.collider.center.set(this.body.position.x, this.body.position.y);
   }
 
   private setAnimation() {
