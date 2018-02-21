@@ -48,6 +48,10 @@ export class Game extends GameBase {
 
   protected onUpdate(deltaTime: number): void {
     this.player.onUpdate(deltaTime);
+
+    if (this.level.collide(this.player.collider)) {
+      console.log('collided!');
+    }
   }
 
   protected onRender(): void {
