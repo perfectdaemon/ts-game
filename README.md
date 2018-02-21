@@ -8,10 +8,11 @@ In fact it is just a beginning of that.
 * Scene management: Camera, Node
 * 2D graphics - Sprite, Text, SpriteBatch renderer
 * Math classes - Vectors, Matrix
+* TextureAtlas
+* Async asset loaders based on Promise<>
 
 ## What is in progress
 * Font, TextBatch
-* TextureAtlas
 
 ## Roadmap
 * 2D graphics full support
