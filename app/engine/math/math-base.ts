@@ -13,3 +13,7 @@ export function isPowerOf2(value: number): boolean {
 export function isEqual(number1: number, number2: number): boolean {
   return Math.abs(number1 - number2) < MathBase.eps;
 }
+
+export function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
