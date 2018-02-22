@@ -6,18 +6,19 @@ import { SpriteBatch } from '../../engine/render2d/sprite-batch';
 import { Sprite } from '../../engine/scene/sprite';
 import { LevelData, TileRole } from './data-assets/level.data';
 import { AABB } from './physics/aabb';
-import { Player } from './player';
 import { Circle } from './physics/circle';
+import { Player } from './player';
 
 export class Level {
   material: Material;
   sprites: Sprite[] = new Array<Sprite>(300);
   colliders: AABB[] = new Array<AABB>(300);
   backgroundColor: Vector4 = new Vector4(0.1, 0.2, 0.2, 0.5);
+  playerStartPosition: Vector2 = new Vector2(0, 0);
 
   private _spriteBatch: SpriteBatch = new SpriteBatch();
 
-  loadFromData(data: LevelData, player: Player): void {
+  loadFromData(data: LevelData): void {
     const mapLines = data.map.split('\n');
     const pivotPoint = new Vector2(0.5, 0.5);
 
@@ -36,8 +37,7 @@ export class Level {
         }
 
         if (tileType[0].role === TileRole.Player) {
-          player.body.position.x = tileX * data.tileSize;
-          player.body.position.y = tileY * data.tileSize;
+          this.playerStartPosition.set(tileX * data.tileSize, tileY * data.tileSize);
           continue;
         }
 

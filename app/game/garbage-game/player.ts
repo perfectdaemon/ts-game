@@ -4,6 +4,7 @@ import { MathBase } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector3 } from '../../engine/math/vector3';
 import { Sprite } from '../../engine/scene/sprite';
+import { GAME_STATE } from './game-state';
 import { Circle } from './physics/circle';
 
 const textureSize = [96, 128];
@@ -16,6 +17,7 @@ export class Player {
   body: Sprite = new Sprite(frameSize * 2, frameSize * 2);
   weapon: Sprite = new Sprite();
   collider: Circle = new Circle(new Vector2(this.body.position.x, this.body.position.y), this.body.width / 2);
+  nextCollider: Circle = new Circle(new Vector2(this.body.position.x, this.body.position.y), this.body.width / 2);
 
   private currentAnimationYCoord: number = 0;
   private currentAnimationXCoord: number = 0;
@@ -36,13 +38,13 @@ export class Player {
     if (this.input.isKeyDown[Keys.Down] || this.input.isKeyDown[Keys.S]) {
       this.currentAnimationYCoord = frameSize * 0;
       this.moveVector.y = 1;
-      this.setAnimation();
+
       this.weaponUpCorrection = 6;
       this.weaponZ = 1;
     } else if (this.input.isKeyDown[Keys.Up] || this.input.isKeyDown[Keys.W]) {
       this.currentAnimationYCoord = frameSize * 3;
       this.moveVector.y = -1;
-      this.setAnimation();
+
       this.weaponUpCorrection = 12;
       this.weaponZ = -0.5;
     }
@@ -50,7 +52,7 @@ export class Player {
     if (this.input.isKeyDown[Keys.Left] || this.input.isKeyDown[Keys.A]) {
       this.currentAnimationYCoord = frameSize * 1;
       this.moveVector.x = -1;
-      this.setAnimation();
+
       if (!this.flippedX) {
         this.flippedX = true;
         this.weapon.flipVerticallyCurrentTexCoords();
@@ -60,7 +62,7 @@ export class Player {
     } else if (this.input.isKeyDown[Keys.Right] || this.input.isKeyDown[Keys.D]) {
       this.currentAnimationYCoord = frameSize * 2;
       this.moveVector.x = 1;
-      this.setAnimation();
+
       if (this.flippedX) {
         this.flippedX = false;
         this.weapon.flipVerticallyCurrentTexCoords();
@@ -70,20 +72,22 @@ export class Player {
 
     this.moveVector.normalize();
     if (this.moveVector.lengthQ() > MathBase.eps) {
+      this.setAnimation();
       this.weapon.rotation = this.moveVector.toAngle() + 90;
       this.weaponPosition.set(32 * this.moveVector.x, this.weaponUpCorrection + 32 * this.moveVector.y);
       this.weapon.position.set(this.weaponPosition.x, this.weaponPosition.y, this.weaponZ);
     }
 
+    // physics
     this.moveVector.multiplyNumSelf(this.speed * deltaTime);
-    this.body.position.addVector2ToSelf(this.moveVector);
+    this.updatePosition();
+
+    // animate movement
     this.animationTimer += deltaTime;
     if (this.animationTimer > animationSpeed) {
       this.animationTimer = 0;
       this.currentAnimationXCoord = (this.currentAnimationXCoord + frameSize) % textureSize[0];
     }
-
-    this.collider.center.set(this.body.position.x, this.body.position.y);
   }
 
   private setAnimation() {
@@ -100,5 +104,17 @@ export class Player {
       this.currentAnimationXCoord / textureSize[0],
       (this.currentAnimationYCoord + frameSize) / textureSize[1],
     ]);
+  }
+
+  private updatePosition(): void {
+    this.moveVector.addToSelf(this.body.position);
+    this.nextCollider.center.set(this.moveVector);
+
+    if (GAME_STATE.currentLevel.collide(this.nextCollider)) {
+      this.moveVector.set(0, 0);
+    } else {
+      this.body.position.set(this.moveVector);
+      this.collider.center.set(this.body.position.x, this.body.position.y);
+    }
   }
 }

@@ -11,6 +11,7 @@ import { Sprite } from '../../engine/scene/sprite';
 import { GameBase } from './../../engine/game-base';
 import { Assets } from './assets';
 import { LEVEL_DATA } from './data-assets/level.data';
+import { GAME_STATE } from './game-state';
 import { Level } from './level';
 import { Player } from './player';
 
@@ -38,7 +39,10 @@ export class Game extends GameBase {
         this.player.weapon.multSize(2);
 
         this.level.material = this.assets.material;
-        this.level.loadFromData(LEVEL_DATA[0], this.player);
+        this.level.loadFromData(LEVEL_DATA[0]);
+        this.player.body.position.set(this.level.playerStartPosition);
+
+        GAME_STATE.currentLevel = this.level;
 
         this.ready = true;
       });
@@ -47,11 +51,9 @@ export class Game extends GameBase {
   }
 
   protected onUpdate(deltaTime: number): void {
-    this.player.onUpdate(deltaTime);
+    if (!this.ready) { return; }
 
-    if (this.level.collide(this.player.collider)) {
-      console.log('collided!');
-    }
+    this.player.onUpdate(deltaTime);
   }
 
   protected onRender(): void {
