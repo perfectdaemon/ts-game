@@ -3,7 +3,7 @@ import { Circle } from './circle';
 
 export class AABB {
   public halfSize: Vector2;
-  constructor(public center: Vector2, public size: Vector2) {
+  constructor(public center: Vector2, size: Vector2) {
     this.halfSize = new Vector2(size.x / 2, size.y / 2);
   }
 
