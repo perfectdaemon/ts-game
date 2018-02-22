@@ -13,7 +13,7 @@ export class Vector2 {
     if (x instanceof Vector2 || x instanceof Vector3) {
       this.x = x.x;
       this.y = x.y;
-    } else if (y) {
+    } else if (y !== undefined) {
       this.x = x;
       this.y = y;
     } else {
