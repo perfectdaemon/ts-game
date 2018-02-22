@@ -9,9 +9,16 @@ export class Vector2 {
 
   constructor(public x: number, public y: number) { }
 
-  set(x: number, y: number): void {
-    this.x = x;
-    this.y = y;
+  set(x: number | Vector2 | Vector3, y?: number): void {
+    if (x instanceof Vector2 || x instanceof Vector3) {
+      this.x = x.x;
+      this.y = x.y;
+    } else if (y) {
+      this.x = x;
+      this.y = y;
+    } else {
+      throw new Error(`Vector2.set(): 'x' is number, but no 'y' provided`);
+    }
   }
 
   equalTo(other: Vector2): boolean {
