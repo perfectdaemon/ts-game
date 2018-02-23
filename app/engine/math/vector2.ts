@@ -7,7 +7,7 @@ export class Vector2 {
     return new Vector2(vector.x, vector.y);
   }
 
-  constructor(public x: number, public y: number) { }
+  constructor(public x: number = 0, public y: number = 0) { }
 
   set(x: number | Vector2 | Vector3, y?: number): Vector2 {
     if (x instanceof Vector2 || x instanceof Vector3) {
