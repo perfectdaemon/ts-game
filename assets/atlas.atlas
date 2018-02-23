@@ -1,17 +1,18 @@
 textures: atlas.png
-wall3.png	0	0	32	32	0	0	32	32	
-wall2.png	33	0	32	32	0	0	32	32	
+wall6.png	0	0	32	32	0	0	32	32	
+wall5.png	33	0	32	32	0	0	32	32	
 wall1.png	66	0	32	32	0	0	32	32	
-wall6.png	0	33	32	32	0	0	32	32	
-wall4.png	33	33	32	32	0	0	32	32	
-wall5.png	66	33	32	32	0	0	32	32	
+wall3.png	0	33	32	32	0	0	32	32	
+wall2.png	33	33	32	32	0	0	32	32	
+wall4.png	66	33	32	32	0	0	32	32	
 gold1.png	0	66	29	29	0	0	29	29	
 mana1.png	99	0	11	29	0	0	11	29	
 health1.png	111	0	11	29	0	0	11	29	
 knife3.png	99	30	5	25	0	0	5	25	
+bullet1.png	30	66	49	24	12	2	64	27	
 knife1.png	105	30	11	24	0	0	11	24	
 knife2.png	117	30	9	24	0	0	9	24	
 pistol4.png	118	55	9	23	0	0	9	23	
 pistol3.png	108	55	9	23	0	0	9	23	
-pistol2.png	30	66	10	22	0	0	10	22	
-pistol1.png	41	66	9	22	0	0	9	22	
+pistol2.png	80	66	10	22	0	0	10	22	
+pistol1.png	91	66	9	22	0	0	9	22	
