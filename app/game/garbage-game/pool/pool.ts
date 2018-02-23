@@ -3,16 +3,19 @@ import { IPoolItem } from './ipool-item';
 const defaultInitialSize = 30;
 
 export class Pool<Item extends IPoolItem> {
-  private _poolObjects: Item[];
-  private _newItem: () => Item;
+  poolObjects: Item[];
 
-  constructor(newItem: () => Item, initialSize?: number) {
-    this._poolObjects = new Array<Item>(initialSize || defaultInitialSize);
-    this._newItem = newItem;
+  constructor(public newItem: () => Item, initialSize?: number) {
+    this.poolObjects = new Array<Item>(initialSize || defaultInitialSize);
+
+    for (let i = 0; i < this.poolObjects.length; ++i) {
+      this.poolObjects[i] = this.newItem();
+      this.poolObjects[i].onDeactivate();
+    }
   }
 
   get(): Item {
-    for (const item of this._poolObjects) {
+    for (const item of this.poolObjects) {
       if (!item.active) {
         item.active = true;
         item.onActivate();
@@ -20,10 +23,10 @@ export class Pool<Item extends IPoolItem> {
       }
     }
 
-    const newItem = this._newItem();
+    const newItem = this.newItem();
     newItem.active = true;
     newItem.onActivate();
-    this._poolObjects.push(newItem);
+    this.poolObjects.push(newItem);
     return newItem;
   }
 
