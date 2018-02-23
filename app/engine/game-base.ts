@@ -30,7 +30,7 @@ export abstract class GameBase {
 
     const gameLoop = (timestamp: number) => {
       this.lastTime = this.currentTime;
-      this.currentTime = timestamp;
+      this.currentTime = timestamp / 1000;
 
       this.deltaTime = Math.min(this.currentTime - this.lastTime, 0.1);
 
