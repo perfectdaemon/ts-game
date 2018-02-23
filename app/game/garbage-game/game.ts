@@ -10,11 +10,11 @@ import { Camera, CameraPivot, CameraProjectionMode } from '../../engine/scene/ca
 import { Sprite } from '../../engine/scene/sprite';
 import { GameBase } from './../../engine/game-base';
 import { Assets } from './assets';
+import { BulletManager } from './bullet-manager';
 import { LEVEL_DATA } from './data-assets/level.data';
 import { GAME_STATE } from './game-state';
 import { Level } from './level';
 import { Player } from './player';
-import { BulletManager } from './bullet-manager';
 
 export class Game extends GameBase {
   spriteBatch: SpriteBatch = new SpriteBatch();
