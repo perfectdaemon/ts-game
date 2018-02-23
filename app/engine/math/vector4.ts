@@ -1,8 +1,8 @@
 export class Vector4 {
-  constructor(public x: number, public y: number, public w: number, public z: number) {
+  constructor(public x: number, public y: number, public z: number, public w: number) {
   }
 
-  set(x: number, y: number, w: number, z: number): void {
+  set(x: number, y: number, z: number, w: number): void {
     this.x = x;
     this.y = y;
     this.z = z;
