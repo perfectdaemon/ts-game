@@ -8,6 +8,7 @@ import { Circle } from './physics/circle';
 import { IPoolItem } from './pool/ipool-item';
 
 const bulletDamage = 1;
+const bulletSpeed = 800;
 
 export class Bullet implements IPoolItem {
   active: boolean = false;
@@ -17,6 +18,7 @@ export class Bullet implements IPoolItem {
   moveVector: Vector2 = new Vector2();
   bulletDamage: number = bulletDamage;
   bulletOwner: BulletOwner = BulletOwner.Player;
+  bulletSpeed: number = bulletSpeed;
 
   private moveVectorN: Vector2 = new Vector2();
 
@@ -26,7 +28,7 @@ export class Bullet implements IPoolItem {
     this.sprite.setTextureRegion(textureRegion, true);
     this.sprite.multSize(multSize);
 
-    this.collider = new Circle(new Vector2(), this.sprite.width / 2);
+    this.collider = new Circle(new Vector2(), 1);
   }
 
   onActivate(): void {
@@ -39,7 +41,7 @@ export class Bullet implements IPoolItem {
   update(deltaTime: number): void {
     if (!this.active) { return; }
 
-    this.moveVectorN = this.moveVector.multiplyNum(deltaTime * 550);
+    this.moveVectorN = this.moveVector.multiplyNum(deltaTime * this.bulletSpeed);
     this.sprite.position.addToSelf(this.moveVectorN);
     this.collider.center.set(this.sprite.position);
 
