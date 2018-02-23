@@ -36,6 +36,7 @@ export class Enemy implements IPoolItem {
 
   onActivate(): void {
     this.body.visible = true;
+    this.health = this.maxHealth;
   }
 
   onDeactivate(): void {
