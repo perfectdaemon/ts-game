@@ -13,11 +13,13 @@ const defaultSpeed = 150;
 const animationSpeed = 0.1;
 const colliderReduceSize = 3;
 const weaponShotTimeout = 0.4;
+const defaultAccuracy = 0.7;
 
 export class Player {
   speed: number = defaultSpeed;
   body: Sprite = new Sprite(frameSize * 2, frameSize * 2);
   weapon: Sprite = new Sprite(0, 0, new Vector2(0.5, 1));
+  accuracy: number = defaultAccuracy;
 
   collider: Circle = new Circle(
     new Vector2(this.body.position.x, this.body.position.y),
@@ -35,9 +37,7 @@ export class Player {
   private nextPosition: Vector2 = new Vector2(0, 1);
 
   private weaponFlippedX: boolean = false;
-  private weaponPosition: Vector2 = new Vector2(0, 0);
-  private weaponUpCorrection: number = 0;
-  private weaponZ: number = 1;
+  private weaponFireDirection: Vector2 = new Vector2(0, 0);
   private weaponShotTimer: number = 0;
   private weaponAbsolutePosition: Vector2 = new Vector2();
 
@@ -118,7 +118,13 @@ export class Player {
 
   private updateFire(deltaTime: number) {
     if (this.input.touches[1].isDown && this.weaponShotTimer <= 0) {
-      GAME_STATE.bulletManager.fire(this.weaponAbsolutePosition, this.characterViewDirection);
+
+      this.weaponFireDirection
+        .set(-this.characterViewDirection.y, this.characterViewDirection.x)
+        .multiplyNumSelf(0.5 - Math.random())
+        .multiplyNumSelf(1 - this.accuracy)
+        .addToSelf(this.characterViewDirection);
+      GAME_STATE.bulletManager.fire(this.weaponAbsolutePosition, this.weaponFireDirection);
       this.weaponShotTimer = weaponShotTimeout;
     }
 
