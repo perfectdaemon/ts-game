@@ -12,6 +12,7 @@ import { Texture } from './texture';
 import { VertexBuffer } from './vertex-buffer';
 import { gl, WebGLRegisterService } from './webgl';
 import { BlendingMode, ClearMask, CullMode, FuncComparison, IndexFormat, VertexFormat } from './webgl-types';
+import { Vector4 } from '../math/vector4';
 
 const TEXTURE_SAMPLERS_MAX = 8;
 
@@ -121,6 +122,10 @@ export class WebGLRenderer {
       case ClearMask.Color: gl.clear(gl.COLOR_BUFFER_BIT); break;
       case ClearMask.Depth: gl.clear(gl.DEPTH_BUFFER_BIT); break;
     }
+  }
+
+  public setClearColor(v: Vector4): void {
+    gl.clearColor(v.x, v.y, v.z, v.w);
   }
 
   public setClearColorRGB(r: number, g: number, b: number, a: number): void {
