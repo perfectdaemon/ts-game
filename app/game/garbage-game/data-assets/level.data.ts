@@ -39,12 +39,12 @@ export const LEVEL_DATA: LevelData[] = [
 
     h
             h
-
+  111     111
 
       @
 
           m
-
+  111     111
 
 445443445444644
 `,
