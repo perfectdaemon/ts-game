@@ -9,15 +9,20 @@ import { Circle } from './physics/circle';
 
 const textureSize = [96, 128];
 const frameSize = 32;
-const defaultSpeed = 25;
+const defaultSpeed = 35;
 const animationSpeed = 0.5;
+const colliderReduceSize = 3;
 
 export class Player {
   speed: number = defaultSpeed;
   body: Sprite = new Sprite(frameSize * 2, frameSize * 2);
   weapon: Sprite = new Sprite();
-  collider: Circle = new Circle(new Vector2(this.body.position.x, this.body.position.y), this.body.width / 2);
-  nextCollider: Circle = new Circle(new Vector2(this.body.position.x, this.body.position.y), this.body.width / 2);
+  collider: Circle = new Circle(
+    new Vector2(this.body.position.x, this.body.position.y),
+    this.body.width / 2 - colliderReduceSize);
+  nextCollider: Circle = new Circle(
+    new Vector2(this.body.position.x, this.body.position.y),
+    this.body.width / 2 - colliderReduceSize);
 
   private currentAnimationYCoord: number = 0;
   private currentAnimationXCoord: number = 0;
@@ -27,6 +32,7 @@ export class Player {
   private flippedX: boolean = false;
   private weaponUpCorrection: number = 0;
   private weaponZ: number = 1;
+  private nextPosition: Vector2 = new Vector2(0, 0);
 
   constructor(private input: Input) {
     this.setAnimation();
@@ -80,7 +86,9 @@ export class Player {
 
     // physics
     this.moveVector.multiplyNumSelf(this.speed * deltaTime);
-    this.updatePosition();
+    this.calculateMoveVector();
+    this.body.position.addToSelf(this.moveVector);
+    this.collider.center.set(this.body.position.x, this.body.position.y);
 
     // animate movement
     this.animationTimer += deltaTime;
@@ -106,15 +114,33 @@ export class Player {
     ]);
   }
 
-  private updatePosition(): void {
-    this.moveVector.addToSelf(this.body.position);
-    this.nextCollider.center.set(this.moveVector);
+  private calculateMoveVector(): void {
+    // try both
+    this.nextPosition
+      .set(this.body.position)
+      .addToSelf(this.moveVector);
+    this.nextCollider.center.set(this.nextPosition);
 
-    if (GAME_STATE.currentLevel.collide(this.nextCollider)) {
-      this.moveVector.set(0, 0);
-    } else {
-      this.body.position.set(this.moveVector);
-      this.collider.center.set(this.body.position.x, this.body.position.y);
+    if (!GAME_STATE.currentLevel.collide(this.nextCollider)) {
+      return;
     }
+
+    // try only x
+    this.nextPosition.set(this.body.position).addToSelf(this.moveVector.x, 0);
+    this.nextCollider.center.set(this.nextPosition);
+    if (!GAME_STATE.currentLevel.collide(this.nextCollider)) {
+      this.moveVector.y = 0;
+      return;
+    }
+
+    // try only y
+    this.nextPosition.set(this.body.position).addToSelf(0, this.moveVector.y);
+    this.nextCollider.center.set(this.nextPosition);
+    if (!GAME_STATE.currentLevel.collide(this.nextCollider)) {
+      this.moveVector.x = 0;
+      return;
+    }
+
+    this.moveVector.set(0, 0);
   }
 }
