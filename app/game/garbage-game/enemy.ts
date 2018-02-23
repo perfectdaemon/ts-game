@@ -4,8 +4,9 @@ import { Sprite } from '../../engine/scene/sprite';
 import { AABB } from './physics/aabb';
 import { IPoolItem } from './pool/ipool-item';
 
-const defaultEnemySpeed = 20;
+const defaultEnemySpeed = 50;
 const defaultEnemyMaxHealth = 2;
+const colliderReduceSize = 30;
 
 export class Enemy implements IPoolItem {
   active: boolean = false;
@@ -20,6 +21,7 @@ export class Enemy implements IPoolItem {
   collider: AABB;
 
   private moveIncrement: Vector2 = new Vector2();
+  private flippedX: boolean = false;
 
   constructor(textureRegion: TextureRegion, multSize: number = 1) {
     this.body = new Sprite();
@@ -27,7 +29,9 @@ export class Enemy implements IPoolItem {
     this.body.setTextureRegion(textureRegion, true);
     this.body.multSize(multSize);
 
-    this.collider = new AABB(new Vector2(), new Vector2(this.body.width, this.body.height));
+    this.collider = new AABB(
+      new Vector2(),
+      new Vector2(this.body.width - colliderReduceSize, this.body.height - colliderReduceSize));
   }
 
   onActivate(): void {
@@ -47,6 +51,14 @@ export class Enemy implements IPoolItem {
 
     this.body.position.addToSelf(this.moveIncrement);
     this.collider.center.set(this.body.position);
+
+    if (this.moveDirection.x > 0 && !this.flippedX) {
+      this.flippedX = true;
+      this.body.flipVerticallyCurrentTexCoords();
+    } else if (this.moveDirection.x < 0 && this.flippedX) {
+      this.flippedX = false;
+      this.body.flipVerticallyCurrentTexCoords();
+    }
   }
 
   hit(damage: number): void {
