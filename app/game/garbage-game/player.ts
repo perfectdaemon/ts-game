@@ -17,7 +17,7 @@ const weaponShotTimeout = 0.4;
 export class Player {
   speed: number = defaultSpeed;
   body: Sprite = new Sprite(frameSize * 2, frameSize * 2);
-  weapon: Sprite = new Sprite();
+  weapon: Sprite = new Sprite(0, 0, new Vector2(0.5, 1));
 
   collider: Circle = new Circle(
     new Vector2(this.body.position.x, this.body.position.y),
@@ -44,12 +44,20 @@ export class Player {
   private characterViewDirection: Vector2 = new Vector2();
 
   constructor(private input: Input) {
-    this.setAnimation();
+    this.updateAnimation(0.1);
     this.weapon.parent = this.body;
+    this.weapon.position.set(0, 15, 2);
   }
 
   hit(damage: number): void {
     console.log(`hit by ${damage} points`);
+  }
+
+  onMouseMove(mousePosition: Vector2): void {
+    this.characterViewDirection
+      .set(mousePosition)
+      .subtractFromSelf(this.body.position)
+      .normalize();
   }
 
   onUpdate(deltaTime: number): void {
@@ -57,28 +65,18 @@ export class Player {
 
     this.updateFire(deltaTime);
 
+    this.updateWeaponAppearance();
+
     if (this.moveDirection.lengthQ() > MathBase.eps) {
-      this.characterViewDirection.set(this.moveDirection);
-      this.setAnimation();
-      this.weapon.rotation = this.moveDirection.toAngle() + 90;
-      this.weaponPosition.set(32 * this.moveDirection.x, this.weaponUpCorrection + 32 * this.moveDirection.y);
-      this.weapon.position.set(this.weaponPosition.x, this.weaponPosition.y, this.weaponZ);
-      this.weaponAbsolutePosition.set(
-        this.weaponPosition.x + this.body.position.x,
-        this.weaponPosition.y + this.body.position.y);
+      this.updateAnimation(deltaTime);
+
+      this.weaponAbsolutePosition.set(this.weapon.position).addToSelf(this.body.position);
 
       // physics
       this.moveDirection.multiplyNumSelf(this.speed * deltaTime);
       this.calculateMoveVector();
       this.body.position.addToSelf(this.moveDirection);
       this.collider.center.set(this.body.position.x, this.body.position.y);
-
-      // animate movement
-      this.animationTimer += deltaTime;
-      if (this.animationTimer > animationSpeed) {
-        this.animationTimer = 0;
-        this.currentAnimationXCoord = (this.currentAnimationXCoord + frameSize) % textureSize[0];
-      }
     }
   }
 
@@ -87,43 +85,39 @@ export class Player {
     if (this.input.isKeyDown[Keys.Down] || this.input.isKeyDown[Keys.S]) {
       this.currentAnimationYCoord = frameSize * 0;
       this.moveDirection.y = 1;
-
-      this.weaponUpCorrection = 6;
-      this.weaponZ = 1;
+      this.weapon.position.z = 1;
     } else if (this.input.isKeyDown[Keys.Up] || this.input.isKeyDown[Keys.W]) {
       this.currentAnimationYCoord = frameSize * 3;
       this.moveDirection.y = -1;
-
-      this.weaponUpCorrection = 12;
-      this.weaponZ = -0.5;
+      this.weapon.position.z = -0.5;
     }
 
     if (this.input.isKeyDown[Keys.Left] || this.input.isKeyDown[Keys.A]) {
       this.currentAnimationYCoord = frameSize * 1;
       this.moveDirection.x = -1;
-
-      if (!this.weaponFlippedX) {
-        this.weaponFlippedX = true;
-        this.weapon.flipVerticallyCurrentTexCoords();
-      }
-
-      this.weaponPosition.x = -32;
+      this.weapon.position.z = 1;
     } else if (this.input.isKeyDown[Keys.Right] || this.input.isKeyDown[Keys.D]) {
       this.currentAnimationYCoord = frameSize * 2;
       this.moveDirection.x = 1;
-
-      if (this.weaponFlippedX) {
-        this.weaponFlippedX = false;
-        this.weapon.flipVerticallyCurrentTexCoords();
-      }
-      this.weaponPosition.x = 32;
+      this.weapon.position.z = 1;
     }
 
     this.moveDirection.normalize();
   }
 
+  private updateWeaponAppearance(): void {
+    this.weapon.rotation = this.characterViewDirection.toAngle() + 90;
+    if ((this.weapon.rotation < 0 || this.weapon.rotation > 180) && !this.weaponFlippedX) {
+      this.weaponFlippedX = true;
+      this.weapon.flipVerticallyCurrentTexCoords();
+    } else if (this.weapon.rotation > 0 && this.weapon.rotation < 180 && this.weaponFlippedX) {
+      this.weaponFlippedX = false;
+      this.weapon.flipVerticallyCurrentTexCoords();
+    }
+  }
+
   private updateFire(deltaTime: number) {
-    if (this.input.isKeyDown[Keys.Space] && this.weaponShotTimer <= 0) {
+    if (this.input.touches[1].isDown && this.weaponShotTimer <= 0) {
       GAME_STATE.bulletManager.fire(this.weaponAbsolutePosition, this.characterViewDirection);
       this.weaponShotTimer = weaponShotTimeout;
     }
@@ -133,7 +127,7 @@ export class Player {
     }
   }
 
-  private setAnimation() {
+  private updateAnimation(deltaTime: number) {
     this.body.setTextureCoords([
       (this.currentAnimationXCoord + frameSize) / textureSize[0],
       (this.currentAnimationYCoord + frameSize) / textureSize[1],
@@ -147,6 +141,13 @@ export class Player {
       this.currentAnimationXCoord / textureSize[0],
       (this.currentAnimationYCoord + frameSize) / textureSize[1],
     ]);
+
+    // animate movement
+    this.animationTimer += deltaTime;
+    if (this.animationTimer > animationSpeed) {
+      this.animationTimer = 0;
+      this.currentAnimationXCoord = (this.currentAnimationXCoord + frameSize) % textureSize[0];
+    }
   }
 
   private calculateMoveVector(): void {
