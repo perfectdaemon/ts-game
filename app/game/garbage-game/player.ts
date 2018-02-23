@@ -45,6 +45,10 @@ export class Player {
     this.weapon.parent = this.body;
   }
 
+  hit(damage: number): void {
+    console.log(`hit by ${damage} points`);
+  }
+
   onUpdate(deltaTime: number): void {
     this.moveVector.set(0, 0);
     if (this.input.isKeyDown[Keys.Down] || this.input.isKeyDown[Keys.S]) {

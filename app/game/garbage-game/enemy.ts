@@ -46,5 +46,15 @@ export class Enemy implements IPoolItem {
       .multiplyNumSelf(deltaTime * this.speed);
 
     this.body.position.addToSelf(this.moveIncrement);
+    this.collider.center.set(this.body.position);
+  }
+
+  hit(damage: number): void {
+    this.health -= damage;
+
+    if (this.health <= 0) {
+      this.active = false;
+      this.onDeactivate();
+    }
   }
 }

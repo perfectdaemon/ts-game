@@ -2,8 +2,12 @@ import { Vector2 } from '../../engine/math/vector2';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { renderer } from '../../engine/render/webgl';
 import { Sprite } from '../../engine/scene/sprite';
+import { BulletOwner } from './bullet-owner.enum';
+import { GAME_STATE } from './game-state';
 import { Circle } from './physics/circle';
 import { IPoolItem } from './pool/ipool-item';
+
+const bulletDamage = 1;
 
 export class Bullet implements IPoolItem {
   active: boolean = false;
@@ -11,6 +15,8 @@ export class Bullet implements IPoolItem {
   sprite: Sprite;
   collider: Circle;
   moveVector: Vector2 = new Vector2();
+  bulletDamage: number = bulletDamage;
+  bulletOwner: BulletOwner = BulletOwner.Player;
 
   private moveVectorN: Vector2 = new Vector2();
 
@@ -41,6 +47,34 @@ export class Bullet implements IPoolItem {
       this.active = false;
       this.onDeactivate();
     }
+
+    switch (this.bulletOwner) {
+      case BulletOwner.Player: this.checkHitAgainstEnemies(); break;
+      case BulletOwner.Enemy: this.checkHitAgainstPlayer(); break;
+    }
+  }
+
+  private checkHitAgainstEnemies(): void {
+    for (const enemy of GAME_STATE.enemyManager.pool.poolObjects) {
+      if (!enemy.active) { continue; }
+
+      if (enemy.collider.overlaps(this.collider)) {
+        enemy.hit(this.bulletDamage);
+        this.active = false;
+        this.onDeactivate();
+        return;
+      }
+    }
+  }
+
+  private checkHitAgainstPlayer(): void {
+    if (!this.collider.overlaps(GAME_STATE.player.collider)) {
+      return;
+    }
+
+    GAME_STATE.player.hit(this.bulletDamage);
+    this.active = false;
+    this.onDeactivate();
   }
 
   private isOutOfScreen(): boolean {
