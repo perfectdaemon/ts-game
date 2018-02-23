@@ -1,3 +1,5 @@
+import { Vector4 } from '../../../engine/math/vector4';
+
 export enum TileRole { Wall, Player, Health, Mana }
 
 export class TileInfo {
@@ -8,6 +10,7 @@ export class TileInfo {
 }
 
 export class LevelData {
+  backgroundColor: Vector4 = new Vector4(0.0, 0.0, 0.0, 1.0);
   tileSize: number = 0;
   tileTypes: TileInfo[] = [];
   map: string = '';
@@ -15,6 +18,7 @@ export class LevelData {
 
 export const LEVEL_DATA: LevelData[] = [
   {
+    backgroundColor: new Vector4(76 / 255.0, 70 / 255.0, 58 / 255.0, 1.0),
     tileSize: 64,
     tileTypes: [
       { id: '@', region: '', role: TileRole.Player },

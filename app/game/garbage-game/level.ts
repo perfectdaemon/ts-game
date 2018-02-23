@@ -2,6 +2,7 @@ import { Vector2 } from '../../engine/math/vector2';
 import { Vector4 } from '../../engine/math/vector4';
 import { Material } from '../../engine/render/material';
 import { TextureAtlas } from '../../engine/render/texture-atlas';
+import { renderer } from '../../engine/render/webgl';
 import { SpriteBatch } from '../../engine/render2d/sprite-batch';
 import { Sprite } from '../../engine/scene/sprite';
 import { LevelData, TileRole } from './data-assets/level.data';
@@ -22,6 +23,8 @@ export class Level {
     const mapLines = data.map.split('\n');
     const pivotPoint = new Vector2(0.5, 0.5);
 
+    this.backgroundColor = data.backgroundColor;
+    renderer.setClearColor(this.backgroundColor);
     const textureAtlas = this.material.textures[0].texture as TextureAtlas;
     for (let tileY = 0; tileY < mapLines.length; ++tileY) {
       const mapLine = mapLines[tileY];
@@ -61,6 +64,7 @@ export class Level {
   }
 
   draw(): void {
+
     this.material.bind();
     this._spriteBatch.finish();
   }
