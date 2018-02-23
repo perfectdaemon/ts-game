@@ -12,6 +12,7 @@ import { GameBase } from './../../engine/game-base';
 import { Assets } from './assets';
 import { BulletManager } from './bullet-manager';
 import { LEVEL_DATA } from './data-assets/level.data';
+import { EnemyManager } from './enemy-manager';
 import { GAME_STATE } from './game-state';
 import { Level } from './level';
 import { Player } from './player';
@@ -25,6 +26,7 @@ export class Game extends GameBase {
   player: Player = new Player(this.input);
   level: Level = new Level();
   bulletManager: BulletManager;
+  enemyManager: EnemyManager;
 
   private ready: boolean = false;
 
@@ -46,8 +48,16 @@ export class Game extends GameBase {
 
         this.bulletManager = new BulletManager(this.assets.textureAtlas.getRegion('bullet1.png'));
 
+        this.enemyManager = new EnemyManager([
+          this.assets.textureAtlas.getRegion('enemy1.png'),
+          this.assets.textureAtlas.getRegion('enemy2.png'),
+          this.assets.textureAtlas.getRegion('enemy3.png'),
+        ]);
+
         GAME_STATE.currentLevel = this.level;
         GAME_STATE.bulletManager = this.bulletManager;
+        GAME_STATE.enemyManager = this.enemyManager;
+        GAME_STATE.player = this.player;
 
         this.ready = true;
       });
@@ -60,6 +70,7 @@ export class Game extends GameBase {
 
     this.player.onUpdate(deltaTime);
     this.bulletManager.update(deltaTime);
+    this.enemyManager.update(deltaTime);
   }
 
   protected onRender(): void {
@@ -77,6 +88,8 @@ export class Game extends GameBase {
     this.spriteBatch2.finish();
 
     this.bulletManager.draw();
+
+    this.enemyManager.draw();
 
     this.assets.characterMaterial.bind();
     this.spriteBatch.start();
