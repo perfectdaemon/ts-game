@@ -34,9 +34,6 @@ export class Player {
   private moveIncrement: Vector2 = new Vector2(0, 0);
   private nextPosition: Vector2 = new Vector2(0, 1);
 
-
-
-
   private weaponFlippedX: boolean = false;
   private weaponPosition: Vector2 = new Vector2(0, 0);
   private weaponUpCorrection: number = 0;
@@ -82,10 +79,6 @@ export class Player {
         this.animationTimer = 0;
         this.currentAnimationXCoord = (this.currentAnimationXCoord + frameSize) % textureSize[0];
       }
-    }
-    // check shot timer
-    if (this.weaponShotTimer > 0) {
-      this.weaponShotTimer -= deltaTime;
     }
   }
 
@@ -133,6 +126,10 @@ export class Player {
     if (this.input.isKeyDown[Keys.Space] && this.weaponShotTimer <= 0) {
       GAME_STATE.bulletManager.fire(this.weaponAbsolutePosition, this.characterViewDirection);
       this.weaponShotTimer = weaponShotTimeout;
+    }
+
+    if (this.weaponShotTimer > 0) {
+      this.weaponShotTimer -= deltaTime;
     }
   }
 
