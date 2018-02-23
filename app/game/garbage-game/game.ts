@@ -36,7 +36,6 @@ export class Game extends GameBase {
 
   protected onInit(): void {
     this.player.body.position.set(this.renderer.width / 2, this.renderer.height / 2, 1);
-    this.player.weapon.position.set(24, 0, -1);
     this.assets.loadAll()
       .then(() => {
         this.player.weapon.setTextureRegion(this.assets.textureAtlas.getRegion('pistol2.png'), true);
@@ -98,6 +97,7 @@ export class Game extends GameBase {
   }
 
   protected onMouseMove(position: Vector2): void {
+    this.player.onMouseMove(position);
     // nothing
   }
 
