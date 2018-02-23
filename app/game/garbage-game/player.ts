@@ -9,9 +9,10 @@ import { Circle } from './physics/circle';
 
 const textureSize = [96, 128];
 const frameSize = 32;
-const defaultSpeed = 35;
-const animationSpeed = 0.5;
+const defaultSpeed = 150;
+const animationSpeed = 0.1;
 const colliderReduceSize = 3;
+const weaponShotTimeout = 0.4;
 
 export class Player {
   speed: number = defaultSpeed;
@@ -32,7 +33,12 @@ export class Player {
   private flippedX: boolean = false;
   private weaponUpCorrection: number = 0;
   private weaponZ: number = 1;
-  private nextPosition: Vector2 = new Vector2(0, 0);
+  private nextPosition: Vector2 = new Vector2(0, 1);
+
+  private weaponShotTimer: number = 0;
+
+  private weaponAbsolutePosition: Vector2 = new Vector2();
+  private characterDirection: Vector2 = new Vector2();
 
   constructor(private input: Input) {
     this.setAnimation();
@@ -77,24 +83,38 @@ export class Player {
     }
 
     this.moveVector.normalize();
+
+    if (this.input.isKeyDown[Keys.Space] && this.weaponShotTimer <= 0) {
+      GAME_STATE.bulletManager.fire(this.weaponAbsolutePosition, this.characterDirection);
+      this.weaponShotTimer = weaponShotTimeout;
+    }
+
     if (this.moveVector.lengthQ() > MathBase.eps) {
+      this.characterDirection.set(this.moveVector);
       this.setAnimation();
       this.weapon.rotation = this.moveVector.toAngle() + 90;
       this.weaponPosition.set(32 * this.moveVector.x, this.weaponUpCorrection + 32 * this.moveVector.y);
       this.weapon.position.set(this.weaponPosition.x, this.weaponPosition.y, this.weaponZ);
+      this.weaponAbsolutePosition.set(
+        this.weaponPosition.x + this.body.position.x,
+        this.weaponPosition.y + this.body.position.y);
+
+      // physics
+      this.moveVector.multiplyNumSelf(this.speed * deltaTime);
+      this.calculateMoveVector();
+      this.body.position.addToSelf(this.moveVector);
+      this.collider.center.set(this.body.position.x, this.body.position.y);
+
+      // animate movement
+      this.animationTimer += deltaTime;
+      if (this.animationTimer > animationSpeed) {
+        this.animationTimer = 0;
+        this.currentAnimationXCoord = (this.currentAnimationXCoord + frameSize) % textureSize[0];
+      }
     }
-
-    // physics
-    this.moveVector.multiplyNumSelf(this.speed * deltaTime);
-    this.calculateMoveVector();
-    this.body.position.addToSelf(this.moveVector);
-    this.collider.center.set(this.body.position.x, this.body.position.y);
-
-    // animate movement
-    this.animationTimer += deltaTime;
-    if (this.animationTimer > animationSpeed) {
-      this.animationTimer = 0;
-      this.currentAnimationXCoord = (this.currentAnimationXCoord + frameSize) % textureSize[0];
+    // check shot timer
+    if (this.weaponShotTimer > 0) {
+      this.weaponShotTimer -= deltaTime;
     }
   }
 
