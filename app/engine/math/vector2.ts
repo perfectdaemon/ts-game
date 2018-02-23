@@ -9,7 +9,7 @@ export class Vector2 {
 
   constructor(public x: number, public y: number) { }
 
-  set(x: number | Vector2 | Vector3, y?: number): void {
+  set(x: number | Vector2 | Vector3, y?: number): Vector2 {
     if (x instanceof Vector2 || x instanceof Vector3) {
       this.x = x.x;
       this.y = x.y;
@@ -19,6 +19,8 @@ export class Vector2 {
     } else {
       throw new Error(`Vector2.set(): 'x' is number, but no 'y' provided`);
     }
+
+    return this;
   }
 
   equalTo(other: Vector2): boolean {
@@ -41,9 +43,16 @@ export class Vector2 {
     return new Vector2(this.x + other.x, this.y + other.y);
   }
 
-  addToSelf(other: Vector2 | Vector3): Vector2 {
-    this.x += other.x;
-    this.y += other.y;
+  addToSelf(x: Vector2 | Vector3 | number, y?: number): Vector2 {
+    if (x instanceof Vector2 || x instanceof Vector3) {
+      this.x += x.x;
+      this.y += x.y;
+    } else if (y !== undefined) {
+      this.x += x;
+      this.y += y;
+    } else {
+      throw new Error(`Vector2.addToSelf(): 'x' is number but no 'y' provided`);
+    }
 
     return this;
   }
