@@ -70,8 +70,6 @@ export class Player {
     if (this.moveDirection.lengthQ() > MathBase.eps) {
       this.updateAnimation(deltaTime);
 
-      this.weaponAbsolutePosition.set(this.weapon.position).addToSelf(this.body.position);
-
       // physics
       this.moveDirection.multiplyNumSelf(this.speed * deltaTime);
       this.calculateMoveVector();
@@ -106,6 +104,7 @@ export class Player {
   }
 
   private updateWeaponAppearance(): void {
+    this.weaponAbsolutePosition.set(this.weapon.position).addToSelf(this.body.position);
     this.weapon.rotation = this.characterViewDirection.toAngle() + 90;
     if ((this.weapon.rotation < 0 || this.weapon.rotation > 180) && !this.weaponFlippedX) {
       this.weaponFlippedX = true;
