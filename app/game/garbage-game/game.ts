@@ -10,6 +10,7 @@ import { Camera, CameraPivot, CameraProjectionMode } from '../../engine/scene/ca
 import { Sprite } from '../../engine/scene/sprite';
 import { GameBase } from './../../engine/game-base';
 import { Assets } from './assets';
+import { AudioManager } from './audio-manager';
 import { BulletManager } from './bullet-manager';
 import { LEVEL_DATA } from './data-assets/level.data';
 import { EnemyManager } from './enemy-manager';
@@ -29,6 +30,7 @@ export class Game extends GameBase {
   bulletManager: BulletManager;
   enemyManager: EnemyManager;
   pickupManager: PickupManager;
+  audioManager: AudioManager = new AudioManager();
 
   private ready: boolean = false;
 
@@ -39,6 +41,7 @@ export class Game extends GameBase {
   protected onInit(): void {
     this.player.body.position.set(this.renderer.width / 2, this.renderer.height / 2, 1);
     this.assets.loadAll()
+      .then(() => this.audioManager.loadAll())
       .then(() => {
         this.player.weapon.setTextureRegion(this.assets.textureAtlas.getRegion('pistol2.png'), true);
         this.player.weapon.multSize(2);
@@ -67,6 +70,7 @@ export class Game extends GameBase {
         GAME_STATE.enemyManager = this.enemyManager;
         GAME_STATE.player = this.player;
         GAME_STATE.pickupManager = this.pickupManager;
+        GAME_STATE.audioManager = this.audioManager;
 
         this.ready = true;
       });

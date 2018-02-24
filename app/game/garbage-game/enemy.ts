@@ -3,6 +3,7 @@ import { Vector2 } from '../../engine/math/vector2';
 import { Vector4 } from '../../engine/math/vector4';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { Sprite } from '../../engine/scene/sprite';
+import { SOUNDS } from './audio-manager';
 import { GAME_STATE } from './game-state';
 import { AABB } from './physics/aabb';
 import { IPoolItem } from './pool/ipool-item';
@@ -82,11 +83,12 @@ export class Enemy implements IPoolItem {
   }
 
   hit(damage: number): void {
+    GAME_STATE.audioManager.play(SOUNDS.hit);
+
     this.health -= damage;
 
     this.hitTimer = defaultHitTimer;
     this.verticesColor.set(1, 0.5, 0.5, 0.5);
-
 
     if (this.health <= 0) {
       this.active = false;

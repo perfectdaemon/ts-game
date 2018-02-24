@@ -1,3 +1,4 @@
+import { AudioManager } from './audio-manager';
 import { BulletManager } from './bullet-manager';
 import { EnemyManager } from './enemy-manager';
 import { Level } from './level';
@@ -10,6 +11,7 @@ export class GameState {
   enemyManager: EnemyManager;
   player: Player;
   pickupManager: PickupManager;
+  audioManager: AudioManager;
 }
 
 export const GAME_STATE = new GameState();

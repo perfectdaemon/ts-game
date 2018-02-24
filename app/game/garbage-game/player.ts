@@ -6,6 +6,7 @@ import { Vector3 } from '../../engine/math/vector3';
 import { Sprite } from '../../engine/scene/sprite';
 import { GAME_STATE } from './game-state';
 import { Circle } from './physics/circle';
+import { SOUNDS } from './audio-manager';
 
 const textureSize = [96, 128];
 const frameSize = 32;
@@ -141,6 +142,8 @@ export class Player {
         .addToSelf(this.characterViewDirection);
       GAME_STATE.bulletManager.fire(this.weaponAbsolutePosition, this.weaponFireDirection);
       this.weaponShotTimer = weaponShotTimeout;
+
+      GAME_STATE.audioManager.play(SOUNDS.shoot);
     }
 
     if (this.weaponShotTimer > 0) {
