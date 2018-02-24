@@ -1,9 +1,10 @@
 import { AssetLoader } from '../../engine/helpers/asset-loader';
 
-export const SOUNDS = {
+export const SOUNDS: any = {
   coin: 'coin.wav',
   hit: 'hit.wav',
   shoot: 'shoot.wav',
+  powerup: 'powerup.wav',
 };
 
 export class AudioManager {
