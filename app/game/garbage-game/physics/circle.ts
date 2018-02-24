@@ -3,13 +3,20 @@ import { Vector2 } from '../../../engine/math/vector2';
 import { AABB } from './aabb';
 
 export class Circle {
-  raduisSquare: number;
+  raduisSquare: number = 0;
 
+  private _radius: number = 0;
   private _closest: Vector2 = new Vector2(0, 0);
   private _distance: Vector2 = new Vector2(0, 0);
 
   constructor(public center: Vector2, radius: number) {
-    this.raduisSquare = radius * radius;
+    this.radius = radius;
+  }
+
+  get radius(): number { return this._radius; }
+  set radius(value: number) {
+    this.raduisSquare = value * value;
+    this._radius = value;
   }
 
   overlaps(other: Circle | AABB): boolean {
