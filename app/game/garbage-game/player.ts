@@ -14,6 +14,7 @@ const animationSpeed = 0.1;
 const colliderReduceSize = 3;
 const weaponShotTimeout = 0.4;
 const defaultAccuracy = 0.7;
+const defaultHealth = 10;
 
 export class Player {
   speed: number = defaultSpeed;
@@ -29,6 +30,7 @@ export class Player {
     this.body.width / 2 - colliderReduceSize);
 
   money: number = 0;
+  health: number = defaultHealth;
 
   private currentAnimationYCoord: number = 0;
   private currentAnimationXCoord: number = 0;
@@ -45,14 +47,24 @@ export class Player {
 
   private characterViewDirection: Vector2 = new Vector2();
 
+  private healthElement: HTMLElement;
+  private moneyElement: HTMLElement;
+
   constructor(private input: Input) {
     this.updateAnimation(0.1);
     this.weapon.parent = this.body;
     this.weapon.position.set(0, 15, 2);
+    this.healthElement = document.getElementById('hudHealthAmount') as HTMLElement;
+    this.moneyElement = document.getElementById('hudMoneyAmount') as HTMLElement;
   }
 
   hit(damage: number): void {
     console.log(`hit by ${damage} points`);
+  }
+
+  drawHud(): void {
+    this.healthElement.innerHTML = this.health.toString();
+    this.moneyElement.innerHTML = this.money.toString();
   }
 
   onMouseMove(mousePosition: Vector2): void {
@@ -78,6 +90,8 @@ export class Player {
       this.body.position.addToSelf(this.moveDirection);
       this.collider.center.set(this.body.position.x, this.body.position.y);
     }
+
+    this.drawHud();
   }
 
   private updateMovement(deltaTime: number): void {

@@ -1,48 +1,104 @@
 <html>
+
 <head>
-    <title>shooter.ts for igdc#151</title>
-    <style>
-        body {
-          font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-          background: #222;
-          color: coral;
-        }
+  <title>shooter.ts for igdc#151</title>
+  <style>
+    @font-face {
+      font-family: "Minecraft 1.1";
+      src: url("assets/Pixelart.ttf") format("truetype");
+    }
 
-        a {
-          color: coral;
-          text-decoration: none;
-          border-bottom: 1px solid currentColor;
-        }
+    body {
+      font-family: "Minecraft 1.1", "Segoe UI", Verdana, Helvetica, Sans-Serif;
+      background: #222;
+      color: coral;
+    }
 
-        * {
-          outline: none;
-        }
+    a {
+      color: coral;
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
 
-        .footer {
-            margin: 10px auto;
-            max-width: 960px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    * {
+      outline: none;
+    }
 
-        #canvas-main {
-            display: block;
-            margin: 10px auto;
-            border: 1px solid #444;
-        }
-    </style>
+    .footer {
+      margin: 10px auto;
+      max-width: 960px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #canvas-main {
+      display: block;
+      margin: 10px auto;
+    }
+
+    .hud {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .hud_health,
+    .hud_money {
+      font-size: 1.3rem;
+      display: flex;
+      align-items: baseline;
+    }
+
+    .hud_health {
+      color: red;
+    }
+
+    .hud_health_icon {
+      background-image: url('assets/atlas.png');
+      background-repeat: no-repeat;
+      background-position: -12px	-154px;
+
+      margin-right: 10px;
+      width: 11px;
+      height: 29px;
+    }
+
+    .hud_money_icon {
+      background-image: url('assets/atlas.png');
+      background-repeat: no-repeat;
+      background-position: -96px	-128px;
+      width: 29px;
+      height: 29px;
+      margin-right: 10px;
+    }
+  </style>
 </head>
 
 <body>
-    <canvas width="960" height="768" id="canvas-main" tabindex="1">
-        No canvas support :(
-    </canvas>
-    <div class="footer">
-      <h3>shooter.ts for igdc#151</h3>
-      <a href="mailto:info@perfectdaemon.ru">info@perfectdaemon.ru</a>
+  <canvas width="960" height="768" id="canvas-main" tabindex="1">
+    No canvas support :(
+  </canvas>
+
+  <div class="hud">
+    <div class="hud_health">
+      <span class="hud_health_icon">&nbsp;</span>
+      <span id="hudHealthAmount">100</span>
+    </div>
+    <div class="hud_money">
+      <span class="hud_money_icon">&nbsp;</span>
+      <span id="hudMoneyAmount">100</span>
+    </div>
   </div>
-    <script src="bundle.js"></script>
+
+  <div class="footer">
+    <h3>shooter.ts for igdc#151</h3>
+    <a href="mailto:info@perfectdaemon.ru">info@perfectdaemon.ru</a>
+  </div>
+
+  <script src="bundle.js"></script>
 </body>
 
 </html>
