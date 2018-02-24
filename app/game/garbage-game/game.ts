@@ -13,8 +13,9 @@ import { Assets } from './assets';
 import { BulletManager } from './bullet-manager';
 import { LEVEL_DATA } from './data-assets/level.data';
 import { EnemyManager } from './enemy-manager';
-import { GAME_STATE } from './game-state';
+import { GAME_STATE, GameState } from './game-state';
 import { Level } from './level';
+import { PickupManager } from './pickup-manager';
 import { Player } from './player';
 
 export class Game extends GameBase {
@@ -27,6 +28,7 @@ export class Game extends GameBase {
   level: Level = new Level();
   bulletManager: BulletManager;
   enemyManager: EnemyManager;
+  pickupManager: PickupManager;
 
   private ready: boolean = false;
 
@@ -53,10 +55,18 @@ export class Game extends GameBase {
           this.assets.textureAtlas.getRegion('enemy3.png'),
         ]);
 
+        this.pickupManager = new PickupManager([
+          this.assets.textureAtlas.getRegion('gold2_1.png'),
+          this.assets.textureAtlas.getRegion('gold2_2.png'),
+          this.assets.textureAtlas.getRegion('gold2_3.png'),
+          this.assets.textureAtlas.getRegion('gold2_4.png'),
+        ]);
+
         GAME_STATE.currentLevel = this.level;
         GAME_STATE.bulletManager = this.bulletManager;
         GAME_STATE.enemyManager = this.enemyManager;
         GAME_STATE.player = this.player;
+        GAME_STATE.pickupManager = this.pickupManager;
 
         this.ready = true;
       });
@@ -70,25 +80,27 @@ export class Game extends GameBase {
     this.player.onUpdate(deltaTime);
     this.bulletManager.update(deltaTime);
     this.enemyManager.update(deltaTime);
+    this.pickupManager.update(deltaTime);
   }
 
   protected onRender(): void {
     super.onRender();
     if (!this.ready) { return; }
+
     this.camera.update();
+
     this.assets.shader.updateUniformValue('uModelViewProj', this.renderer.renderParams.modelViewProjection.e);
     this.assets.shader.updateUniformValue('uColor', this.renderer.renderParams.color.asArray());
 
-    this.level.draw();
-
     this.assets.material.bind();
+    this.level.draw();
+    this.bulletManager.draw();
+    this.enemyManager.draw();
+    this.pickupManager.draw();
+
     this.spriteBatch2.start();
     this.spriteBatch2.drawSingle(this.player.weapon);
     this.spriteBatch2.finish();
-
-    this.bulletManager.draw();
-
-    this.enemyManager.draw();
 
     this.assets.characterMaterial.bind();
     this.spriteBatch.start();

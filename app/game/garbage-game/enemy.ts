@@ -1,6 +1,7 @@
 import { Vector2 } from '../../engine/math/vector2';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { Sprite } from '../../engine/scene/sprite';
+import { GAME_STATE } from './game-state';
 import { AABB } from './physics/aabb';
 import { IPoolItem } from './pool/ipool-item';
 
@@ -68,6 +69,7 @@ export class Enemy implements IPoolItem {
     if (this.health <= 0) {
       this.active = false;
       this.onDeactivate();
+      GAME_STATE.pickupManager.spawnCoin(this.collider.center, 1);
     }
   }
 }
