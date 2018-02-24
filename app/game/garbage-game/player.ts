@@ -4,9 +4,9 @@ import { MathBase } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector3 } from '../../engine/math/vector3';
 import { Sprite } from '../../engine/scene/sprite';
+import { SOUNDS } from './audio-manager';
 import { GAME_STATE } from './game-state';
 import { Circle } from './physics/circle';
-import { SOUNDS } from './audio-manager';
 
 const textureSize = [96, 128];
 const frameSize = 32;
