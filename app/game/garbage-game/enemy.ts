@@ -1,11 +1,11 @@
+import { isEqual } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
+import { Vector4 } from '../../engine/math/vector4';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { Sprite } from '../../engine/scene/sprite';
 import { GAME_STATE } from './game-state';
 import { AABB } from './physics/aabb';
 import { IPoolItem } from './pool/ipool-item';
-import { Vector4 } from '../../engine/math/vector4';
-import { isEqual } from '../../engine/math/math-base';
 
 const defaultEnemySpeed = 50;
 const defaultEnemyMaxHealth = 2;
