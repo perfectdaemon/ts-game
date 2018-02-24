@@ -28,6 +28,8 @@ export class Player {
     new Vector2(this.body.position.x, this.body.position.y),
     this.body.width / 2 - colliderReduceSize);
 
+  money: number = 0;
+
   private currentAnimationYCoord: number = 0;
   private currentAnimationXCoord: number = 0;
   private animationTimer: number = 0;
