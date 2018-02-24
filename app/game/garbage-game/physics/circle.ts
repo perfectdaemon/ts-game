@@ -21,7 +21,10 @@ export class Circle {
 
   overlaps(other: Circle | AABB): boolean {
     if (other instanceof Circle) {
-      return Math.abs(this.center.lengthQ() - other.center.lengthQ()) < this.raduisSquare + other.raduisSquare;
+      this._distance
+        .set(this.center)
+        .subtractFromSelf(other.center);
+      return Math.abs(this._distance.lengthQ()) < this.raduisSquare + other.raduisSquare;
     } else {
 
       this._closest.set(
