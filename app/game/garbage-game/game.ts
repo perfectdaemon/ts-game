@@ -32,7 +32,12 @@ export class Game extends GameBase {
   pickupManager: PickupManager;
   audioManager: AudioManager = new AudioManager();
 
+  screenSprite: Sprite;
+  screenSpriteAlpha: number = 0;
+
   private ready: boolean = false;
+
+  private gameOver: boolean = false;
 
   constructor(protected canvasElement: HTMLCanvasElement) {
     super(canvasElement);
@@ -68,6 +73,9 @@ export class Game extends GameBase {
           this.assets.textureAtlas.getRegion('health1.png'),
         );
 
+        this.screenSprite = new Sprite(this.renderer.width, this.renderer.height, new Vector2(0, 0));
+        this.screenSprite.position.set(0, 0, 50);
+
         GAME_STATE.currentLevel = this.level;
         GAME_STATE.bulletManager = this.bulletManager;
         GAME_STATE.enemyManager = this.enemyManager;
@@ -84,15 +92,27 @@ export class Game extends GameBase {
   protected onUpdate(deltaTime: number): void {
     if (!this.ready) { return; }
 
-    this.player.onUpdate(deltaTime);
-    this.bulletManager.update(deltaTime);
-    this.enemyManager.update(deltaTime);
-    this.pickupManager.update(deltaTime);
+    if (this.gameOver) {
+      this.screenSprite.setVerticesAlpha(this.screenSpriteAlpha += deltaTime * 0.3);
+      if (this.screenSpriteAlpha >= 1.0) {
+        document.location.reload();
+      }
+    } else {
+      this.player.onUpdate(deltaTime);
+      this.bulletManager.update(deltaTime);
+      this.enemyManager.update(deltaTime);
+      this.pickupManager.update(deltaTime);
+
+      if (this.player.health <= 0) {
+        this.gameOver = true;
+      }
+    }
   }
 
   protected onRender(): void {
-    super.onRender();
     if (!this.ready) { return; }
+
+    super.onRender();
 
     this.camera.update();
 
@@ -113,6 +133,13 @@ export class Game extends GameBase {
     this.spriteBatch.start();
     this.spriteBatch.drawSingle(this.player.body);
     this.spriteBatch.finish();
+
+    if (this.gameOver) {
+      this.assets.noTextureMaterial.bind();
+      this.spriteBatch.start();
+      this.spriteBatch.drawSingle(this.screenSprite);
+      this.spriteBatch.finish();
+    }
   }
 
   protected onMouseMove(position: Vector2): void {
