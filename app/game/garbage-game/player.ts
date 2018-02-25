@@ -1,6 +1,6 @@
 import { Input } from '../../engine/input/input';
 import { Keys } from '../../engine/input/keys.enum';
-import { MathBase } from '../../engine/math/math-base';
+import { MathBase, clamp } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector3 } from '../../engine/math/vector3';
 import { Vector4 } from '../../engine/math/vector4';
@@ -18,6 +18,8 @@ const colliderReduceSize = 3;
 const weaponShotTimeout = 0.4;
 const defaultAccuracy = 0.7;
 const defaultHealth = 10;
+const defaultStamina = 5;
+const defaultCantRunTimer = 2;
 const defaultHitTimer = 0.1;
 
 export class Player {
@@ -35,6 +37,10 @@ export class Player {
 
   money: number = 0;
   health: number = defaultHealth;
+  stamina: number = defaultStamina;
+
+  private run: boolean = false;
+  private cantRunTimer: number = defaultCantRunTimer;
 
   private currentAnimationYCoord: number = 0;
   private currentAnimationXCoord: number = 0;
@@ -56,6 +62,7 @@ export class Player {
 
   private healthElement: HTMLElement;
   private moneyElement: HTMLElement;
+  private staminaElement: HTMLElement;
 
   constructor(private input: Input) {
     this.updateAnimation(0.1);
@@ -63,6 +70,7 @@ export class Player {
     this.weapon.position.set(0, 15, 2);
     this.healthElement = document.getElementById('hudHealthAmount') as HTMLElement;
     this.moneyElement = document.getElementById('hudMoneyAmount') as HTMLElement;
+    this.staminaElement = document.getElementById('hudStaminaAmount') as HTMLElement;
   }
 
   hit(damage: number): void {
@@ -81,6 +89,7 @@ export class Player {
   drawHud(): void {
     this.healthElement.innerHTML = this.health.toString();
     this.moneyElement.innerHTML = this.money.toString();
+    this.staminaElement.innerHTML = this.stamina.toFixed(0);
   }
 
   onMouseMove(mousePosition: Vector2): void {
@@ -101,7 +110,7 @@ export class Player {
       this.updateAnimation(deltaTime);
 
       // physics
-      this.moveDirection.multiplyNumSelf(this.speed * deltaTime);
+      this.moveDirection.multiplyNumSelf(this.speed * deltaTime * (this.run ? 2 : 1));
       this.calculateMoveVector();
       this.body.position.addToSelf(this.moveDirection);
       this.collider.center.set(this.body.position.x, this.body.position.y);
@@ -146,6 +155,12 @@ export class Player {
     }
 
     this.moveDirection.normalize();
+
+    this.run = this.input.isKeyDown[Keys.Shift] && this.stamina > 0;
+
+    111111this.cantRunTimer1111
+
+    this.stamina = clamp(this.stamina + (this.run ? -5 * deltaTime : deltaTime), 0, 10);
   }
 
   private updateWeaponAppearance(): void {
