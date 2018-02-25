@@ -18,7 +18,7 @@ const colliderReduceSize = 3;
 const weaponShotTimeout = 0.4;
 const defaultAccuracy = 0.7;
 const defaultHealth = 10;
-const defaultStamina = 5;
+const defaultStamina = 9;
 const defaultCantRunTimer = 2;
 const defaultHitTimer = 0.1;
 
@@ -164,7 +164,7 @@ export class Player {
       && this.stamina > 0
       && this.cantRunTimer <= 0;
 
-    this.stamina = clamp(this.stamina + (this.run ? -5 * deltaTime : deltaTime), 0, 10);
+    this.stamina = clamp(this.stamina + (this.run ? -5 * deltaTime : deltaTime), 0, defaultStamina);
     if (this.stamina <= MathBase.eps) {
       this.cantRunTimer = defaultCantRunTimer;
     }
