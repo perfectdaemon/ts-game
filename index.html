@@ -14,23 +14,32 @@
       color: coral;
     }
 
-    a {
-      color: coral;
-      text-decoration: none;
-      border-bottom: 1px solid currentColor;
-    }
-
     * {
       outline: none;
     }
 
-    .footer {
-      margin: 10px auto;
-      max-width: 960px;
+    .flex-container {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin: 0 auto;
+      max-width: 960px;
     }
+
+    .controls {}
+
+    .footer {
+      margin: 10px auto;
+      max-width: 960px;
+      color: hsl(0, 0%, 30%);
+    }
+
+    .footer a {
+      color: hsl(0, 0%, 30%);
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
+
 
     #canvas-main {
       display: block;
@@ -38,15 +47,17 @@
     }
 
     .hud {
-      max-width: 960px;
-      margin: 0 auto;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .hud * {
+      margin-right: 20px;
     }
 
     .hud_health,
-    .hud_money {
+    .hud_money,
+    .hud_stamina {
       font-size: 1.3rem;
       display: flex;
       align-items: baseline;
@@ -59,17 +70,21 @@
     .hud_health_icon {
       background-image: url('assets/atlas.png');
       background-repeat: no-repeat;
-      background-position: -12px	-154px;
+      background-position: -12px -154px;
 
       margin-right: 10px;
       width: 11px;
       height: 29px;
     }
 
+    .hud_stamina_icon {
+      margin-right: 10px;
+    }
+
     .hud_money_icon {
       background-image: url('assets/atlas.png');
       background-repeat: no-repeat;
-      background-position: -96px	-128px;
+      background-position: -96px -128px;
       width: 29px;
       height: 29px;
       margin-right: 10px;
@@ -82,19 +97,30 @@
     No canvas support :(
   </canvas>
 
-  <div class="hud">
-    <div class="hud_health">
-      <span class="hud_health_icon">&nbsp;</span>
-      <span id="hudHealthAmount">100</span>
+  <div class="flex-container">
+    <div class="hud">
+      <div class="hud_health">
+        <span class="hud_health_icon">&nbsp;</span>
+        <span id="hudHealthAmount">100</span>
+      </div>
+      <div class="hud_money">
+        <span class="hud_money_icon">&nbsp;</span>
+        <span id="hudMoneyAmount">100</span>
+      </div>
+      <div class="hud_stamina">
+        <span class="hud_stamina_icon">stamina</span>
+        <span id="hudStaminaAmount">10</span>
+      </div>
     </div>
-    <div class="hud_money">
-      <span class="hud_money_icon">&nbsp;</span>
-      <span id="hudMoneyAmount">100</span>
+
+    <div class="controls">
+      <div>Wasd/arrows - movement</div>
+      <div>Mouse - aim & shoot</div>
+      <div>Shift - run</div>
     </div>
   </div>
-
-  <div class="footer">
-    <h3>shooter.ts for igdc#151</h3>
+  <div class="flex-container footer">
+    <div>shooter.ts for igdc#151</div>
     <a href="mailto:info@perfectdaemon.ru">info@perfectdaemon.ru</a>
   </div>
 
