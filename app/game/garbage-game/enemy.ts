@@ -116,7 +116,7 @@ export class Enemy implements IPoolItem {
 
       // health spawn
       if (Math.random() <= defaultEnemyHealthDropChance) {
-        GAME_STATE.pickupManager.spawnHealth(this.getRandomSpawnPosition(), 1);
+        GAME_STATE.pickupManager.spawnHealth(this.getRandomSpawnPosition(), 2);
       }
     }
   }
