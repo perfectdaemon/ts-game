@@ -110,6 +110,7 @@ export class Enemy implements IPoolItem {
       this.active = false;
       this.onDeactivate();
       --GAME_STATE.enemyManager.activeEnemyCount;
+      GAME_STATE.enemyManager.markEnemyKilled();
 
       // coin spawn
       GAME_STATE.pickupManager.spawnCoin(this.getRandomSpawnPosition(), 1);
