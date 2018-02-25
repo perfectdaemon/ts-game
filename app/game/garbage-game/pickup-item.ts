@@ -6,7 +6,7 @@ import { IPoolItem } from './pool/ipool-item';
 
 const defaultTimeToDisappear = 12;
 const defaultAnimationSpeed = 0.2;
-const defaultPickupColliderRadius = 16;
+const defaultPickupColliderRadius = 28;
 
 export abstract class PickupItem implements IPoolItem {
   active: boolean = false;
