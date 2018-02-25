@@ -15,6 +15,7 @@ const colliderReduceSize = 30;
 const defaultHitTimer = 0.1;
 const defaultShotTimer = 1.2;
 const defaultEnemyAccuracy = 0.65;
+const defaultEnemyHealthDropChance = 0.3;
 
 export class Enemy implements IPoolItem {
   active: boolean = false;
@@ -108,8 +109,15 @@ export class Enemy implements IPoolItem {
     if (this.health <= 0) {
       this.active = false;
       this.onDeactivate();
-      GAME_STATE.pickupManager.spawnCoin(this.collider.center, 1);
       --GAME_STATE.enemyManager.activeEnemyCount;
+
+      // coin spawn
+      GAME_STATE.pickupManager.spawnCoin(this.getRandomSpawnPosition(), 1);
+
+      // health spawn
+      if (Math.random() <= defaultEnemyHealthDropChance) {
+        GAME_STATE.pickupManager.spawnHealth(this.getRandomSpawnPosition(), 1);
+      }
     }
   }
 
@@ -121,5 +129,13 @@ export class Enemy implements IPoolItem {
       .addToSelf(this.moveDirection);
     GAME_STATE.bulletManager.fire(this.collider.center, this.weaponFireDirection, BulletOwner.Enemy);
     GAME_STATE.audioManager.play(SOUNDS.shoot);
+  }
+
+  private getRandomSpawnPosition(): Vector2 {
+    return new Vector2()
+      .set(this.collider.center)
+      .addToSelf(
+        -this.collider.halfSize.x + 2 * Math.random() * this.collider.halfSize.x,
+        -this.collider.halfSize.y + 2 * Math.random() * this.collider.halfSize.y);
   }
 }

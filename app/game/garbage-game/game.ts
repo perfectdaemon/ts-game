@@ -58,12 +58,15 @@ export class Game extends GameBase {
           this.assets.textureAtlas.getRegion('enemy3.png'),
         ]);
 
-        this.pickupManager = new PickupManager([
-          this.assets.textureAtlas.getRegion('gold2_1.png'),
-          this.assets.textureAtlas.getRegion('gold2_2.png'),
-          this.assets.textureAtlas.getRegion('gold2_3.png'),
-          this.assets.textureAtlas.getRegion('gold2_4.png'),
-        ]);
+        this.pickupManager = new PickupManager(
+          [
+            this.assets.textureAtlas.getRegion('gold2_1.png'),
+            this.assets.textureAtlas.getRegion('gold2_2.png'),
+            this.assets.textureAtlas.getRegion('gold2_3.png'),
+            this.assets.textureAtlas.getRegion('gold2_4.png'),
+          ],
+          this.assets.textureAtlas.getRegion('health1.png'),
+        );
 
         GAME_STATE.currentLevel = this.level;
         GAME_STATE.bulletManager = this.bulletManager;
