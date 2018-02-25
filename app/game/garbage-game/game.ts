@@ -93,8 +93,11 @@ export class Game extends GameBase {
     if (!this.ready) { return; }
 
     if (this.gameOver) {
-      this.screenSprite.setVerticesAlpha(this.screenSpriteAlpha += deltaTime * 0.3);
-      if (this.screenSpriteAlpha >= 1.0) {
+      if (this.screenSpriteAlpha < 1) {
+        this.screenSprite.setVerticesAlpha(this.screenSpriteAlpha += deltaTime * 0.3);
+      }
+
+      if (this.gameOver && this.input.isKeyDown[Keys.Return]) {
         document.location.reload();
       }
     } else {
@@ -103,8 +106,10 @@ export class Game extends GameBase {
       this.enemyManager.update(deltaTime);
       this.pickupManager.update(deltaTime);
 
-      if (this.player.health <= 0) {
+      if (this.player.health <= 0 && !this.gameOver) {
         this.gameOver = true;
+        const element = document.getElementById('gameOver') as HTMLElement;
+        element.style.display = 'block';
       }
     }
   }

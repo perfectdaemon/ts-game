@@ -49,6 +49,13 @@
       margin: 10px auto;
     }
 
+    .game-over {
+      font-size: 2.0rem;
+      text-align: center;
+      color: red;
+      margin: 20px auto;
+    }
+
     .hud {
       display: flex;
       align-items: baseline;
@@ -102,6 +109,9 @@
   <canvas width="960" height="768" id="canvas-main" tabindex="1">
     No canvas support :(
   </canvas>
+  <div id="gameOver" class="flex-container game-over" style="display: none">
+    GAME OVER. PRESS ENTER TO REPLAY.
+  </div>
 
   <div class="flex-container">
     <div class="hud">
