@@ -1,6 +1,6 @@
 import { AssetLoader } from '../../engine/helpers/asset-loader';
 
-export const SOUNDS: any = {
+export const SOUNDS = {
   coin: 'coin.wav',
   hit: 'hit.wav',
   shoot: 'shoot.wav',
@@ -21,7 +21,7 @@ export class AudioManager {
     const promises: Promise<any>[] = [];
 
     for (const name in SOUNDS) {
-      promises.push(this.load(SOUNDS[name]));
+      promises.push(this.load((SOUNDS as any)[name]));
     }
     return Promise.all(promises);
   }
