@@ -11,6 +11,7 @@
     body {
       font-family: "Minecraft 1.1", "Segoe UI", Verdana, Helvetica, Sans-Serif;
       background: #222;
+      font-size: 16pt;
       color: coral;
     }
 
@@ -26,7 +27,9 @@
       max-width: 960px;
     }
 
-    .controls {}
+    .controls {
+      font-size: 0.9rem;
+    }
 
     .footer {
       margin: 10px auto;
@@ -58,7 +61,6 @@
     .hud_health,
     .hud_money,
     .hud_stamina {
-      font-size: 1.3rem;
       display: flex;
       align-items: baseline;
     }
@@ -78,6 +80,10 @@
     }
 
     .hud_stamina_icon {
+      margin-right: 10px;
+    }
+
+    .hud_waves_icon {
       margin-right: 10px;
     }
 
@@ -103,13 +109,32 @@
         <span class="hud_health_icon">&nbsp;</span>
         <span id="hudHealthAmount">100</span>
       </div>
+
       <div class="hud_money">
         <span class="hud_money_icon">&nbsp;</span>
         <span id="hudMoneyAmount">100</span>
       </div>
+
       <div class="hud_stamina">
-        <span class="hud_stamina_icon">stamina</span>
+        <span class="hud_stamina_icon">stamina: </span>
         <span id="hudStaminaAmount">10</span>
+      </div>
+
+      <div class="hud_waves">
+        <div>
+          <span class="hud_waves_icon">waves passed:</span>
+          <span id="hudWaveNumber"></span>
+        </div>
+
+        <div>
+            <span class="hud_waves_icon">enemy remain:</span>
+            <span id="hudEnemyRemain"></span>
+          </div>
+
+        <div>
+            <span class="hud_waves_icon">total killed:</span>
+            <span id="hudTotalKilled"></span>
+          </div>
       </div>
     </div>
 
