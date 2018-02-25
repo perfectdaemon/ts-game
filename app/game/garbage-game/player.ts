@@ -3,8 +3,10 @@ import { Keys } from '../../engine/input/keys.enum';
 import { MathBase } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector3 } from '../../engine/math/vector3';
+import { Vector4 } from '../../engine/math/vector4';
 import { Sprite } from '../../engine/scene/sprite';
 import { SOUNDS } from './audio-manager';
+import { BulletOwner } from './bullet-owner.enum';
 import { GAME_STATE } from './game-state';
 import { Circle } from './physics/circle';
 
@@ -16,6 +18,7 @@ const colliderReduceSize = 3;
 const weaponShotTimeout = 0.4;
 const defaultAccuracy = 0.7;
 const defaultHealth = 10;
+const defaultHitTimer = 0.1;
 
 export class Player {
   speed: number = defaultSpeed;
@@ -48,6 +51,9 @@ export class Player {
 
   private characterViewDirection: Vector2 = new Vector2();
 
+  private verticesColor: Vector4 = new Vector4(1, 1, 1, 1);
+  private hitTimer: number = 0;
+
   private healthElement: HTMLElement;
   private moneyElement: HTMLElement;
 
@@ -60,7 +66,16 @@ export class Player {
   }
 
   hit(damage: number): void {
-    console.log(`hit by ${damage} points`);
+    GAME_STATE.audioManager.play(SOUNDS.hit);
+    this.health -= damage;
+
+    this.hitTimer = defaultHitTimer;
+    this.verticesColor.set(1, 0.5, 0.5, 0.5);
+    this.body.setVerticesColor(this.verticesColor);
+
+    if (this.health <= 0) {
+      console.log('dieeeee');
+    }
   }
 
   drawHud(): void {
@@ -93,6 +108,19 @@ export class Player {
     }
 
     this.drawHud();
+
+    this.updateHit(deltaTime);
+  }
+
+  private updateHit(deltaTime: number): void {
+    if (this.hitTimer > 0) {
+      this.hitTimer -= deltaTime;
+
+      if (this.hitTimer <= 0) {
+        this.verticesColor.set(1, 1, 1, 1);
+        this.body.setVerticesColor(this.verticesColor);
+      }
+    }
   }
 
   private updateMovement(deltaTime: number): void {
@@ -140,7 +168,7 @@ export class Player {
         .multiplyNumSelf(0.5 - Math.random())
         .multiplyNumSelf(1 - this.accuracy)
         .addToSelf(this.characterViewDirection);
-      GAME_STATE.bulletManager.fire(this.weaponAbsolutePosition, this.weaponFireDirection);
+      GAME_STATE.bulletManager.fire(this.weaponAbsolutePosition, this.weaponFireDirection, BulletOwner.Player);
       this.weaponShotTimer = weaponShotTimeout;
 
       GAME_STATE.audioManager.play(SOUNDS.shoot);

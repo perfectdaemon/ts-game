@@ -6,11 +6,13 @@ import { GAME_STATE } from './game-state';
 import { Pool } from './pool/pool';
 
 const spawnTimer = 5;
+const maxActiveEnemyCount = 8;
 
 export class EnemyManager {
   pool: Pool<Enemy>;
   spriteBatch: SpriteBatch = new SpriteBatch();
   spawnTimer: number = spawnTimer;
+  activeEnemyCount: number = 0;
 
   constructor(public enemyTextureRegions: TextureRegion[]) {
     this.pool = new Pool<Enemy>(() => this.newEnemy(), 10);
@@ -26,9 +28,10 @@ export class EnemyManager {
     }
 
     this.spawnTimer -= deltaTime;
-    if (this.spawnTimer < 0) {
+    if (this.spawnTimer < 0 && this.activeEnemyCount < maxActiveEnemyCount) {
       this.spawn();
       this.spawnTimer = spawnTimer;
+      ++this.activeEnemyCount;
     }
   }
 

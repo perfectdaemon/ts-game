@@ -4,6 +4,7 @@ import { Vector4 } from '../../engine/math/vector4';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { Sprite } from '../../engine/scene/sprite';
 import { SOUNDS } from './audio-manager';
+import { BulletOwner } from './bullet-owner.enum';
 import { GAME_STATE } from './game-state';
 import { AABB } from './physics/aabb';
 import { IPoolItem } from './pool/ipool-item';
@@ -12,6 +13,8 @@ const defaultEnemySpeed = 50;
 const defaultEnemyMaxHealth = 2;
 const colliderReduceSize = 30;
 const defaultHitTimer = 0.1;
+const defaultShotTimer = 1.2;
+const defaultEnemyAccuracy = 0.65;
 
 export class Enemy implements IPoolItem {
   active: boolean = false;
@@ -19,6 +22,7 @@ export class Enemy implements IPoolItem {
 
   moveDirection: Vector2 = new Vector2();
   speed: number = defaultEnemySpeed;
+  accuracy: number = defaultEnemyAccuracy;
 
   maxHealth: number = defaultEnemyMaxHealth;
   health: number = this.maxHealth;
@@ -30,6 +34,9 @@ export class Enemy implements IPoolItem {
 
   private verticesColor: Vector4 = new Vector4(1, 1, 1, 1);
   private hitTimer: number = 0;
+
+  private shotTimer: number = defaultShotTimer;
+  private weaponFireDirection: Vector2 = new Vector2();
 
   constructor(textureRegion: TextureRegion, multSize: number = 1) {
     this.body = new Sprite();
@@ -47,6 +54,8 @@ export class Enemy implements IPoolItem {
     this.health = this.maxHealth;
     this.hitTimer = 0;
     this.verticesColor.set(1, 1, 1, 1);
+    this.shotTimer = defaultShotTimer;
+    this.accuracy = defaultEnemyAccuracy;
   }
 
   onDeactivate(): void {
@@ -80,6 +89,12 @@ export class Enemy implements IPoolItem {
         this.verticesColor.set(1, 1, 1, 1);
       }
     }
+
+    this.shotTimer -= deltaTime;
+    if (this.shotTimer <= 0) {
+      this.shootPlayer();
+      this.shotTimer = defaultShotTimer;
+    }
   }
 
   hit(damage: number): void {
@@ -94,6 +109,17 @@ export class Enemy implements IPoolItem {
       this.active = false;
       this.onDeactivate();
       GAME_STATE.pickupManager.spawnCoin(this.collider.center, 1);
+      --GAME_STATE.enemyManager.activeEnemyCount;
     }
+  }
+
+  private shootPlayer(): void {
+    this.weaponFireDirection
+      .set(-this.moveDirection.y, this.moveDirection.x)
+      .multiplyNumSelf(0.5 - Math.random())
+      .multiplyNumSelf(1 - this.accuracy)
+      .addToSelf(this.moveDirection);
+    GAME_STATE.bulletManager.fire(this.collider.center, this.weaponFireDirection, BulletOwner.Enemy);
+    GAME_STATE.audioManager.play(SOUNDS.shoot);
   }
 }
