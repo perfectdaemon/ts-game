@@ -63,6 +63,7 @@ export class EnemyManager {
   draw(): void {
     this.spriteBatch.start();
     for (const enemy of this.pool.poolObjects) {
+      this.spriteBatch.drawSingle(enemy.shadow);
       this.spriteBatch.drawSingle(enemy.body);
     }
     this.spriteBatch.finish();
@@ -79,7 +80,10 @@ export class EnemyManager {
     enemy.body.position.set(
       Math.random() < 0.5 ? -65 : renderer.width + 65,
       Math.random() * renderer.height,
-      1);
+      2);
+    const enemySkinNumber = Math.floor(Math.random() * (this.enemyTextureRegions.length));
+    enemy.body.setTextureRegion(this.enemyTextureRegions[enemySkinNumber], false);
+    enemy.shadow.setTextureRegion(this.enemyTextureRegions[enemySkinNumber], false);
   }
 
   markEnemyKilled(): void {

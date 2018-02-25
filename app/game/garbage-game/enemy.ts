@@ -20,6 +20,7 @@ const defaultEnemyHealthDropChance = 0.3;
 export class Enemy implements IPoolItem {
   active: boolean = false;
   body: Sprite = new Sprite();
+  shadow: Sprite = new Sprite();
 
   moveDirection: Vector2 = new Vector2();
   speed: number = defaultEnemySpeed;
@@ -40,10 +41,15 @@ export class Enemy implements IPoolItem {
   private weaponFireDirection: Vector2 = new Vector2();
 
   constructor(textureRegion: TextureRegion, multSize: number = 1) {
-    this.body = new Sprite();
-    this.body.position.z = 1;
+    this.body.position.z = 5;
     this.body.setTextureRegion(textureRegion, true);
     this.body.multSize(multSize);
+
+    this.shadow.position.set(5, 15, -1);
+    this.shadow.setTextureRegion(textureRegion, true);
+    this.shadow.multSize(multSize);
+    this.shadow.setVerticesColor(new Vector4(0, 0, 0, 0.5));
+    this.shadow.parent = this.body;
 
     this.collider = new AABB(
       new Vector2(),
@@ -52,15 +58,18 @@ export class Enemy implements IPoolItem {
 
   onActivate(): void {
     this.body.visible = true;
+    this.shadow.visible = true;
     this.health = this.maxHealth;
     this.hitTimer = 0;
     this.verticesColor.set(1, 1, 1, 1);
     this.shotTimer = defaultShotTimer;
     this.accuracy = defaultEnemyAccuracy;
+    this.flippedX = false
   }
 
   onDeactivate(): void {
     this.body.visible = false;
+    this.shadow.visible = false;
   }
 
   update(deltaTime: number): void {
@@ -76,9 +85,11 @@ export class Enemy implements IPoolItem {
     if (this.moveDirection.x > 0 && !this.flippedX) {
       this.flippedX = true;
       this.body.flipVerticallyCurrentTexCoords();
+      this.shadow.flipVerticallyCurrentTexCoords();
     } else if (this.moveDirection.x < 0 && this.flippedX) {
       this.flippedX = false;
       this.body.flipVerticallyCurrentTexCoords();
+      this.shadow.flipVerticallyCurrentTexCoords();
     }
 
     this.body.setVerticesColor(this.verticesColor);
