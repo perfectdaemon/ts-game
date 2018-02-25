@@ -1,6 +1,6 @@
 import { Input } from '../../engine/input/input';
 import { Keys } from '../../engine/input/keys.enum';
-import { MathBase, clamp } from '../../engine/math/math-base';
+import { clamp, MathBase } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector3 } from '../../engine/math/vector3';
 import { Vector4 } from '../../engine/math/vector4';
