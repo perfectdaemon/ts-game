@@ -156,11 +156,18 @@ export class Player {
 
     this.moveDirection.normalize();
 
-    this.run = this.input.isKeyDown[Keys.Shift] && this.stamina > 0;
+    if (this.cantRunTimer > 0) {
+      this.cantRunTimer -= deltaTime;
+    }
 
-    111111this.cantRunTimer1111
+    this.run = this.input.isKeyDown[Keys.Shift]
+      && this.stamina > 0
+      && this.cantRunTimer <= 0;
 
     this.stamina = clamp(this.stamina + (this.run ? -5 * deltaTime : deltaTime), 0, 10);
+    if (this.stamina <= MathBase.eps) {
+      this.cantRunTimer = defaultCantRunTimer;
+    }
   }
 
   private updateWeaponAppearance(): void {
