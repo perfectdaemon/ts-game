@@ -41,13 +41,13 @@ export const LEVEL_DATA: LevelData[] = [
     map:
 `445444464444644
 
-    h
-            h
+
+
   111     111
 
       @
 
-          m
+
   111     111
 
 445443445444644
