@@ -6,6 +6,7 @@ import { IPoolItem } from './pool/ipool-item';
 
 const defaultTimeToDisappear = 12;
 const defaultAnimationSpeed = 0.2;
+const defaultPickupColliderRadius = 16;
 
 export abstract class PickupItem implements IPoolItem {
   active: boolean = false;
@@ -26,7 +27,9 @@ export abstract class PickupItem implements IPoolItem {
     this.sprite.position.z = 1;
     this.setNextAnimationFrame();
 
-    this.collider = new Circle(new Vector2(this.sprite.position.x, this.sprite.position.y), this.sprite.width / 2);
+    this.collider = new Circle(
+      new Vector2(this.sprite.position.x, this.sprite.position.y),
+      defaultPickupColliderRadius);
   }
 
   update(deltaTime: number): void {
