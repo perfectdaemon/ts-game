@@ -64,7 +64,7 @@ export class Enemy implements IPoolItem {
     this.verticesColor.set(1, 1, 1, 1);
     this.shotTimer = defaultShotTimer;
     this.accuracy = defaultEnemyAccuracy;
-    this.flippedX = false
+    this.flippedX = false;
   }
 
   onDeactivate(): void {
