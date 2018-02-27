@@ -21,14 +21,30 @@ export class AssetLoader {
    * @param url
    */
   public static getTextFromUrl(url: string): Promise<string> {
-    return new Promise<string>((resolve: any, reject: any) => {
+    return this.getResponseFromUrl<string>(url);
+  }
+
+  /**
+   * Requests strongly typed data from url
+   * @param url
+   */
+  public static getJSONFromUrl<T>(url: string): Promise<T> {
+    return this.getTextFromUrl(url)
+      .then(result => JSON.parse(result) as T);
+  }
+
+  public static getResponseFromUrl<T>(url: string, responseType?: XMLHttpRequestResponseType): Promise<T> {
+    return new Promise<T>((resolve: any, reject: any) => {
 
       const request = new XMLHttpRequest();
       request.open('get', url);
+      if (responseType !== undefined) {
+        request.responseType = responseType;
+      }
 
       request.onload = () => {
         if (request.status >= 200 && request.status < 300) {
-          resolve(request.response as string);
+          resolve(request.response as T);
         } else {
           reject({
             status: request.status,
@@ -46,14 +62,5 @@ export class AssetLoader {
 
       request.send();
     });
-  }
-
-  /**
-   * Requests strongly typed data from url
-   * @param url
-   */
-  public static getJSONFromUrl<T>(url: string): Promise<T> {
-    return this.getTextFromUrl(url)
-      .then(result => JSON.parse(result) as T);
   }
 }

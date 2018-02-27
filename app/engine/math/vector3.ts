@@ -1,4 +1,5 @@
 import { MathBase } from './math-base';
+import { Vector2 } from './vector2';
 
 export class Vector3 {
   constructor(public x: number, public y: number, public z: number) { }
@@ -14,10 +15,21 @@ export class Vector3 {
     return this;
   }
 
-  set(x: number, y: number, z: number): Vector3 {
-    this.x = x;
-    this.y = y;
-    this.z = z;
+  set(x: number | Vector2 | Vector3, y?: number, z?: number): Vector3 {
+    if (x instanceof Vector2) {
+      this.x = x.x;
+      this.y = x.y;
+    } else if (x instanceof Vector3) {
+      this.x = x.x;
+      this.y = x.y;
+      this.z = x.z;
+    } else if (y !== undefined && z !== undefined) {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+    } else {
+      throw new Error(`Vector3.set(): 'x' is number but no 'y' and 'z' provided`);
+    }
 
     return this;
   }
@@ -36,10 +48,12 @@ export class Vector3 {
     return new Vector3(this.x + vector.x, this.y + vector.y, this.z + vector.z);
   }
 
-  addToSelf(vector: Vector3): Vector3 {
+  addToSelf(vector: Vector2 | Vector3): Vector3 {
     this.x += vector.x;
     this.y += vector.y;
-    this.z += vector.z;
+    if (vector instanceof Vector3) {
+      this.z += vector.z;
+    }
 
     return this;
   }

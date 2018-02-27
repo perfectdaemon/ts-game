@@ -14,6 +14,7 @@ export class SpriteBatch {
   private _vertexBuffer: VertexBuffer;
   private _indexBuffer: IndexBuffer;
   private _count: number = 0;
+  private _changed: boolean = false;
 
   private _vertexData: number[] = new Array(65536);
   private _indexData: number[] = new Array(65536);
@@ -47,8 +48,11 @@ export class SpriteBatch {
   finish(): void {
     if (this._count === 0) { return; }
 
-    this._vertexBuffer.update(this._vertexData, 0);
-    this._indexBuffer.update(this._indexData, 0);
+    if (this._changed) {
+      this._vertexBuffer.update(this._vertexData, 0);
+      this._indexBuffer.update(this._indexData, 0);
+    }
+
     renderer.renderParams.modelViewProjection = renderer.renderParams.viewProjection;
     renderer.drawTriangles(this._vertexBuffer, this._indexBuffer, 0, this._count * 6);
   }
@@ -70,6 +74,7 @@ export class SpriteBatch {
     }
 
     ++this._count;
+    this._changed = true;
   }
 
   /**

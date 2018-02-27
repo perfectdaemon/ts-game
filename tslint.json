@@ -20,7 +20,8 @@
     "forin": false,
     "radix": false,
     "member-access": false,
-    "one-variable-per-declaration": false
+    "one-variable-per-declaration": false,
+    "array-type": false
   },
   "rulesDirectory": []
 }

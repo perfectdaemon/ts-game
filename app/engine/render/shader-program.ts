@@ -15,6 +15,10 @@ export class UniformInfo {
 
 export class ShaderProgram {
 
+  public static unbind(): void {
+    gl.useProgram(null);
+  }
+
   public program: WebGLProgram;
   public shaders: WebGLShader[] = [];
   public uniforms: UniformInfo[] = [];
@@ -43,10 +47,6 @@ export class ShaderProgram {
       }
       this.setUniform(i);
     }
-  }
-
-  public static unbind(): void {
-    gl.useProgram(null);
   }
 
   public attach(shaderType: ShaderType, source: string): void {

@@ -7,11 +7,20 @@ export class Vector2 {
     return new Vector2(vector.x, vector.y);
   }
 
-  constructor(public x: number, public y: number) { }
+  constructor(public x: number = 0, public y: number = 0) { }
 
-  set(x: number, y: number): void {
-    this.x = x;
-    this.y = y;
+  set(x: number | Vector2 | Vector3, y?: number): Vector2 {
+    if (x instanceof Vector2 || x instanceof Vector3) {
+      this.x = x.x;
+      this.y = x.y;
+    } else if (y !== undefined) {
+      this.x = x;
+      this.y = y;
+    } else {
+      throw new Error(`Vector2.set(): 'x' is number, but no 'y' provided`);
+    }
+
+    return this;
   }
 
   equalTo(other: Vector2): boolean {
@@ -34,9 +43,16 @@ export class Vector2 {
     return new Vector2(this.x + other.x, this.y + other.y);
   }
 
-  addToSelf(other: Vector2): Vector2 {
-    this.x += other.x;
-    this.y += other.y;
+  addToSelf(x: Vector2 | Vector3 | number, y?: number): Vector2 {
+    if (x instanceof Vector2 || x instanceof Vector3) {
+      this.x += x.x;
+      this.y += x.y;
+    } else if (y !== undefined) {
+      this.x += x;
+      this.y += y;
+    } else {
+      throw new Error(`Vector2.addToSelf(): 'x' is number but no 'y' provided`);
+    }
 
     return this;
   }
@@ -45,24 +61,39 @@ export class Vector2 {
     return new Vector2(this.x - other.x, this.y - other.y);
   }
 
-  subtractFromSelf(other: Vector2): Vector2 {
+  subtractFromSelf(other: Vector2 | Vector3): Vector2 {
     this.x -= other.x;
     this.y -= other.y;
 
     return this;
   }
 
-  multiply(value: number) {
+  multiplyNum(value: number) {
     return new Vector2(this.x * value, this.y * value);
   }
 
+  multiplyNumSelf(num: number): Vector2 {
+    this.x *= num;
+    this.y *= num;
+    return this;
+  }
+
   normal(): Vector2 {
-    const len = this.length();
+    const length = this.length();
 
-    if (len < MathBase.eps)
-      return new Vector2(0, 0);
+    return length < MathBase.eps
+      ? new Vector2(0, 0)
+      : this.multiplyNum(1 / length);
+  }
 
-    return this.multiply(1 / len);
+  normalize(): Vector2 {
+    const length = this.length();
+
+    length < MathBase.eps
+      ? this.set(0, 0)
+      : this.multiplyNumSelf(1 / length);
+
+    return this;
   }
 
   toString(): string {
