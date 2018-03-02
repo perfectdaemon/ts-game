@@ -2,11 +2,6 @@ import { isEqual, MathBase } from './math-base';
 import { Vector3 } from './vector3';
 
 export class Vector2 {
-
-  static fromVector3(vector: Vector3): Vector2 {
-    return new Vector2(vector.x, vector.y);
-  }
-
   constructor(public x: number = 0, public y: number = 0) { }
 
   set(x: number | Vector2 | Vector3, y?: number): Vector2 {
@@ -61,9 +56,16 @@ export class Vector2 {
     return new Vector2(this.x - other.x, this.y - other.y);
   }
 
-  subtractFromSelf(other: Vector2 | Vector3): Vector2 {
-    this.x -= other.x;
-    this.y -= other.y;
+  subtractFromSelf(x: Vector2 | Vector3 | number, y?: number): Vector2 {
+    if (x instanceof Vector2 || x instanceof Vector3) {
+    this.x -= x.x;
+    this.y -= x.y;
+    } else if (y !== undefined) {
+      this.x -= x;
+      this.y -= y;
+    } else {
+      throw new Error(`Vector2.subtractFromSelf(): 'x' is number but no 'y' provided`);
+    }
 
     return this;
   }

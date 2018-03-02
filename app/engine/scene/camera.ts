@@ -105,8 +105,8 @@ export class Camera extends Node {
       return new Vector3(0, 0, 0);
     }
 
-    const result = Vector2
-      .fromVector3(this.position)
+    const result = new Vector2()
+      .set(this.position)
       .addToSelf(screenPosition.multiplyNum(1 / this._scale));
 
     const pivotOffset = new Vector2(0, 0);
