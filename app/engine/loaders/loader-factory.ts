@@ -6,6 +6,8 @@ import { MaterialData } from './material.data';
 import { MaterialLoader } from './material.loader';
 import { ShaderProgramData } from './shader-program.data';
 import { ShaderProgramLoader } from './shader-program.loader';
+import { SoundData } from './sound.data';
+import { SoundLoader } from './sound.loader';
 import { TextureAtlasData } from './texture-atlas.data';
 import { TextureAtlasLoader } from './texture-atlas.loader';
 import { TextureData } from './texture.data';
@@ -16,6 +18,7 @@ export class LoaderFactory {
   private _textureAtlasLoader = new TextureAtlasLoader();
   private _shaderLoader = new ShaderProgramLoader();
   private _materialLoader = new MaterialLoader();
+  private _soundLoader = new SoundLoader();
 
   loadTexture(data: TextureData): Promise<Texture> {
     return this._textureLoader.load(data);
@@ -31,5 +34,9 @@ export class LoaderFactory {
 
   loadMaterial(data: MaterialData): Promise<Material> {
     return this._materialLoader.load(data, this._shaderLoader, this._textureLoader, this._textureAtlasLoader);
+  }
+
+  loadSound(data: SoundData): Promise<any> {
+    return this._soundLoader.load(data);
   }
 }
