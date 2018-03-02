@@ -18,7 +18,9 @@ export class IndexBuffer {
     }
   }
 
-  public buffer: WebGLBuffer;
+  buffer: WebGLBuffer;
+
+  private _intArray: Uint8Array | Uint16Array | Uint32Array;
 
   constructor(public format: IndexFormat, public count: number) {
     this.buffer = gl.createBuffer() as WebGLBuffer;
@@ -27,8 +29,19 @@ export class IndexBuffer {
       return;
     }
 
+    const size = count * IndexBuffer.getSizeFromFormat(format);
+
+    switch (format) {
+      case IndexFormat.Byte: this._intArray = new Uint8Array(count); break;
+      case IndexFormat.Short: this._intArray = new Uint16Array(count); break;
+      case IndexFormat.Int: this._intArray = new Uint32Array(count); break;
+      default:
+        console.log(`new IndexBuffer() - wrong index format: ${this.format}`);
+        return;
+    }
+
     this.bind();
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, count * IndexBuffer.getSizeFromFormat(format), gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, size, gl.STATIC_DRAW);
   }
 
   public free(): void {
@@ -42,17 +55,7 @@ export class IndexBuffer {
   public update(data: number[], start: number): void {
     this.bind();
 
-    let iData: Uint8Array | Uint16Array | Uint32Array;
-
-    switch (this.format) {
-      case IndexFormat.Byte: iData = new Uint8Array(data); break;
-      case IndexFormat.Short: iData = new Uint16Array(data); break;
-      case IndexFormat.Int: iData = new Uint32Array(data); break;
-      default:
-        console.log(`IndexBuffer.update() - wrong format: ${this.format}`);
-        return;
-    }
-
-    gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, start, iData)
+    this._intArray.set(data, start);
+    gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, this._intArray);
   }
 }
