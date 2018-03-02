@@ -25,8 +25,7 @@ export class IndexBuffer {
   constructor(public format: IndexFormat, public count: number) {
     this.buffer = gl.createBuffer() as WebGLBuffer;
     if (!this.buffer) {
-      console.log('Error while creating Index Buffer');
-      return;
+      throw new Error('Error while creating Index Buffer');
     }
 
     const size = count * IndexBuffer.getSizeFromFormat(format);
@@ -35,9 +34,7 @@ export class IndexBuffer {
       case IndexFormat.Byte: this._intArray = new Uint8Array(count); break;
       case IndexFormat.Short: this._intArray = new Uint16Array(count); break;
       case IndexFormat.Int: this._intArray = new Uint32Array(count); break;
-      default:
-        console.log(`new IndexBuffer() - wrong index format: ${this.format}`);
-        return;
+      default: throw new Error(`new IndexBuffer() - wrong index format: ${this.format}`);
     }
 
     this.bind();
