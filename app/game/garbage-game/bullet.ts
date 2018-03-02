@@ -1,3 +1,4 @@
+import { IPoolItem } from '../../engine/helpers/pool/ipool-item';
 import { Vector2 } from '../../engine/math/vector2';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { renderer } from '../../engine/render/webgl';
@@ -5,7 +6,6 @@ import { Sprite } from '../../engine/scene/sprite';
 import { BulletOwner } from './bullet-owner.enum';
 import { GAME_STATE } from './game-state';
 import { Circle } from './physics/circle';
-import { IPoolItem } from './pool/ipool-item';
 
 const bulletDamage = 1;
 const bulletSpeed = 800;

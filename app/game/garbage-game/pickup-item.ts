@@ -1,8 +1,8 @@
+import { IPoolItem } from '../../engine/helpers/pool/ipool-item';
 import { Vector2 } from '../../engine/math/vector2';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { Sprite } from '../../engine/scene/sprite';
 import { Circle } from './physics/circle';
-import { IPoolItem } from './pool/ipool-item';
 
 const defaultTimeToDisappear = 12;
 const defaultAnimationSpeed = 0.2;

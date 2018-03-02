@@ -1,9 +1,9 @@
+import { Pool } from '../../engine/helpers/pool/pool';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { renderer } from '../../engine/render/webgl';
 import { SpriteBatch } from '../../engine/render2d/sprite-batch';
 import { Enemy } from './enemy';
 import { GAME_STATE } from './game-state';
-import { Pool } from './pool/pool';
 
 const spawnTimer = 5;
 const spawnTimerDec = 0.5;

@@ -1,10 +1,10 @@
+import { Pool } from '../../engine/helpers/pool/pool';
 import { Vector2 } from '../../engine/math/vector2';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { SpriteBatch } from '../../engine/render2d/sprite-batch';
 import { Coin } from './coin';
 import { GAME_STATE } from './game-state';
 import { Health } from './health';
-import { Pool } from './pool/pool';
 
 export class PickupManager {
   coinPool: Pool<Coin>;

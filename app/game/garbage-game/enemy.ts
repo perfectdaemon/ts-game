@@ -1,3 +1,4 @@
+import { IPoolItem } from '../../engine/helpers/pool/ipool-item';
 import { isEqual } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector4 } from '../../engine/math/vector4';
@@ -7,7 +8,6 @@ import { SOUNDS } from './audio-manager';
 import { BulletOwner } from './bullet-owner.enum';
 import { GAME_STATE } from './game-state';
 import { AABB } from './physics/aabb';
-import { IPoolItem } from './pool/ipool-item';
 
 const defaultEnemySpeed = 50;
 const defaultEnemyMaxHealth = 2;
