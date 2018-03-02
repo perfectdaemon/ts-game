@@ -38,9 +38,8 @@ export class AudioManager {
     this._musicVolume.gain.value = value;
   }
 
-  addSound(audioData: any, soundName: string): Promise<AudioBuffer> {
-    return this._context.decodeAudioData(audioData)
-      .then(buffer => this._sounds[soundName] = buffer);
+  addSound(audioBuffer: AudioBuffer, soundName: string): void {
+    this._sounds[soundName] = audioBuffer;
   }
 
   playSound(soundName: string): void {
@@ -50,9 +49,8 @@ export class AudioManager {
     source.start();
   }
 
-  addMusic(audioData: any, musicName: string): Promise<AudioBuffer> {
-    return this._context.decodeAudioData(audioData)
-      .then(buffer => this._music[musicName] = buffer);
+  addMusic(audioBuffer: AudioBuffer, musicName: string): void {
+    this._music[musicName] = audioBuffer;
   }
 
   playMusic(musicName: string): void {

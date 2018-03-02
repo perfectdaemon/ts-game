@@ -36,7 +36,7 @@ export class LoaderFactory {
     return this._materialLoader.load(data, this._shaderLoader, this._textureLoader, this._textureAtlasLoader);
   }
 
-  loadSound(data: SoundData): Promise<any> {
+  loadSound(data: SoundData): Promise<AudioBuffer> {
     return this._soundLoader.load(data);
   }
 }
