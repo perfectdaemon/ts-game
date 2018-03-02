@@ -2,7 +2,7 @@ import { gl } from './webgl';
 import { IndexFormat } from './webgl-types';
 
 export class IndexBuffer {
-  public static getSizeFromFormat(format: IndexFormat): number {
+  static getSizeFromFormat(format: IndexFormat): number {
     switch (format) {
       case IndexFormat.Byte: return 1;
       case IndexFormat.Short: return 2;
@@ -10,7 +10,7 @@ export class IndexBuffer {
     }
   }
 
-  public static getWebGLFormat(format: IndexFormat): number {
+  static getWebGLFormat(format: IndexFormat): number {
     switch (format) {
       case IndexFormat.Byte: return gl.UNSIGNED_BYTE;
       case IndexFormat.Short: return gl.UNSIGNED_SHORT;
