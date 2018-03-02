@@ -5,6 +5,7 @@ import { Texture } from '../../engine/render/texture';
 import { TextureAtlas } from '../../engine/render/texture-atlas';
 import { DEFAULT_MATERIAL_DATA, NO_TEXTURE_MATERIAL } from './data-assets/default-material';
 import { DEFAULT_SHADER_DATA } from './data-assets/default-shader';
+import { SOUNDS_DATA } from './data-assets/sounds.data';
 import { CHARACTER_TEXTURE_DATE, DEFAULT_ATLAS_DATA } from './data-assets/textures';
 
 export class Assets {
@@ -14,11 +15,19 @@ export class Assets {
   material: Material;
   characterMaterial: Material;
   noTextureMaterial: Material;
+  sounds: {[key: string]: AudioBuffer} = {};
 
   loadAll(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
 
       const loaderFactory = new LoaderFactory();
+
+      const soundPromises: Promise<any>[] = [];
+
+      for (const soundData of SOUNDS_DATA) {
+        soundPromises.push(loaderFactory.loadSound(soundData)
+          .then(data => this.sounds[soundData.soundName] = data));
+      }
 
       Promise.all<ShaderProgram, TextureAtlas, Texture>([
         loaderFactory.loadShaderProgram(DEFAULT_SHADER_DATA),
@@ -44,6 +53,7 @@ export class Assets {
           return loaderFactory.loadMaterial(NO_TEXTURE_MATERIAL);
         })
         .then(material => this.noTextureMaterial = material)
+        .then(() => Promise.all(soundPromises))
         .then(() => resolve());
     });
   }

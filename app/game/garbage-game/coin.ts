@@ -1,5 +1,5 @@
 import { TextureRegion } from '../../engine/render/texture-atlas';
-import { SOUNDS } from './audio-manager';
+import { SOUNDS } from './data-assets/sounds.data';
 import { GAME_STATE } from './game-state';
 import { PickupItem } from './pickup-item';
 
@@ -11,7 +11,6 @@ export class Coin extends PickupItem {
   onPickup(): void {
     super.onPickup();
     GAME_STATE.player.money += this.amount;
-    GAME_STATE.audioManager.play(SOUNDS.coin);
+    GAME_STATE.audioManager.playSound(SOUNDS.coin);
   }
-
 }

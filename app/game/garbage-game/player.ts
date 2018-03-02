@@ -6,8 +6,8 @@ import { Vector3 } from '../../engine/math/vector3';
 import { Vector4 } from '../../engine/math/vector4';
 import { Circle } from '../../engine/physics/circle';
 import { Sprite } from '../../engine/scene/sprite';
-import { SOUNDS } from './audio-manager';
 import { BulletOwner } from './bullet-owner.enum';
+import { SOUNDS } from './data-assets/sounds.data';
 import { GAME_STATE } from './game-state';
 
 const textureSize = [96, 128];
@@ -74,7 +74,7 @@ export class Player {
   }
 
   hit(damage: number): void {
-    GAME_STATE.audioManager.play(SOUNDS.hit);
+    GAME_STATE.audioManager.playSound(SOUNDS.hit);
     this.health -= damage;
 
     this.hitTimer = defaultHitTimer;
@@ -193,7 +193,7 @@ export class Player {
       GAME_STATE.bulletManager.fire(this.weaponAbsolutePosition, this.weaponFireDirection, BulletOwner.Player);
       this.weaponShotTimer = weaponShotTimeout;
 
-      GAME_STATE.audioManager.play(SOUNDS.shoot);
+      GAME_STATE.audioManager.playSound(SOUNDS.shoot);
     }
 
     if (this.weaponShotTimer > 0) {

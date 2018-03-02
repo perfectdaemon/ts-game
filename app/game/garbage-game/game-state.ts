@@ -1,4 +1,4 @@
-import { AudioManager } from './audio-manager';
+import { AudioManager } from '../../engine/sound/audio-manager';
 import { BulletManager } from './bullet-manager';
 import { EnemyManager } from './enemy-manager';
 import { Level } from './level';
