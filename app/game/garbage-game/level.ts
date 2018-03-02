@@ -1,13 +1,13 @@
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector4 } from '../../engine/math/vector4';
+import { AABB } from '../../engine/physics/aabb';
+import { Circle } from '../../engine/physics/circle';
 import { Material } from '../../engine/render/material';
 import { TextureAtlas } from '../../engine/render/texture-atlas';
 import { renderer } from '../../engine/render/webgl';
 import { SpriteBatch } from '../../engine/render2d/sprite-batch';
 import { Sprite } from '../../engine/scene/sprite';
 import { LevelData, TileRole } from './data-assets/level.data';
-import { AABB } from './physics/aabb';
-import { Circle } from './physics/circle';
 import { Player } from './player';
 
 export class Level {

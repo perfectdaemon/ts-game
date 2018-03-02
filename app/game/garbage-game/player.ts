@@ -4,11 +4,11 @@ import { clamp, MathBase } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector3 } from '../../engine/math/vector3';
 import { Vector4 } from '../../engine/math/vector4';
+import { Circle } from '../../engine/physics/circle';
 import { Sprite } from '../../engine/scene/sprite';
 import { SOUNDS } from './audio-manager';
 import { BulletOwner } from './bullet-owner.enum';
 import { GAME_STATE } from './game-state';
-import { Circle } from './physics/circle';
 
 const textureSize = [96, 128];
 const frameSize = 32;

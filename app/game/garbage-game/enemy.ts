@@ -2,12 +2,12 @@ import { IPoolItem } from '../../engine/helpers/pool/ipool-item';
 import { isEqual } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector4 } from '../../engine/math/vector4';
+import { AABB } from '../../engine/physics/aabb';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { Sprite } from '../../engine/scene/sprite';
 import { SOUNDS } from './audio-manager';
 import { BulletOwner } from './bullet-owner.enum';
 import { GAME_STATE } from './game-state';
-import { AABB } from './physics/aabb';
 
 const defaultEnemySpeed = 50;
 const defaultEnemyMaxHealth = 2;
