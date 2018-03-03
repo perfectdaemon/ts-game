@@ -1,8 +1,9 @@
 import { MathBase } from './math-base';
+import { Matrix4 } from './matrix4';
 import { Vector2 } from './vector2';
 
 export class Vector3 {
-  constructor(public x: number, public y: number, public z: number) { }
+  constructor(public x: number = 0, public y: number = 0, public z: number = 0) { }
 
   multiplyNum(num: number): Vector3 {
     return new Vector3(this.x * num, this.y * num, this.z * num);
@@ -12,6 +13,14 @@ export class Vector3 {
     this.x *= num;
     this.y *= num;
     this.z *= num;
+    return this;
+  }
+
+  multiplyMatSelf(mat: Matrix4): Vector3 {
+    this.x = mat.e[0] * this.x + mat.e[4] * this.y + mat.e[8] * this.z + mat.e[12];
+    this.y = mat.e[1] * this.x + mat.e[5] * this.y + mat.e[9] * this.z + mat.e[13];
+    this.z = mat.e[2] * this.x + mat.e[6] * this.y + mat.e[10] * this.z + mat.e[14];
+
     return this;
   }
 
