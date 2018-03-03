@@ -80,6 +80,13 @@ export class Vector2 {
     return this;
   }
 
+  multiplyVecSelf(vec: Vector2): Vector2 {
+    this.x *= vec.x;
+    this.y *= vec.y;
+
+    return this;
+  }
+
   normal(): Vector2 {
     const length = this.length();
 
