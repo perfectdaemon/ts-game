@@ -1,5 +1,5 @@
 // tslint:disable-next-line:interface-name
-export interface FontData {
+export class SymbolData {
   symbol: string;
   startY: number;
   width: number;

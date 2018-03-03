@@ -1,8 +1,10 @@
-import { FontData } from './font-data';
+import { Material } from './material';
 import { QuadP3T2C4 } from './quad';
+import { SymbolData } from './symbol-data';
 
 export class Font {
-  fontData: { [key: string]: FontData } = {};
+  fontData: { [key: string]: SymbolData } = {};
+  material: Material = new Material();
 
   maxSymbolHeight: number = 0;
 
@@ -32,7 +34,7 @@ export class Font {
 
   getTextLength(text: string, withTrailingSpace: boolean = true): number {
     let length = 0;
-    let fontData: FontData;
+    let fontData: SymbolData;
     for (const symbol of text) {
       fontData = this.fontData[symbol];
       length += fontData ? fontData.width : 0;
