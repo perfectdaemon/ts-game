@@ -20,8 +20,8 @@ export class Text extends Node {
   public shadowOffset: Vector2;
   public shadowColor: Vector4;
 
-  private _textWidth: number;
-  private _isTextWidthChanged: boolean;
+  private _maxTextWidth: number;
+  private _isWrapped: boolean;
 
   constructor(text: string = '') {
     super();
@@ -37,21 +37,24 @@ export class Text extends Node {
 
     this.pivotPoint = new Vector2(0, 0);
     this.horizontalAlignment = HorizontalAlignment.Left;
-    this._textWidth = -1;
-    this._isTextWidthChanged = false;
+    this._maxTextWidth = 0;
+    this._isWrapped = true;
   }
 
   public free(): void {
     super.free();
   }
 
-  get textWidth(): number { return this._textWidth; }
-  set textWidth(width: number) {
-    if (isEqual(this._textWidth, width)) { return; }
+  get maxTextWidth(): number { return this._maxTextWidth; }
+  set maxTextWidth(width: number) {
+    if (isEqual(this._maxTextWidth, width)) { return; }
 
-    this._textWidth = width;
-    this._isTextWidthChanged = true;
+    this._maxTextWidth = width;
+    this._isWrapped = false;
   }
+
+  get isWrapped(): boolean { return this._isWrapped; }
+  set isWrapped(value: boolean) { this._isWrapped = value; }
 
   public renderSelf(): void {
     // nothing;
