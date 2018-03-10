@@ -1,7 +1,10 @@
+import { Font } from '../render/font';
 import { Material } from '../render/material';
 import { ShaderProgram } from '../render/shader-program';
 import { Texture } from '../render/texture';
 import { TextureAtlas } from '../render/texture-atlas';
+import { FontData } from './font.data';
+import { FontLoader } from './font.loader';
 import { MaterialData } from './material.data';
 import { MaterialLoader } from './material.loader';
 import { ShaderProgramData } from './shader-program.data';
@@ -19,6 +22,7 @@ export class LoaderFactory {
   private _shaderLoader = new ShaderProgramLoader();
   private _materialLoader = new MaterialLoader();
   private _soundLoader = new SoundLoader();
+  private _fontLoader = new FontLoader();
 
   loadTexture(data: TextureData): Promise<Texture> {
     return this._textureLoader.load(data);
@@ -38,5 +42,10 @@ export class LoaderFactory {
 
   loadSound(data: SoundData): Promise<AudioBuffer> {
     return this._soundLoader.load(data);
+  }
+
+  loadFont(data: FontData): Promise<Font> {
+    return this._fontLoader.load(data, this._materialLoader,
+      this._shaderLoader, this._textureLoader, this._textureAtlasLoader);
   }
 }
