@@ -6,19 +6,20 @@
     body {
       font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
       background: #222;
-      font-size: 16pt;
+      font-size: 14pt;
+      color: coral;
+    }
+
+    a {
       color: coral;
     }
 
     #canvas-main {
       display: block;
-      margin: 10px auto;
       width: 960px;
     }
 
     .font-drop {
-      margin: 0 auto;
-      width: 960px;
       height: 200px;
       border: 3px dashed currentColor;
       color: coral;
@@ -26,17 +27,25 @@
       align-items: center;
       justify-content: center;
     }
+
+    .flex {
+      display: flex;
+    }
   </style>
 </head>
 
 <body>
-  <canvas width="1024" height="768" id="canvas-main">
-    No canvas support :(
-  </canvas>
-
-  <div id="fontDrop" class="font-drop">
-    Drop font file here
+  <div class="flex">
+    <canvas width="1024" height="512" id="canvas-main">No canvas support :(</canvas>
+    <div>
+        <div id="fontDrop" class="font-drop">
+            Drop font file here
+          </div>
+        <a href="#" id="downloadBitmapLink">Download bitmap</a>
+        <a href="#" id="downloadSymbolDataLink">Download symbol data</a>
+    </div>
   </div>
+
 
   <script src="tools.bundle.js"></script>
 </body>

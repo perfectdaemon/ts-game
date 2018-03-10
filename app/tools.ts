@@ -58,6 +58,25 @@ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
     }
 
     console.log(this.symbolDatas);
+    console.log(this.canvasElement.toDataURL('image/png'));
+  }
+
+  save(width: number, height: number): void {
+    const hiddenCanvas = document.createElement('canvas');
+    hiddenCanvas.width = width;
+    hiddenCanvas.height = height;
+
+    const context = hiddenCanvas.getContext('2d') as CanvasRenderingContext2D;
+    context.drawImage(this.canvasElement, 0, 0, width, height, 0, 0, width, height);
+
+    const base64data = hiddenCanvas.toDataURL();
+    const hrefElement = document.getElementById('downloadBitmapLink') as HTMLAnchorElement;
+    hrefElement.download = 'font.png';
+    hrefElement.href = base64data;
+
+    const hrefDataElement = document.getElementById('downloadSymbolDataLink') as HTMLAnchorElement;
+    hrefDataElement.download = 'font.json';
+    hrefDataElement.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.symbolDatas));
   }
 }
 
@@ -65,3 +84,4 @@ const canvas = document.getElementById('canvas-main') as HTMLCanvasElement;
 const fontDropEl = document.getElementById('fontDrop') as HTMLElement;
 const bfg = new BitmapFontGenerator(canvas, fontDropEl);
 bfg.draw(30, 'Arial', 512, 256, 0, 1);
+bfg.save(512, 256);
