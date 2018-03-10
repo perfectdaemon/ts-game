@@ -15,10 +15,10 @@ export class Font {
       return quad;
     }
 
-    quad.positions[0].set(symbolData.width, symbolData.startY + symbolData.height, 0).multiplyNumSelf(scale);
-    quad.positions[1].set(symbolData.width, symbolData.startY, 0).multiplyNumSelf(scale);
-    quad.positions[2].set(0, symbolData.startY, 0).multiplyNumSelf(scale);
-    quad.positions[3].set(0, symbolData.startY + symbolData.height, 0).multiplyNumSelf(scale);
+    quad.positions[0].set(symbolData.width, symbolData.height, 0).multiplyNumSelf(scale);
+    quad.positions[1].set(symbolData.width, 0, 0).multiplyNumSelf(scale);
+    quad.positions[2].set(0, 0, 0).multiplyNumSelf(scale);
+    quad.positions[3].set(0, 0 + symbolData.height, 0).multiplyNumSelf(scale);
 
     quad.texCoords[0].set(symbolData.tx + symbolData.tw, symbolData.ty + symbolData.th).multiplyNumSelf(scale);
     quad.texCoords[1].set(symbolData.tx + symbolData.tw, symbolData.ty).multiplyNumSelf(scale);

@@ -18,8 +18,6 @@ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
     };
 
     this.context = canvasElement.getContext('2d') as CanvasRenderingContext2D;
-    this.context.fillStyle = '#333';
-    this.context.fillRect(0, 0, canvasElement.width, canvasElement.height);
   }
 
   draw(
@@ -27,9 +25,6 @@ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
     textureWidth: number, textureHeight: number,
     paddingTop: number, paddingRight: number,
   ): void {
-    this.context.fillStyle = '#000';
-    this.context.fillRect(0, 0, textureWidth, textureHeight);
-
     this.context.fillStyle = '#fff';
     this.context.font = `${fontSize}px ${fontName}`;
 
@@ -44,7 +39,6 @@ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
       }
       const symbolData = new SymbolData();
       symbolData.width = symbolWidth;
-      symbolData.startY = 0;
       symbolData.height = fontSize;
       symbolData.symbol = letter;
       symbolData.tx = startX / textureWidth;

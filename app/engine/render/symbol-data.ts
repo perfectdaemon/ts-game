@@ -1,6 +1,5 @@
 export class SymbolData {
   symbol: string;
-  startY: number;
   width: number;
   height: number;
   tx: number;
