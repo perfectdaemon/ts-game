@@ -91,6 +91,7 @@ export class TextBatch {
       }
 
       const quad = this.font.getSymbolQuad(symbol, text.scale);
+      const width = quad.positions[0].x;
 
       for (let vert = 0; vert < 4; ++vert) {
         quad.positions[vert].addToSelf(this._start);
@@ -107,7 +108,7 @@ export class TextBatch {
       for (let i = 0; i < 6; ++i) {
         this._indexData[this._count * 6 + i] = SPRITE_INDICES[i] + this._count * 4;
       }
-
+      this._start.x += width + text.letterSpacing;
       ++this._count;
       this._changed = true;
     }
