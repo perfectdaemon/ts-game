@@ -18,10 +18,14 @@ import { GAME_STATE, GameState } from './game-state';
 import { Level } from './level';
 import { PickupManager } from './pickup-manager';
 import { Player } from './player';
+import { TextBatch } from '../../engine/render2d/text-batch';
+import { Text } from '../../engine/scene/text';
 
 export class Game extends GameBase {
   spriteBatch: SpriteBatch = new SpriteBatch();
   spriteBatch2: SpriteBatch = new SpriteBatch();
+  textBatch: TextBatch;
+  text: Text = new Text();
 
   camera: Camera = new Camera();
   assets: Assets = new Assets();
@@ -78,6 +82,11 @@ export class Game extends GameBase {
         for (const soundName in this.assets.sounds) {
           this.audioManager.addSound(this.assets.sounds[soundName], soundName);
         }
+
+        this.textBatch = new TextBatch(this.assets.font);
+        this.text.text = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\n
+абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБ`;
+        this.text.position.set(50, 50, 10);
 
         GAME_STATE.currentLevel = this.level;
         GAME_STATE.bulletManager = this.bulletManager;
@@ -148,6 +157,11 @@ export class Game extends GameBase {
       this.spriteBatch.drawSingle(this.screenSprite);
       this.spriteBatch.finish();
     }
+
+    this.assets.fontMaterial.bind();
+    this.textBatch.start();
+    this.textBatch.drawSingle(this.text);
+    this.textBatch.finish();
   }
 
   protected onMouseMove(position: Vector2): void {

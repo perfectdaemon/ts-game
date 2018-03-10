@@ -14,3 +14,9 @@ export const CHARACTER_TEXTURE_DATE: TextureData = {
   filter: TextureFilter.Nearest,
   anisotropic: 0,
 };
+
+export const FONT_TEXTURE_DATA: TextureData = {
+  imageFileSrc: 'assets/font.png',
+  filter: TextureFilter.Nearest,
+  anisotropic: 0,
+};
