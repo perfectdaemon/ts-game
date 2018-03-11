@@ -33,19 +33,3 @@ export const NO_TEXTURE_MATERIAL: MaterialData = {
 
   cull: CullMode.Back,
 };
-
-export const FONT_MATERIAL: MaterialData = {
-  textures: [
-    { uniformName: 'uDiffuse' },
-  ],
-
-  color: new Vector4(1, 1, 1, 1),
-
-  blend: BlendingMode.Alpha,
-
-  depthWrite: true,
-  depthTest: true,
-  depthTestFunc: FuncComparison.Less,
-
-  cull: CullMode.Back,
-};
