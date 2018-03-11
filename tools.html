@@ -4,45 +4,88 @@
   <title>Engine tools</title>
   <style>
     body {
-      font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-      background: #222;
+      font-family: "Segoe UI", Helvetica, Sans-Serif;
+      background: #eee;
       font-size: 14pt;
-      color: coral;
-    }
-
-    a {
-      color: coral;
+      color: #444;
     }
 
     #canvas-main {
+      background-color: #000;
       display: block;
-      width: 960px;
-    }
-
-    .font-drop {
-      height: 200px;
-      border: 3px dashed currentColor;
-      color: coral;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      box-shadow: #333 0 1px 10px 0;
     }
 
     .flex {
       display: flex;
     }
+
+    .flex_center {
+      justify-content: center;
+    }
+
+    .flex_space_between {
+      justify-content: space-between;
+    }
+
+    .flex-items-margin>* {
+      margin: 10px;
+    }
+
+    .flex_inputs>input,
+    .flex_inputs>textarea {
+      flex-grow: 1;
+    }
+
+    .flex_inputs>* {
+      margin: 10px;
+    }
+
+    .flex-item {
+      margin: 10px;
+    }
   </style>
 </head>
 
 <body>
-  <div class="flex">
-    <canvas width="1024" height="512" id="canvas-main">No canvas support :(</canvas>
+  <div class="flex flex-items-margin flex_center">
+    <canvas width="512" height="512" id="canvas-main">No canvas support :(</canvas>
     <div>
-        <div id="fontDrop" class="font-drop">
-            Drop font file here
-          </div>
-        <a href="#" id="downloadBitmapLink">Download bitmap</a>
-        <a href="#" id="downloadSymbolDataLink">Download symbol data</a>
+      <h3>Settings</h3>
+
+      <div class="flex flex_space_between flex_inputs">
+        <label>Font name</label>
+        <input id="fontName" />
+      </div>
+
+      <div class="flex flex_space_between flex_inputs">
+        <label>Font size</label>
+        <input id="fontSize" type="number" />
+      </div>
+
+      <div class="flex flex_space_between flex_inputs">
+        <label>Texture size</label>
+        <input id="textureWidth" type="number" />
+        <span>x</span>
+        <input id="textureHeight" type="number" />
+      </div>
+
+      <div class="flex flex_space_between flex_inputs">
+        <label>Symbol paddings (top, right)</label>
+        <input id="paddingTop" type="number" />
+        <input id="paddingRight" type="number" />
+      </div>
+
+      <div class="flex flex_space_between flex_inputs">
+        <label for="fontText">Symbols to generate</label>
+        <textarea id="fontText" rows="4" cols="36"></textarea>
+      </div>
+
+      <div class="flex flex_inputs">
+        <button id="generate">Generate</button>
+        <button id="download">Download all</button>
+      </div>
+
     </div>
   </div>
 
