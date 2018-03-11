@@ -33,7 +33,7 @@ export class BitmapFontGenerator {
   ): void {
     this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
     this.context.strokeStyle = '#0ff';
-    this.context.strokeRect(-1, -1, textureWidth + 1, textureHeight + 1);
+    this.context.strokeRect(-1, -1, textureWidth + 2, textureHeight + 2);
 
     this.symbolDatas = [];
     this.textureWidth = textureWidth;
