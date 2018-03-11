@@ -33,7 +33,7 @@ const bfg = new BitmapFontGenerator(canvas);
 
 getElement('download').onclick = (event) => {
   event.preventDefault();
-  bfg.save('font.png', 'font.json');
+  bfg.save(`${inputs.fontName.value}.png`, `${inputs.fontName.value}.json`);
 };
 
 getElement('generate').onclick = (event) => {
