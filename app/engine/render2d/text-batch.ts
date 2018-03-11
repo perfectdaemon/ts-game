@@ -80,13 +80,13 @@ export class TextBatch {
     this._start.set(this._textOrigin);
 
     for (const symbol of text.text) {
-      if (!this.font.hasFontData(symbol)) {
-        continue;
-      }
-
       if (symbol === '\n') {
         this._start.x = this._textOrigin.x;
         this._start.y += text.scale * (text.lineSpacing + this.font.maxSymbolHeight);
+        continue;
+      }
+
+      if (!this.font.hasFontData(symbol)) {
         continue;
       }
 

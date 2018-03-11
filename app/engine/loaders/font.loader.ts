@@ -21,8 +21,11 @@ export class FontLoader {
         .then(symbols => {
           for (const symbol of symbols) {
             font.fontData[symbol.symbol] = symbol;
+            if (symbol.height > font.maxSymbolHeight) {
+              font.maxSymbolHeight = symbol.height;
+            }
           }
-          font.maxSymbolHeight = symbols[0].height;
+
           if (data.material) {
             font.material = data.material;
             resolve(font);
