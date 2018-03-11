@@ -43,3 +43,5 @@ getElement('generate').onclick = (event) => {
     parseInt(inputs.textureWidth.value), parseInt(inputs.textureHeight.value),
     parseInt(inputs.paddingTop.value), parseInt(inputs.paddingRight.value));
 };
+
+getElement('generate').click();
