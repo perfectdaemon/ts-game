@@ -84,7 +84,7 @@ export class Game extends GameBase {
         }
 
         this.textBatch = new TextBatch(this.assets.font);
-        this.text.text = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\n
+        this.text.text = `abcdefghijklmnopqrstuvwxyzABCD
 абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБ`;
         this.text.position.set(50, 50, 10);
 
