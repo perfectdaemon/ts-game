@@ -1,14 +1,24 @@
-# TypeScript HTML5 Canvas Game Template
+# TypeScript WebGL Game Framework
 
 In theory it is small code-oriented framework for building html5 games.  
 In fact it is just a beginning of that.
 
-## Roadmap
+## What have we got?
+* WebGL renderer with base classes for Vertex/Index/Frame buffers, Texture, Shader and so on
+* Scene management: Camera, Node
+* 2D graphics - Sprite, Text, SpriteBatch renderer
+* Math classes - Vectors, Matrix
+* TextureAtlas
+* Async asset loaders based on Promise<>
 
-* WebGL Renderer (SUDDENLY!) — rewrite tinyglr graphics (https://github.com/perfectdaemon/tiny-glr) from opengl and free pascal into webgl and typescript
-* 2d graphics - sprites, texts, etc
-* some other infrastructure
-* performance tests
+## What is in progress
+* Font, TextBatch
+
+## Roadmap
+* 2D graphics full support
+* more maths, sound, physics
+* games
+* 3d graphics
 * ...
 
 ## Quick start
