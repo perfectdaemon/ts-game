@@ -4,17 +4,25 @@ In theory it is small code-oriented framework for building html5 games.
 In fact it is just a beginning of that.
 
 ## What have we got?
-* WebGL renderer with base classes for Vertex/Index/Frame buffers, Texture, Shader and so on
-* Scene management: Camera, Node
-* 2D graphics - Sprite, Text, SpriteBatch renderer
-* Math classes - Vectors, Matrix
-* TextureAtlas
-* Async asset loaders based on Promise<>
+* WebGL rendering
+* Scene management: camera, node
+* 2D graphics: sprite, text
+* Texture atlases
+* Audio
+* Font generator
+* Math classes
+* Async asset loading
+
 
 ## What is in progress
-* Font, TextBatch
+* Tweening
+* ActionManager (do actions with timeout, continuos and so on, no more timers at your Game class)
+* Sprite animations (spritesheet and object based)
+* Box2d (?)
+* GUI (buttons, sliders, inputs)
+* Menu framework (Main Menu, Settings and so on)
 
-## Roadmap
+## Global roadmap
 * 2D graphics full support
 * more maths, sound, physics
 * games
