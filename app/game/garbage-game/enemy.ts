@@ -1,13 +1,13 @@
+import { IPoolItem } from '../../engine/helpers/pool/ipool-item';
 import { isEqual } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector4 } from '../../engine/math/vector4';
+import { AABB } from '../../engine/physics/aabb';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { Sprite } from '../../engine/scene/sprite';
-import { SOUNDS } from './audio-manager';
 import { BulletOwner } from './bullet-owner.enum';
+import { SOUNDS } from './data-assets/sounds.data';
 import { GAME_STATE } from './game-state';
-import { AABB } from './physics/aabb';
-import { IPoolItem } from './pool/ipool-item';
 
 const defaultEnemySpeed = 50;
 const defaultEnemyMaxHealth = 2;
@@ -110,7 +110,7 @@ export class Enemy implements IPoolItem {
   }
 
   hit(damage: number): void {
-    GAME_STATE.audioManager.play(SOUNDS.hit);
+    GAME_STATE.audioManager.playSound(SOUNDS.hit);
 
     this.health -= damage;
 
@@ -140,7 +140,7 @@ export class Enemy implements IPoolItem {
       .multiplyNumSelf(1 - this.accuracy)
       .addToSelf(this.moveDirection);
     GAME_STATE.bulletManager.fire(this.collider.center, this.weaponFireDirection, BulletOwner.Enemy);
-    GAME_STATE.audioManager.play(SOUNDS.shoot);
+    GAME_STATE.audioManager.playSound(SOUNDS.shoot);
   }
 
   private getRandomSpawnPosition(): Vector2 {

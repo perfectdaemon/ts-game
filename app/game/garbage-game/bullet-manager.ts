@@ -1,3 +1,4 @@
+import { Pool } from '../../engine/helpers/pool/pool';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector4 } from '../../engine/math/vector4';
 import { TextureRegion } from '../../engine/render/texture-atlas';
@@ -5,7 +6,6 @@ import { SpriteBatch } from '../../engine/render2d/sprite-batch';
 import { Sprite } from '../../engine/scene/sprite';
 import { Bullet } from './bullet';
 import { BulletOwner } from './bullet-owner.enum';
-import { Pool } from './pool/pool';
 
 const defaultPlayerBulletSpeed = 800;
 const defaultEnemyBulletSpeed = 500;

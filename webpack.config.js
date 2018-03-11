@@ -2,7 +2,10 @@ const path = require('path');
 const copy = require('copy-webpack-plugin');
 
 module.exports = {
-  entry: './app/main.ts',
+  entry: {
+    game: './app/main.ts',
+    tools: './app/tools.ts'
+  },
   module: {
     rules: [
       {
@@ -16,13 +19,14 @@ module.exports = {
     extensions: [ '.tsx', '.ts', '.js' ]
   },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
   plugins: [
     new copy([
       {from: 'assets', to: 'assets', ignore: '.gitkeep'},
-      {from: 'index.html'}
+      {from: 'index.html'},
+      {from: 'tools.html'}
     ])
   ]
 };

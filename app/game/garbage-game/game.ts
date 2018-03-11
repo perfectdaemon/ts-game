@@ -8,9 +8,9 @@ import { TextureAtlas } from '../../engine/render/texture-atlas';
 import { SpriteBatch } from '../../engine/render2d/sprite-batch';
 import { Camera, CameraPivot, CameraProjectionMode } from '../../engine/scene/camera';
 import { Sprite } from '../../engine/scene/sprite';
+import { AudioManager } from '../../engine/sound/audio-manager';
 import { GameBase } from './../../engine/game-base';
 import { Assets } from './assets';
-import { AudioManager } from './audio-manager';
 import { BulletManager } from './bullet-manager';
 import { LEVEL_DATA } from './data-assets/level.data';
 import { EnemyManager } from './enemy-manager';
@@ -22,6 +22,7 @@ import { Player } from './player';
 export class Game extends GameBase {
   spriteBatch: SpriteBatch = new SpriteBatch();
   spriteBatch2: SpriteBatch = new SpriteBatch();
+  text: Text = new Text();
 
   camera: Camera = new Camera();
   assets: Assets = new Assets();
@@ -46,7 +47,6 @@ export class Game extends GameBase {
   protected onInit(): void {
     this.player.body.position.set(this.renderer.width / 2, this.renderer.height / 2, 1);
     this.assets.loadAll()
-      .then(() => this.audioManager.loadAll())
       .then(() => {
         this.player.weapon.setTextureRegion(this.assets.textureAtlas.getRegion('pistol2.png'), true);
         this.player.weapon.multSize(2);
@@ -75,6 +75,10 @@ export class Game extends GameBase {
 
         this.screenSprite = new Sprite(this.renderer.width, this.renderer.height, new Vector2(0, 0));
         this.screenSprite.position.set(0, 0, 50);
+
+        for (const soundName in this.assets.sounds) {
+          this.audioManager.addSound(this.assets.sounds[soundName], soundName);
+        }
 
         GAME_STATE.currentLevel = this.level;
         GAME_STATE.bulletManager = this.bulletManager;

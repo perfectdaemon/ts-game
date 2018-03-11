@@ -2,6 +2,7 @@ import { gl } from './webgl';
 import { VertexAtrib, VertexFormat } from './webgl-types';
 
 export class VertexBuffer {
+  private _floatArray: Float32Array;
   public buffer: WebGLBuffer;
 
   constructor(public format: VertexFormat, public count: number) {
@@ -15,6 +16,7 @@ export class VertexBuffer {
     this.bind();
     const size = count * this.getSizeFromFormat(this.format);
     gl.bufferData(gl.ARRAY_BUFFER, size, gl.STATIC_DRAW);
+    this._floatArray = new Float32Array(count * this.getFloatCountFromFormat(this.format));
   }
 
   public bind(): void {
@@ -63,15 +65,20 @@ export class VertexBuffer {
 
   public update(data: number[], start: number): void {
     this.bind();
-    gl.bufferSubData(gl.ARRAY_BUFFER, start, new Float32Array(data));
+    this._floatArray.set(data, start);
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, this._floatArray);
   }
 
   private getSizeFromFormat(format: VertexFormat): number {
+    return this.getFloatCountFromFormat(format) * 4;
+  }
+
+  private getFloatCountFromFormat(format: VertexFormat): number {
     switch (format) {
-      case VertexFormat.Pos3Tex2: return 20;
-      case VertexFormat.Pos2Tex2: return 16;
-      case VertexFormat.Pos3Tex2Nor3: return 32;
-      case VertexFormat.Pos3Tex2Col4: return 36;
+      case VertexFormat.Pos3Tex2: return 5;
+      case VertexFormat.Pos2Tex2: return 4;
+      case VertexFormat.Pos3Tex2Nor3: return 8;
+      case VertexFormat.Pos3Tex2Col4: return 9;
     }
   }
 }

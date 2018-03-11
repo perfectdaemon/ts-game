@@ -1,4 +1,4 @@
-import { Vector2 } from '../../../engine/math/vector2';
+import { Vector2 } from '../math/vector2';
 import { Circle } from './circle';
 
 export class AABB {
