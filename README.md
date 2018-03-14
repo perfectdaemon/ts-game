@@ -21,6 +21,7 @@ In fact it is just a beginning of that.
 * Box2d (?)
 * GUI (buttons, sliders, inputs)
 * Menu framework (Main Menu, Settings and so on)
+* Particles
 
 ## Global roadmap
 * 2D graphics full support
