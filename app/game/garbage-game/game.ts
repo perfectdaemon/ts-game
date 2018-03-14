@@ -18,6 +18,7 @@ import { GAME_STATE, GameState } from './game-state';
 import { Level } from './level';
 import { PickupManager } from './pickup-manager';
 import { Player } from './player';
+import { ActionManager } from '../../engine/helpers/action-manager/action-manager';
 
 export class Game extends GameBase {
   spriteBatch: SpriteBatch = new SpriteBatch();
@@ -32,6 +33,7 @@ export class Game extends GameBase {
   enemyManager: EnemyManager;
   pickupManager: PickupManager;
   audioManager: AudioManager = new AudioManager();
+  actionManager: ActionManager = new ActionManager();
 
   screenSprite: Sprite;
   screenSpriteAlpha: number = 0;
@@ -91,6 +93,7 @@ export class Game extends GameBase {
       });
 
     this.renderer.setClearColorRGB(0.1, 0.2, 0.2, 0.5);
+    this.actionManagerTest();
   }
 
   protected onUpdate(deltaTime: number): void {
@@ -109,6 +112,7 @@ export class Game extends GameBase {
       this.bulletManager.update(deltaTime);
       this.enemyManager.update(deltaTime);
       this.pickupManager.update(deltaTime);
+      this.actionManager.update(deltaTime);
 
       if (this.player.health <= 0 && !this.gameOver) {
         this.gameOver = true;
@@ -165,5 +169,12 @@ export class Game extends GameBase {
   }
   protected onKeyUp(key: Keys): void {
     // nothing
+  }
+
+  private actionManagerTest(): void {
+    this.actionManager.add(() => console.log('simple with 2 seconds timeout'), 2);
+    this.actionManager.add((deltaTime) => console.log('repeat with 1 second timeout for 3 seconds'), 1, 3)
+      .then(dt => console.log('after that repeat for 2 seconds'), 0, 2)
+      .then(() => console.log('after that - simple'));
   }
 }
