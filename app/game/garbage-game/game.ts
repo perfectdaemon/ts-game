@@ -93,6 +93,7 @@ export class Game extends GameBase {
       });
 
     this.renderer.setClearColorRGB(0.1, 0.2, 0.2, 0.5);
+    this.audioManager.masterVolume = 0;
     this.actionManagerTest();
   }
 
