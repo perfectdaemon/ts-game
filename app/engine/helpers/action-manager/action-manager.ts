@@ -6,13 +6,27 @@ import { ContinuousAction, SimpleAction } from './actions.func';
 export class ActionManager {
   private _pool: Pool<Action> = new Pool<Action>(() => new Action(this), 10);
 
-  add(actionCallback: ContinuousAction, duration: number, pauseOnStart: number = 0): Action {
+  add(actionCallback: SimpleAction | ContinuousAction, pauseOnStart: number = 0, duration?: number): Action {
     const action = this._pool.get();
-    action.duration = duration;
-    action.pauseOnStart = pauseOnStart;
-    action.actionType = ActionType.Continuous;
-    action.action = actionCallback;
 
+    if (duration !== undefined) {
+      action.duration = duration;
+    }
+    action.pauseOnStart = pauseOnStart;
+    action.actionType = this.isSimpleAction(actionCallback)
+      ? ActionType.Simple
+      : ActionType.Continuous;
+    action.action = actionCallback;
+    return action;
+  }
+
+  addAfter(
+    otherAction: Action, actionCallback: SimpleAction | ContinuousAction,
+    pauseOnStart: number = 0, duration?: number,
+  ): Action {
+    const action = this.add(actionCallback, pauseOnStart, duration);
+    action.paused = true;
+    otherAction.nextActions.push(action);
     return action;
   }
 
@@ -20,5 +34,9 @@ export class ActionManager {
     for (const action of this._pool.poolObjects) {
       action.update(deltaTime);
     }
+  }
+
+  private isSimpleAction(actionCallback: SimpleAction | ContinuousAction): actionCallback is SimpleAction {
+    return (actionCallback as SimpleAction).length === 0;
   }
 }

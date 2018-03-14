@@ -5,10 +5,12 @@ import { ContinuousAction, SimpleAction } from './actions.func';
 
 export class Action implements IPoolItem {
   active: boolean = false;
+  paused: boolean = false;
   actionType: ActionType = ActionType.Simple;
   pauseOnStart: number = 0;
   time: number = 0;
   duration: number = 0;
+  nextActions: Action[] = [];
 
   constructor(private _actionManager: ActionManager) { }
 
@@ -16,34 +18,44 @@ export class Action implements IPoolItem {
 
   onActivate(): void {
     this.active = true;
+    this.paused = false;
     this.time = 0;
     this.duration = 0;
+    this.nextActions = [];
   }
 
   onDeactivate(): void {
     this.active = false;
   }
 
-  /*addAfter(actionCallback: ContinuousAction, duration: number, pauseOnStart: number = 0): Action {
-    return this._actionManager.add(actionCallback, duration, pauseOnStart);
-  }*/
+  then(actionCallback: SimpleAction | ContinuousAction, pauseOnStart: number = 0, duration?: number): Action {
+    return this._actionManager.addAfter(this, actionCallback, pauseOnStart, duration);
+  }
 
   update(deltaTime: number): void {
-    if (!this.active) { return; }
-
-    if (this.actionType === ActionType.Simple) {
-      (this.action as SimpleAction)();
-      this.onDeactivate();
-      return;
-    }
+    if (!this.active || this.paused) { return; }
 
     this.time += deltaTime;
 
     if (this.time < this.pauseOnStart) { return; }
 
-    const callbackResult = (this.action as ContinuousAction)(deltaTime);
-    if (!callbackResult || this.time >= this.duration + this.pauseOnStart) {
+    if (this.actionType === ActionType.Simple) {
+      (this.action as SimpleAction)();
       this.onDeactivate();
+      this.playNextActions();
+      return;
+    }
+
+    const callbackResult = (this.action as ContinuousAction)(deltaTime);
+    if (callbackResult || this.time >= this.duration + this.pauseOnStart) {
+      this.onDeactivate();
+      this.playNextActions();
+    }
+  }
+
+  private playNextActions(): void {
+    for (const next of this.nextActions) {
+      next.paused = false;
     }
   }
 }
