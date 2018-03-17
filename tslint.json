@@ -21,7 +21,8 @@
     "radix": false,
     "member-access": false,
     "one-variable-per-declaration": false,
-    "array-type": false
+    "array-type": false,
+    "no-empty": false
   },
   "rulesDirectory": []
 }
