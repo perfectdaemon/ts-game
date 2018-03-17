@@ -1,18 +1,14 @@
 <html>
 
 <head>
-  <title>shooter.ts for igdc#151</title>
+  <title>RTS for igdc#152</title>
   <style>
-    @font-face {
-      font-family: "Minecraft 1.1";
-      src: url("assets/Pixelart.ttf") format("truetype");
-    }
 
     body {
-      font-family: "Minecraft 1.1", "Segoe UI", Verdana, Helvetica, Sans-Serif;
-      background: #222;
+      font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+      background: #999;
       font-size: 16pt;
-      color: coral;
+      color: rgb(19, 104, 138)
     }
 
     * {
@@ -25,10 +21,6 @@
       justify-content: space-between;
       margin: 0 auto;
       max-width: 960px;
-    }
-
-    .controls {
-      font-size: 0.9rem;
     }
 
     .footer {
@@ -48,60 +40,6 @@
       display: block;
       margin: 10px auto;
     }
-
-    .game-over {
-      font-size: 2.0rem;
-      text-align: center;
-      color: red;
-      margin: 20px auto;
-    }
-
-    .hud {
-      display: flex;
-      align-items: baseline;
-    }
-
-    .hud * {
-      margin-right: 20px;
-    }
-
-    .hud_health,
-    .hud_money,
-    .hud_stamina {
-      display: flex;
-      align-items: baseline;
-    }
-
-    .hud_health {
-      color: red;
-    }
-
-    .hud_health_icon {
-      background-image: url('assets/atlas.png');
-      background-repeat: no-repeat;
-      background-position: -12px -154px;
-
-      margin-right: 10px;
-      width: 11px;
-      height: 29px;
-    }
-
-    .hud_stamina_icon {
-      margin-right: 10px;
-    }
-
-    .hud_waves_icon {
-      margin-right: 10px;
-    }
-
-    .hud_money_icon {
-      background-image: url('assets/atlas.png');
-      background-repeat: no-repeat;
-      background-position: -96px -128px;
-      width: 29px;
-      height: 29px;
-      margin-right: 10px;
-    }
   </style>
 </head>
 
@@ -109,53 +47,9 @@
   <canvas width="960" height="768" id="canvas-main" tabindex="1">
     No canvas support :(
   </canvas>
-  <div id="gameOver" class="flex-container game-over" style="display: none">
-    GAME OVER. PRESS ENTER TO REPLAY.
-  </div>
 
-  <div class="flex-container">
-    <div class="hud">
-      <div class="hud_health">
-        <span class="hud_health_icon">&nbsp;</span>
-        <span id="hudHealthAmount">100</span>
-      </div>
-
-      <div class="hud_money">
-        <span class="hud_money_icon">&nbsp;</span>
-        <span id="hudMoneyAmount">100</span>
-      </div>
-
-      <div class="hud_stamina">
-        <span class="hud_stamina_icon">stamina: </span>
-        <span id="hudStaminaAmount">10</span>
-      </div>
-
-      <div class="hud_waves">
-        <div>
-          <span class="hud_waves_icon">waves passed:</span>
-          <span id="hudWaveNumber"></span>
-        </div>
-
-        <div>
-            <span class="hud_waves_icon">enemy remain:</span>
-            <span id="hudEnemyRemain"></span>
-          </div>
-
-        <div>
-            <span class="hud_waves_icon">total killed:</span>
-            <span id="hudTotalKilled"></span>
-          </div>
-      </div>
-    </div>
-
-    <div class="controls">
-      <div>Wasd/arrows - movement</div>
-      <div>Mouse - aim & shoot</div>
-      <div>Shift - run</div>
-    </div>
-  </div>
   <div class="flex-container footer">
-    <div>shooter.ts for igdc#151</div>
+    <div>RTS for igdc#152</div>
     <a href="mailto:info@perfectdaemon.ru">info@perfectdaemon.ru</a>
   </div>
 
