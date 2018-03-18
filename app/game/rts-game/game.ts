@@ -16,7 +16,7 @@ export class Game extends GameBase {
 
     this.assets.loadAll()
       .then(() => {
-        const gameScene = new GameScene();
+        const gameScene = new GameScene(this.assets);
         this.sceneManager.addScene(gameScene, SCENES.game);
 
         this.sceneManager.switchTo(SCENES.game);
@@ -28,6 +28,11 @@ export class Game extends GameBase {
     GLOBAL.actionManager.update(deltaTime);
     GLOBAL.tweener.update(deltaTime);
     this.sceneManager.update(deltaTime);
+  }
+
+  protected onRender(): void {
+    super.onRender();
+    this.sceneManager.render();
   }
 
   protected onMouseMove(position: Vector2): void {

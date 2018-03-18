@@ -3,7 +3,7 @@ import { Vector2 } from '../../../engine/math/vector2';
 
 export enum SceneState { Hidden, Active, Paused }
 
-export class Scene {
+export abstract class Scene {
   state: SceneState = SceneState.Hidden;
 
   load(): Promise<void> {
@@ -20,11 +20,9 @@ export class Scene {
     });
   }
 
-  update(deltaTime: number): void {
-    if (this.state in [SceneState.Hidden, SceneState.Paused]) {
-      return;
-    }
-  }
+  abstract update(deltaTime: number): void;
+
+  abstract render(): void;
 
   setPause(pause: boolean): void {
     if (this.state === SceneState.Hidden) {

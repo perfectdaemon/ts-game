@@ -65,6 +65,16 @@ export class SceneManager {
     }
   }
 
+  render(): void {
+    for (const sceneName in this.scenes) {
+      if (this.scenes[sceneName].state === SceneState.Hidden) {
+        continue;
+      }
+
+      this.scenes[sceneName].render();
+    }
+  }
+
   onMouseMove(position: Vector2): void {
     for (const sceneName in this.scenes) {
       if (this.scenes[sceneName].state !== SceneState.Active) {

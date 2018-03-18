@@ -4,12 +4,16 @@ import { Font } from '../../../engine/render/font';
 import { Material } from '../../../engine/render/material';
 import { ShaderProgram } from '../../../engine/render/shader-program';
 import { Texture } from '../../../engine/render/texture';
+import { Camera } from '../../../engine/scene/camera';
 import { DEFAULT_FONT, DEFAULT_MATERIAL, DEFAULT_SHADER } from './default';
 
 export class Assets {
   shader: ShaderProgram = new ShaderProgram();
   blankMaterial: Material = new Material();
   font: Font = new Font();
+
+  gameCamera: Camera = new Camera();
+  guiCamera: Camera = new Camera();
 
   private loaders: LoaderFactory = new LoaderFactory();
 
