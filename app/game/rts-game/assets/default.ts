@@ -1,12 +1,14 @@
+import { FontData } from '../../../engine/loaders/font.data';
 import { MaterialData } from '../../../engine/loaders/material.data';
 import { ShaderProgramData } from '../../../engine/loaders/shader-program.data';
 import { Vector4 } from '../../../engine/math/vector4';
 import { BlendingMode, CullMode, FuncComparison, TextureFilter } from '../../../engine/render/webgl-types';
-import { FontData } from '../../../engine/loaders/font.data';
 
 export const DEFAULT_MATERIAL: MaterialData = {
   textures: [
-    { uniformName: 'uDiffuse' },
+    {
+      uniformName: 'uDiffuse',
+    },
   ],
 
   color: new Vector4(1, 1, 1, 1),

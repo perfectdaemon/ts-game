@@ -1,7 +1,9 @@
 import { LoaderFactory } from '../../../engine/loaders/loader-factory';
+import { MaterialData } from '../../../engine/loaders/material.data';
 import { Font } from '../../../engine/render/font';
 import { Material } from '../../../engine/render/material';
 import { ShaderProgram } from '../../../engine/render/shader-program';
+import { Texture } from '../../../engine/render/texture';
 import { DEFAULT_FONT, DEFAULT_MATERIAL, DEFAULT_SHADER } from './default';
 
 export class Assets {
@@ -13,16 +15,20 @@ export class Assets {
 
   loadAll(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      Promise.all<ShaderProgram, Font>([
-        this.loaders.loadShaderProgram(DEFAULT_SHADER),
-        this.loaders.loadFont(DEFAULT_FONT)
-      ])
-        .then(result => {
-          [this.shader, this.font] = result;
+      this.loaders.loadShaderProgram(DEFAULT_SHADER)
+        .then(shader => {
+          this.shader = shader;
           DEFAULT_MATERIAL.shaderProgram = this.shader;
+          DEFAULT_MATERIAL.textures[0].texture = new Texture();
+          (DEFAULT_FONT.materialData as MaterialData).shaderProgram = this.shader;
         })
+
         .then(() => this.loaders.loadMaterial(DEFAULT_MATERIAL))
         .then(material => this.blankMaterial = material)
+
+        .then(() => this.loaders.loadFont(DEFAULT_FONT))
+        .then(font => this.font = font)
+
         .then(() => resolve());
     });
   }
