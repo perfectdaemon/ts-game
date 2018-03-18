@@ -130,9 +130,6 @@ export class Game extends GameBase {
 
     this.camera.update();
 
-    this.assets.shader.updateUniformValue('uModelViewProj', this.renderer.renderParams.modelViewProjection.e);
-    this.assets.shader.updateUniformValue('uColor', this.renderer.renderParams.color.asArray());
-
     this.assets.material.bind();
     this.level.draw();
     this.bulletManager.draw();
