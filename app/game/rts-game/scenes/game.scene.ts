@@ -7,6 +7,7 @@ import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
+import { BorderSprite } from '../helpers/border-sprite';
 import { UnitManager } from '../units/unit-manager';
 import { Scene } from './scene';
 
@@ -16,23 +17,19 @@ export class GameScene extends Scene {
 
   textBatch: TextBatch;
   text: Text = new Text('Hello world!');
-  sprite: Sprite = new Sprite(20, 20);
+
   spriteBatch: SpriteBatch = new SpriteBatch();
+  selection: BorderSprite = new BorderSprite(new Vector2(0, 0), new Vector2(0, 0), 2);
 
   constructor() {
     super();
 
     this.textBatch = new TextBatch(GLOBAL.assets.font);
-    this.sprite.position.set(10, 10, 0);
   }
 
   load(): Promise<void> {
     this.text.position.set(50, 50, 10);
     this.text.color.set(1, 0, 0, 1);
-
-    this.unitManager.addUnit(new Vector2(30, 30));
-    this.unitManager.addUnit(new Vector2(50, 30));
-    this.unitManager.addUnit(new Vector2(30, 100));
 
     return super.load();
   }
@@ -41,6 +38,10 @@ export class GameScene extends Scene {
     GLOBAL.assets.gameCamera.update();
 
     this.unitManager.render();
+
+    this.spriteBatch.start();
+    this.spriteBatch.drawArray(this.selection.sprites);
+    this.spriteBatch.finish();
 
     this.textBatch.start();
     this.textBatch.drawSingle(this.text);
@@ -52,9 +53,25 @@ export class GameScene extends Scene {
   }
 
   onKeyDown(key: Keys): void {
-    console.log(key);
     if (key === Keys.S) {
       this.unitManager.addUnit(INPUT.mousePos);
     }
+  }
+
+  onMouseDown(position: Vector2): void {
+    this.selection.start.set(position);
+  }
+
+  onMouseMove(position: Vector2): void {
+    if (INPUT.touches[1].isDown) {
+      this.selection.finish.set(position);
+      this.selection.updateSprites();
+    }
+  }
+
+  onMouseUp(position: Vector2): void {
+    this.selection.start.set(0, 0);
+    this.selection.finish.set(0, 0);
+    this.selection.updateSprites();
   }
 }
