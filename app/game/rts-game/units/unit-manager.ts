@@ -46,7 +46,7 @@ export class UnitManager {
 
   private decorateUnit(unit: Unit): void {
     unit.body.setVerticesColor(new Vector4(Math.random(), Math.random(), Math.random(), 1.0));
-    unit.selection.setVerticesColor(new Vector4(0.1, 1.0, 0.1, 0.5))
+    unit.selection.setVerticesColor(new Vector4(0.1, 1.0, 0.1, 0.5));
     unit.healthBar.setVerticesColor(new Vector4(1, 0.1, 0.1, 1));
 
     unit.body.setSize(15, 15);
