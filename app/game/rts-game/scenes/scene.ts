@@ -40,6 +40,10 @@ export abstract class Scene {
 
   }
 
+  onMouseUp(position: Vector2): void {
+
+  }
+
   onKeyDown(key: Keys): void {
 
   }

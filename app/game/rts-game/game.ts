@@ -40,8 +40,11 @@ export class Game extends GameBase {
     this.sceneManager.onMouseDown(position);
   }
 
+  protected onMouseUp(position: Vector2): void {
+    this.sceneManager.onMouseUp(position);
+  }
+
   protected onKeyDown(key: Keys): void {
-    console.log(key);
     this.sceneManager.onKeyDown(key);
   }
 

@@ -18,6 +18,7 @@ export abstract class GameBase {
     this.renderer = new WebGLRenderer(canvasElement);
     this.renderer.onMouseMove = (position) => this.onMouseMove(position);
     this.renderer.onMouseDown = (position) => this.onMouseDown(position);
+    this.renderer.onMouseUp = (position) => this.onMouseUp(position);
     this.renderer.onKeyDown = (key) => this.onKeyDown(key);
     this.renderer.onKeyUp = (key) => this.onKeyUp(key);
     this.renderer.setViewPort(0, 0, canvasElement.width, canvasElement.height);
@@ -74,6 +75,8 @@ export abstract class GameBase {
    * Mouse down callback
    */
   protected abstract onMouseDown(position: Vector2): void;
+
+  protected abstract onMouseUp(position: Vector2): void;
 
   protected abstract onKeyDown(key: Keys): void;
 

@@ -163,6 +163,10 @@ export class Game extends GameBase {
     // this.pauseAll = !this.pauseAll;
   }
 
+  protected onMouseUp(position: Vector2): void {
+    // nothing
+  }
+
   protected onKeyDown(key: Keys): void {
     // nothing
   }

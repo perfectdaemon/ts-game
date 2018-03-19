@@ -95,6 +95,16 @@ export class SceneManager {
     }
   }
 
+  onMouseUp(position: Vector2): void {
+    for (const sceneName in this.scenes) {
+      if (this.scenes[sceneName].state !== SceneState.Active) {
+        continue;
+      }
+
+      this.scenes[sceneName].onMouseUp(position);
+    }
+  }
+
   onKeyDown(key: Keys): void {
     for (const sceneName in this.scenes) {
       if (this.scenes[sceneName].state !== SceneState.Active) {

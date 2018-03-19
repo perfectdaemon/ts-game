@@ -75,6 +75,7 @@ export class WebGLRenderer {
 
   public onMouseMove: (position: Vector2) => void = p => {};
   public onMouseDown: (position: Vector2) => void = p => {};
+  public onMouseUp: (position: Vector2) => void = p => {};
   public onKeyDown: (key: Keys) => void = k => {};
   public onKeyUp: (key: Keys) => void = k => {};
 
@@ -322,6 +323,11 @@ export class WebGLRenderer {
     this.canvasElement.onmouseup = event => {
       const inputEvent = this.getInputEventFromMouseEvent(event);
       INPUT.process(inputEvent);
+
+      this.onMouseUp(new Vector2(
+        event.pageX - canvasWindowPosition.x,
+        event.pageY - canvasWindowPosition.y,
+      ));
     };
 
     this.canvasElement.onwheel = event => {
