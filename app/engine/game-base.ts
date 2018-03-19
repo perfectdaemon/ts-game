@@ -13,12 +13,13 @@ export abstract class GameBase {
   protected lastTime: number = 0.0;
   protected currentTime: number = 0.0;
   protected pauseAll: boolean = false;
-  protected input: Input = new Input();
 
   constructor(canvasElement: HTMLCanvasElement) {
-    this.renderer = new WebGLRenderer(canvasElement, this.input);
+    this.renderer = new WebGLRenderer(canvasElement);
     this.renderer.onMouseMove = (position) => this.onMouseMove(position);
     this.renderer.onMouseDown = (position) => this.onMouseDown(position);
+    this.renderer.onKeyDown = (key) => this.onKeyDown(key);
+    this.renderer.onKeyUp = (key) => this.onKeyUp(key);
     this.renderer.setViewPort(0, 0, canvasElement.width, canvasElement.height);
   }
 

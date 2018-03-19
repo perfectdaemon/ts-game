@@ -45,3 +45,5 @@ export class Input {
     }
   }
 }
+
+export const INPUT: Input = new Input();

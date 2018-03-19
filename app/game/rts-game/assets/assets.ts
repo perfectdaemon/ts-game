@@ -8,16 +8,19 @@ import { Camera } from '../../../engine/scene/camera';
 import { DEFAULT_FONT, DEFAULT_MATERIAL, DEFAULT_SHADER } from './default';
 
 export class Assets {
-  shader: ShaderProgram = new ShaderProgram();
-  blankMaterial: Material = new Material();
-  font: Font = new Font();
+  shader: ShaderProgram;
+  blankMaterial: Material;
+  font: Font;
 
-  gameCamera: Camera = new Camera();
-  guiCamera: Camera = new Camera();
+  gameCamera: Camera;
+  guiCamera: Camera;
 
   private loaders: LoaderFactory = new LoaderFactory();
 
   loadAll(): Promise<void> {
+    this.gameCamera = new Camera();
+    this.guiCamera = new Camera();
+
     return new Promise<void>((resolve, reject) => {
       this.loaders.loadShaderProgram(DEFAULT_SHADER)
         .then(shader => {

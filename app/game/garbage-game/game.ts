@@ -1,3 +1,5 @@
+import { ActionManager } from '../../engine/helpers/action-manager/action-manager';
+import { INPUT } from '../../engine/input/input';
 import { Keys } from '../../engine/input/keys.enum';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector3 } from '../../engine/math/vector3';
@@ -18,7 +20,6 @@ import { GAME_STATE, GameState } from './game-state';
 import { Level } from './level';
 import { PickupManager } from './pickup-manager';
 import { Player } from './player';
-import { ActionManager } from '../../engine/helpers/action-manager/action-manager';
 
 export class Game extends GameBase {
   spriteBatch: SpriteBatch = new SpriteBatch();
@@ -27,7 +28,7 @@ export class Game extends GameBase {
 
   camera: Camera = new Camera();
   assets: Assets = new Assets();
-  player: Player = new Player(this.input);
+  player: Player = new Player();
   level: Level = new Level();
   bulletManager: BulletManager;
   enemyManager: EnemyManager;
@@ -105,7 +106,7 @@ export class Game extends GameBase {
         this.screenSprite.setVerticesAlpha(this.screenSpriteAlpha += deltaTime * 0.3);
       }
 
-      if (this.gameOver && this.input.isKeyDown[Keys.Return]) {
+      if (this.gameOver && INPUT.isKeyDown[Keys.Return]) {
         document.location.reload();
       }
     } else {

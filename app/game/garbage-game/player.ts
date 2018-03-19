@@ -1,4 +1,4 @@
-import { Input } from '../../engine/input/input';
+import { Input, INPUT } from '../../engine/input/input';
 import { Keys } from '../../engine/input/keys.enum';
 import { clamp, MathBase } from '../../engine/math/math-base';
 import { Vector2 } from '../../engine/math/vector2';
@@ -64,7 +64,7 @@ export class Player {
   private moneyElement: HTMLElement;
   private staminaElement: HTMLElement;
 
-  constructor(private input: Input) {
+  constructor() {
     this.updateAnimation(0.1);
     this.weapon.parent = this.body;
     this.weapon.position.set(0, 15, 2);
@@ -134,21 +134,21 @@ export class Player {
 
   private updateMovement(deltaTime: number): void {
     this.moveDirection.set(0, 0);
-    if (this.input.isKeyDown[Keys.Down] || this.input.isKeyDown[Keys.S]) {
+    if (INPUT.isKeyDown[Keys.Down] || INPUT.isKeyDown[Keys.S]) {
       this.currentAnimationYCoord = frameSize * 0;
       this.moveDirection.y = 1;
       this.weapon.position.z = 1;
-    } else if (this.input.isKeyDown[Keys.Up] || this.input.isKeyDown[Keys.W]) {
+    } else if (INPUT.isKeyDown[Keys.Up] || INPUT.isKeyDown[Keys.W]) {
       this.currentAnimationYCoord = frameSize * 3;
       this.moveDirection.y = -1;
       this.weapon.position.z = -0.5;
     }
 
-    if (this.input.isKeyDown[Keys.Left] || this.input.isKeyDown[Keys.A]) {
+    if (INPUT.isKeyDown[Keys.Left] || INPUT.isKeyDown[Keys.A]) {
       this.currentAnimationYCoord = frameSize * 1;
       this.moveDirection.x = -1;
       this.weapon.position.z = 1;
-    } else if (this.input.isKeyDown[Keys.Right] || this.input.isKeyDown[Keys.D]) {
+    } else if (INPUT.isKeyDown[Keys.Right] || INPUT.isKeyDown[Keys.D]) {
       this.currentAnimationYCoord = frameSize * 2;
       this.moveDirection.x = 1;
       this.weapon.position.z = 1;
@@ -160,7 +160,7 @@ export class Player {
       this.cantRunTimer -= deltaTime;
     }
 
-    this.run = this.input.isKeyDown[Keys.Shift]
+    this.run = INPUT.isKeyDown[Keys.Shift]
       && this.stamina > 0
       && this.cantRunTimer <= 0;
 
@@ -183,7 +183,7 @@ export class Player {
   }
 
   private updateFire(deltaTime: number) {
-    if (this.input.touches[1].isDown && this.weaponShotTimer <= 0) {
+    if (INPUT.touches[1].isDown && this.weaponShotTimer <= 0) {
 
       this.weaponFireDirection
         .set(-this.characterViewDirection.y, this.characterViewDirection.x)
