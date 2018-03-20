@@ -19,7 +19,7 @@ export class GameScene extends Scene {
   text: Text = new Text('Hello world!');
 
   spriteBatch: SpriteBatch = new SpriteBatch();
-  selection: BorderSprite = new BorderSprite(new Vector2(0, 0), new Vector2(0, 0), 2);
+  selection: BorderSprite = new BorderSprite(new Vector2(0, 0), new Vector2(0, 0), 4);
 
   constructor() {
     super();
