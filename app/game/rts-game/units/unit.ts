@@ -2,6 +2,7 @@ import { IPoolItem } from '../../../engine/helpers/pool/ipool-item';
 import { MathBase } from '../../../engine/math/math-base';
 import { Vector2 } from '../../../engine/math/vector2';
 import { Sprite } from '../../../engine/scene/sprite';
+import { BorderSprite } from '../helpers/border-sprite';
 
 const unitHealthMax = 5;
 const unitSpeed = 30;
@@ -10,7 +11,7 @@ export class Unit implements IPoolItem {
   active: boolean = false;
 
   body: Sprite = new Sprite();
-  selection: Sprite = new Sprite();
+  selection: BorderSprite = new BorderSprite(new Vector2(), new Vector2(), 1);
   healthBar: Sprite = new Sprite();
 
   moveDirection: Vector2 = new Vector2();
@@ -29,7 +30,7 @@ export class Unit implements IPoolItem {
   onActivate(): void {
     this.body.visible = true;
     this.selection.visible = false;
-    this.healthBar.visible = false;
+    this.healthBar.visible = true;
     this.health = this.healthMax;
     this.speed = unitSpeed;
   }

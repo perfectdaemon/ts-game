@@ -70,6 +70,8 @@ export class GameScene extends Scene {
   }
 
   onMouseUp(position: Vector2): void {
+    this.unitManager.select(this.selection.start, position);
+
     this.selection.start.set(0, 0);
     this.selection.finish.set(0, 0);
     this.selection.updateSprites();

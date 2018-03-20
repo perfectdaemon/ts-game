@@ -6,6 +6,8 @@ import { GLOBAL } from '../global';
 import { Unit } from './unit';
 
 export class UnitManager {
+  selected: Unit[] = [];
+
   private pool: Pool<Unit> = new Pool<Unit>(() => this.newUnit(), 64);
   private batch: SpriteBatch = new SpriteBatch();
 
@@ -31,9 +33,43 @@ export class UnitManager {
 
       this.batch.drawSingle(unit.body);
       this.batch.drawSingle(unit.healthBar);
-      this.batch.drawSingle(unit.selection);
+      this.batch.drawArray(unit.selection.sprites);
     }
     this.batch.finish();
+  }
+
+  select(start: Vector2, finish: Vector2): void {
+    let tmp = 0;
+    if (start.x > finish.x) {
+      tmp = finish.x;
+      finish.x = start.x;
+      start.x = tmp;
+    }
+
+    if (start.y > finish.y) {
+      tmp = finish.y;
+      finish.y = start.y;
+      start.y = tmp;
+    }
+
+    for (const unit of this.selected) {
+      unit.selection.visible = false;
+    }
+
+    this.selected = [];
+
+    for (const unit of this.pool.poolObjects) {
+      if (!unit.active || !this.isUnitInSelection(unit, start, finish)) { continue; }
+
+      this.selected.push(unit);
+      unit.selection.visible = true;
+    }
+  }
+
+  private isUnitInSelection(unit: Unit, start: Vector2, finish: Vector2): boolean {
+    if (unit.body.position.x < start.x || unit.body.position.x > finish.x) { return false; }
+    if (unit.body.position.y < start.y || unit.body.position.y > finish.y) { return false; }
+    return true;
   }
 
   private newUnit(): Unit {
@@ -46,15 +82,17 @@ export class UnitManager {
 
   private decorateUnit(unit: Unit): void {
     unit.body.setVerticesColor(new Vector4(Math.random(), Math.random(), Math.random(), 1.0));
-    unit.selection.setVerticesColor(new Vector4(0.1, 1.0, 0.1, 0.5));
+    unit.selection.color.set(0.1, 1.0, 0.1, 0.5);
     unit.healthBar.setVerticesColor(new Vector4(1, 0.1, 0.1, 1));
 
     unit.body.setSize(15, 15);
-    unit.selection.setSize(25, 25);
+    unit.selection.start.set(-12, -12);
+    unit.selection.finish.set(12, 12);
     unit.healthBar.setSize(25, 5);
 
     unit.healthBar.position.set(0, -25, 5);
-    unit.selection.position.set(0, 0, 2);
     unit.body.position.set(0, 0, 1);
+
+    unit.selection.updateSprites();
   }
 }
