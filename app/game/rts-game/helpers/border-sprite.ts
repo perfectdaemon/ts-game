@@ -28,10 +28,10 @@ export class BorderSprite {
   }
 
   private createSprites(): void {
-    this.sprites[0] = new Sprite(this.finish.x - this.start.x, this.borderWidth, new Vector2(0, 0.5)); // top
-    this.sprites[1] = new Sprite(this.borderWidth, this.finish.y - this.start.y, new Vector2(0.5, 0)); // right
-    this.sprites[2] = new Sprite(this.finish.x - this.start.x, this.borderWidth, new Vector2(0, 0.5)); // bottom
-    this.sprites[3] = new Sprite(this.borderWidth, this.finish.y - this.start.y, new Vector2(0.5, 0)); // left
+    this.sprites[0] = new Sprite(this.finish.x - this.start.x, this.borderWidth, new Vector2(0, 0)); // top
+    this.sprites[1] = new Sprite(this.borderWidth, this.finish.y - this.start.y, new Vector2(1, 0)); // right
+    this.sprites[2] = new Sprite(this.finish.x - this.start.x, this.borderWidth, new Vector2(0, 1)); // bottom
+    this.sprites[3] = new Sprite(this.borderWidth, this.finish.y - this.start.y, new Vector2(1, 0)); // left
 
     for (const sprite of this.sprites) {
       sprite.position.z = 1;
