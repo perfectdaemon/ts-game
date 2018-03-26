@@ -5,7 +5,7 @@ import { Sprite } from '../../../engine/scene/sprite';
 import { BorderSprite } from '../helpers/border-sprite';
 
 const unitHealthMax = 5;
-const unitSpeed = 30;
+const unitSpeed = 90;
 
 export class Unit implements IPoolItem {
   active: boolean = false;
@@ -16,6 +16,9 @@ export class Unit implements IPoolItem {
 
   moveDirection: Vector2 = new Vector2();
   moveIncrement: Vector2 = new Vector2();
+
+  target: Vector2 = new Vector2();
+  moveToTarget: boolean = false;
 
   healthMax: number = unitHealthMax;
   health: number = this.healthMax;
@@ -33,6 +36,10 @@ export class Unit implements IPoolItem {
     this.healthBar.visible = true;
     this.health = this.healthMax;
     this.speed = unitSpeed;
+    this.moveDirection.set(0, 0);
+    this.moveIncrement.set(0, 0);
+    this.target.set(0, 0);
+    this.moveToTarget = false;
   }
   onDeactivate(): void {
     this.body.visible = false;
@@ -42,21 +49,36 @@ export class Unit implements IPoolItem {
 
   update(deltaTime: number): void {
     if (!this.active) { return; }
+
     this.think();
-    this.move();
+    this.move(deltaTime);
+    this.shoot();
   }
 
   private think(): void {
     // nothing
   }
 
-  private move(): void {
-    if (this.moveDirection.lengthQ() <= MathBase.eps) { return; }
+  private move(deltaTime: number): void {
+    if (!this.moveToTarget) { return; }
+
+    this.moveDirection.set(this.target).subtractFromSelf(this.body.position);
+
+    if (this.moveDirection.lengthQ() <= MathBase.eps) {
+      this.moveToTarget = false;
+      return;
+    }
+
+    this.moveDirection.normalize();
 
     this.moveIncrement
       .set(this.moveDirection)
-      .multiplyNumSelf(this.speed);
+      .multiplyNumSelf(this.speed * deltaTime);
 
     this.body.position.addToSelf(this.moveIncrement);
+  }
+
+  private shoot(): void {
+    // nothing
   }
 }

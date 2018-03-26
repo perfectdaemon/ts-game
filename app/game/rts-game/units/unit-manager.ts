@@ -39,6 +39,7 @@ export class UnitManager {
   }
 
   select(start: Vector2, finish: Vector2): void {
+    // invert start/finish if direction of selection is not left -> right and top -> bottom
     let tmp = 0;
     if (start.x > finish.x) {
       tmp = finish.x;
@@ -52,17 +53,29 @@ export class UnitManager {
       start.y = tmp;
     }
 
+    // clear current selection
     for (const unit of this.selected) {
       unit.selection.visible = false;
     }
-
     this.selected = [];
 
+    // select units
     for (const unit of this.pool.poolObjects) {
       if (!unit.active || !this.isUnitInSelection(unit, start, finish)) { continue; }
 
       this.selected.push(unit);
       unit.selection.visible = true;
+    }
+  }
+
+  public moveSelectedUnits(target: Vector2): void {
+    this.moveUnits(this.selected, target);
+  }
+
+  public moveUnits(units: Unit[], target: Vector2): void {
+    for (const unit of units) {
+      unit.target.set(target);
+      unit.moveToTarget = true;
     }
   }
 

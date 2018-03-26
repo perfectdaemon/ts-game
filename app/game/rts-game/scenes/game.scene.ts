@@ -59,8 +59,13 @@ export class GameScene extends Scene {
   }
 
   onMouseDown(position: Vector2, button: MouseButtons): void {
-    if (button === Keys.LeftButton) {
-      this.selection.start.set(position);
+    switch (button) {
+      case Keys.LeftButton:
+        this.selection.start.set(position);
+        break;
+      case Keys.RightButton:
+        this.unitManager.moveSelectedUnits(position);
+        break;
     }
   }
 
