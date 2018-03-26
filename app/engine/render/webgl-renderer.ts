@@ -320,6 +320,10 @@ export class WebGLRenderer {
       ));
     };
 
+    this.canvasElement.oncontextmenu = event => {
+      event.preventDefault();
+    }
+
     this.canvasElement.onmouseup = event => {
       const inputEvent = this.getInputEventFromMouseEvent(event);
       INPUT.process(inputEvent);
