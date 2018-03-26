@@ -1,7 +1,7 @@
 import { Input, INPUT } from '../input/input';
 import { InputEvent } from '../input/input-event';
 import { InputType } from '../input/input-type.enum';
-import { Keys } from '../input/keys.enum';
+import { Keys, MouseButtons } from '../input/keys.enum';
 import { Vector2 } from '../math/vector2';
 import { Vector4 } from '../math/vector4';
 import { FrameBuffer } from './frame-buffer';
@@ -74,8 +74,8 @@ export class WebGLRenderer {
   }
 
   public onMouseMove: (position: Vector2) => void = p => {};
-  public onMouseDown: (position: Vector2) => void = p => {};
-  public onMouseUp: (position: Vector2) => void = p => {};
+  public onMouseDown: (position: Vector2, button: MouseButtons) => void = (p, b) => {};
+  public onMouseUp: (position: Vector2, button: MouseButtons) => void = (p, b) => {};
   public onKeyDown: (key: Keys) => void = k => {};
   public onKeyUp: (key: Keys) => void = k => {};
 
@@ -317,7 +317,7 @@ export class WebGLRenderer {
       this.onMouseDown(new Vector2(
         event.pageX - canvasWindowPosition.x,
         event.pageY - canvasWindowPosition.y,
-      ));
+      ), inputEvent.key as MouseButtons);
     };
 
     this.canvasElement.oncontextmenu = event => {
@@ -331,7 +331,7 @@ export class WebGLRenderer {
       this.onMouseUp(new Vector2(
         event.pageX - canvasWindowPosition.x,
         event.pageY - canvasWindowPosition.y,
-      ));
+      ), inputEvent.key as MouseButtons);
     };
 
     this.canvasElement.onwheel = event => {

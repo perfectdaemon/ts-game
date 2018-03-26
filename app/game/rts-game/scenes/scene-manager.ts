@@ -1,4 +1,4 @@
-import { Keys } from '../../../engine/input/keys.enum';
+import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
 import { Vector2 } from '../../../engine/math/vector2';
 import { Scene, SceneState } from './scene';
 
@@ -85,23 +85,23 @@ export class SceneManager {
     }
   }
 
-  onMouseDown(position: Vector2): void {
+  onMouseDown(position: Vector2, button: MouseButtons): void {
     for (const sceneName in this.scenes) {
       if (this.scenes[sceneName].state !== SceneState.Active) {
         continue;
       }
 
-      this.scenes[sceneName].onMouseDown(position);
+      this.scenes[sceneName].onMouseDown(position, button);
     }
   }
 
-  onMouseUp(position: Vector2): void {
+  onMouseUp(position: Vector2, button: MouseButtons): void {
     for (const sceneName in this.scenes) {
       if (this.scenes[sceneName].state !== SceneState.Active) {
         continue;
       }
 
-      this.scenes[sceneName].onMouseUp(position);
+      this.scenes[sceneName].onMouseUp(position, button);
     }
   }
 

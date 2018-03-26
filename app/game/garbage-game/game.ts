@@ -159,11 +159,11 @@ export class Game extends GameBase {
     // nothing
   }
 
-  protected onMouseDown(position: Vector2): void {
+  protected onMouseDown(position: Vector2, button: MouseButtons): void {
     // this.pauseAll = !this.pauseAll;
   }
 
-  protected onMouseUp(position: Vector2): void {
+  protected onMouseUp(position: Vector2, button: MouseButtons): void {
     // nothing
   }
 

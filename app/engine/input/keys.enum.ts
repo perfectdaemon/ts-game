@@ -34,3 +34,5 @@ export enum Keys {
 
     OpenBracket = 219, BackSlash, CloseBracket, SingleQuote,
 }
+
+export type MouseButtons = Keys.LeftButton | Keys.RightButton | Keys.MiddleButton;

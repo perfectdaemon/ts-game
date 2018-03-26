@@ -1,4 +1,4 @@
-import { Keys } from '../../../engine/input/keys.enum';
+import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
 import { Vector2 } from '../../../engine/math/vector2';
 
 export enum SceneState { Hidden, Active, Paused }
@@ -36,11 +36,11 @@ export abstract class Scene {
 
   }
 
-  onMouseDown(position: Vector2): void {
+  onMouseDown(position: Vector2, button: MouseButtons): void {
 
   }
 
-  onMouseUp(position: Vector2): void {
+  onMouseUp(position: Vector2, button: MouseButtons): void {
 
   }
 

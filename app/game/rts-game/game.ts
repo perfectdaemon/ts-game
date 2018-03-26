@@ -1,5 +1,5 @@
 import { GameBase } from '../../engine/game-base';
-import { Keys } from '../../engine/input/keys.enum';
+import { Keys, MouseButtons } from '../../engine/input/keys.enum';
 import { Vector2 } from '../../engine/math/vector2';
 import { GLOBAL } from './global';
 import { GameScene } from './scenes/game.scene';
@@ -36,12 +36,12 @@ export class Game extends GameBase {
     this.sceneManager.onMouseMove(position);
   }
 
-  protected onMouseDown(position: Vector2): void {
-    this.sceneManager.onMouseDown(position);
+  protected onMouseDown(position: Vector2, button: MouseButtons): void {
+    this.sceneManager.onMouseDown(position, button);
   }
 
-  protected onMouseUp(position: Vector2): void {
-    this.sceneManager.onMouseUp(position);
+  protected onMouseUp(position: Vector2, button: MouseButtons): void {
+    this.sceneManager.onMouseUp(position, button);
   }
 
   protected onKeyDown(key: Keys): void {

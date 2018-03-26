@@ -1,5 +1,5 @@
 import { INPUT } from '../../../engine/input/input';
-import { Keys } from '../../../engine/input/keys.enum';
+import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
 import { Vector2 } from '../../../engine/math/vector2';
 import { renderer } from '../../../engine/render/webgl';
 import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
@@ -58,8 +58,10 @@ export class GameScene extends Scene {
     }
   }
 
-  onMouseDown(position: Vector2): void {
-    this.selection.start.set(position);
+  onMouseDown(position: Vector2, button: MouseButtons): void {
+    if (button === Keys.LeftButton) {
+      this.selection.start.set(position);
+    }
   }
 
   onMouseMove(position: Vector2): void {
@@ -69,11 +71,13 @@ export class GameScene extends Scene {
     }
   }
 
-  onMouseUp(position: Vector2): void {
-    this.unitManager.select(this.selection.start, position);
+  onMouseUp(position: Vector2, button: MouseButtons): void {
+    if (button === Keys.LeftButton) {
+      this.unitManager.select(this.selection.start, position);
 
-    this.selection.start.set(0, 0);
-    this.selection.finish.set(0, 0);
-    this.selection.updateSprites();
+      this.selection.start.set(0, 0);
+      this.selection.finish.set(0, 0);
+      this.selection.updateSprites();
+    }
   }
 }
