@@ -1,6 +1,6 @@
 import { ActionManager } from '../../engine/helpers/action-manager/action-manager';
 import { INPUT } from '../../engine/input/input';
-import { Keys } from '../../engine/input/keys.enum';
+import { Keys, MouseButtons } from '../../engine/input/keys.enum';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector3 } from '../../engine/math/vector3';
 import { Material } from '../../engine/render/material';
