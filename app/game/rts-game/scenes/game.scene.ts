@@ -11,8 +11,10 @@ import { BorderSprite } from '../helpers/border-sprite';
 import { UnitManager } from '../units/unit-manager';
 import { Scene } from './scene';
 
-export class GameScene extends Scene {
+const cameraMoveBorderThreshold = 70;
+const cameraMoveSpeed = 250;
 
+export class GameScene extends Scene {
   unitManager: UnitManager = new UnitManager();
 
   textBatch: TextBatch;
@@ -20,6 +22,7 @@ export class GameScene extends Scene {
 
   spriteBatch: SpriteBatch = new SpriteBatch();
   selection: BorderSprite = new BorderSprite(new Vector2(0, 0), new Vector2(0, 0), 4);
+  cameraMovementDirection: Vector2 = new Vector2();
 
   constructor() {
     super();
@@ -50,39 +53,73 @@ export class GameScene extends Scene {
 
   update(deltaTime: number): void {
     this.unitManager.update(deltaTime);
+
+    GLOBAL.assets.gameCamera.translate(
+      this.cameraMovementDirection.y * deltaTime * cameraMoveSpeed,
+      this.cameraMovementDirection.x * deltaTime * cameraMoveSpeed,
+      0);
   }
 
   onKeyDown(key: Keys): void {
+    const world = this.getWorldPosition(INPUT.mousePos);
+
     if (key === Keys.S) {
-      this.unitManager.addUnit(INPUT.mousePos);
+      this.unitManager.addUnit(world);
     }
   }
 
   onMouseDown(position: Vector2, button: MouseButtons): void {
+    const world = this.getWorldPosition(position);
+
     switch (button) {
       case Keys.LeftButton:
-        this.selection.start.set(position);
+        this.selection.start.set(world);
         break;
       case Keys.RightButton:
-        this.unitManager.moveSelectedUnits(position);
+        this.unitManager.moveSelectedUnits(world);
         break;
     }
   }
 
   onMouseMove(position: Vector2): void {
+    // camera move
+    this.cameraMovementDirection.set(0, 0);
+
+    if (position.x < cameraMoveBorderThreshold) {
+      this.cameraMovementDirection.x = -1;
+    } else if (renderer.width - position.x < cameraMoveBorderThreshold) {
+      this.cameraMovementDirection.x = 1;
+    }
+
+    if (position.y < cameraMoveBorderThreshold) {
+      this.cameraMovementDirection.y = -1;
+    } else if (renderer.height - position.y < cameraMoveBorderThreshold) {
+      this.cameraMovementDirection.y = 1;
+    }
+
+    const world = this.getWorldPosition(position);
+
+    // selection frame
     if (INPUT.touches[1].isDown) {
-      this.selection.finish.set(position);
+      this.selection.finish.set(world);
       this.selection.updateSprites();
     }
   }
 
   onMouseUp(position: Vector2, button: MouseButtons): void {
     if (button === Keys.LeftButton) {
-      this.unitManager.select(this.selection.start, position);
+
+      const world = this.getWorldPosition(position);
+
+      this.unitManager.select(this.selection.start, world);
 
       this.selection.start.set(0, 0);
       this.selection.finish.set(0, 0);
       this.selection.updateSprites();
     }
+  }
+
+  private getWorldPosition(position: Vector2): Vector2 {
+    return new Vector2().set(GLOBAL.assets.gameCamera.screenToWorld(position));
   }
 }
