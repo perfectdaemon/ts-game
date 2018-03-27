@@ -32,23 +32,13 @@ export abstract class Scene {
     this.state = pause ? SceneState.Paused : SceneState.Active;
   }
 
-  onMouseMove(position: Vector2): void {
+  onMouseMove(position: Vector2): void { }
 
-  }
+  onMouseDown(position: Vector2, button: MouseButtons): void { }
 
-  onMouseDown(position: Vector2, button: MouseButtons): void {
+  onMouseUp(position: Vector2, button: MouseButtons): void { }
 
-  }
+  onKeyDown(key: Keys): void { }
 
-  onMouseUp(position: Vector2, button: MouseButtons): void {
-
-  }
-
-  onKeyDown(key: Keys): void {
-
-  }
-
-  onKeyUp(key: Keys): void {
-
-  }
+  onKeyUp(key: Keys): void { }
 }
