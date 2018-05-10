@@ -1,4 +1,4 @@
-import { Game } from './game/rts-game/game';
+import { Game } from './game/template-game/game';
 
 const canvas = document.getElementById('canvas-main') as HTMLCanvasElement;
 if (canvas) {
