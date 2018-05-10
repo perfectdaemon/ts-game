@@ -21,22 +21,16 @@ export class Assets {
     this.gameCamera = new Camera();
     this.guiCamera = new Camera();
 
-    return new Promise<void>((resolve, reject) => {
-      this.loaders.loadShaderProgram(DEFAULT_SHADER)
-        .then(shader => {
-          this.shader = shader;
-          DEFAULT_MATERIAL.shaderProgram = this.shader;
-          DEFAULT_MATERIAL.textures[0].texture = new Texture();
-          (DEFAULT_FONT.materialData as MaterialData).shaderProgram = this.shader;
-        })
+    return new Promise<void>(async (resolve, reject) => {
+      this.shader = await this.loaders.loadShaderProgram(DEFAULT_SHADER);
 
-        .then(() => this.loaders.loadMaterial(DEFAULT_MATERIAL))
-        .then(material => this.blankMaterial = material)
+      DEFAULT_MATERIAL.shaderProgram = this.shader;
+      DEFAULT_MATERIAL.textures[0].texture = new Texture();
+      (DEFAULT_FONT.materialData as MaterialData).shaderProgram = this.shader;
+      this.blankMaterial = await this.loaders.loadMaterial(DEFAULT_MATERIAL);
+      this.font = await this.loaders.loadFont(DEFAULT_FONT);
 
-        .then(() => this.loaders.loadFont(DEFAULT_FONT))
-        .then(font => this.font = font)
-
-        .then(() => resolve());
+      resolve();
     });
   }
 }
