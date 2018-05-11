@@ -4,6 +4,7 @@ import { Vector2 } from '../../engine/math/vector2';
 import { SceneManager } from '../../engine/scenes/scene-manager';
 import { GLOBAL } from './global';
 import { GameScene } from './scenes/game.scene';
+import { MainMenuScene } from './scenes/main-menu.scene';
 import { SCENES } from './scenes/scenes.const';
 
 export class Game extends GameBase {
@@ -13,10 +14,10 @@ export class Game extends GameBase {
 
     GLOBAL.assets.loadAll()
       .then(() => {
-        const gameScene = new GameScene();
-        this.sceneManager.addScene(gameScene, SCENES.game);
+        this.sceneManager.addScene(SCENES.game, new GameScene());
+        this.sceneManager.addScene(SCENES.mainMenu, new MainMenuScene());
 
-        this.sceneManager.switchTo(SCENES.game);
+        this.sceneManager.switchTo(SCENES.mainMenu);
       });
 
   }

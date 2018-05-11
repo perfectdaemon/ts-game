@@ -7,7 +7,7 @@ export class SceneManager {
   modal: Scene | null = null;
   scenes: { [key: string]: Scene } = {};
 
-  addScene(scene: Scene, name: string): void {
+  addScene(name: string, scene: Scene): void {
     if (this.scenes[name]) {
       throw new Error(`Scene with name '${name}' already exists`);
     }
