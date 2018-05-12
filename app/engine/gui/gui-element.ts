@@ -1,5 +1,8 @@
 import { InputEvent } from '../input/input-event';
+import { InputType } from '../input/input-type.enum';
+import { AABB } from '../math/aabb';
 import { IFigure } from '../math/figure.interface';
+import { Vector2 } from '../math/vector2';
 import { SpriteBatch } from '../render2d/sprite-batch';
 import { TextBatch } from '../render2d/text-batch';
 import { GuiCallback } from './gui-callback';
@@ -40,7 +43,7 @@ export abstract class GuiElement {
 
   zIndex: number = 0;
 
-  hitBox: IFigure;
+  hitBox: IFigure = new AABB();
 
   protected _isMouseOver: boolean = false;
 
@@ -63,7 +66,49 @@ export abstract class GuiElement {
    * Callback for receiving input events
    * @param inputEvent InputEvent
    */
-  abstract processInput(inputEvent: InputEvent): void;
+  processInput(inputEvent: InputEvent): void {
+    let isHit = false;
+    switch (inputEvent.inputType) {
+      case InputType.TouchDown:
+        isHit = this.hitBox.hit(new Vector2(inputEvent.x, inputEvent.y));
+        this.focused = isHit;
+
+        if (isHit) {
+          this.onTouchDown(this, inputEvent);
+        }
+        break;
+
+      case InputType.TouchUp:
+        isHit = this.hitBox.hit(new Vector2(inputEvent.x, inputEvent.y));
+        if (!isHit) { break; }
+
+        this.onTouchUp(this, inputEvent);
+
+        if (this.focused) {
+          this.onClick(this, inputEvent);
+        }
+        break;
+
+      case InputType.TouchMove:
+        isHit = this.hitBox.hit(new Vector2(inputEvent.x, inputEvent.y));
+        if (isHit) {
+          this.onTouchMove(this, inputEvent);
+          if (this._isMouseOver) { break; }
+
+          this._isMouseOver = true;
+          this.onMouseOver(this, inputEvent);
+        } else {
+          if (!this._isMouseOver) { break; }
+
+          this._isMouseOver = false;
+          this.onMouseOut(this, inputEvent);
+        }
+        break;
+
+      default:
+        break;
+    }
+  }
 
   abstract updateHitBox(): void;
 }
