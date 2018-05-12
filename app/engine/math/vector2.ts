@@ -58,8 +58,8 @@ export class Vector2 {
 
   subtractFromSelf(x: Vector2 | Vector3 | number, y?: number): Vector2 {
     if (x instanceof Vector2 || x instanceof Vector3) {
-    this.x -= x.x;
-    this.y -= x.y;
+      this.x -= x.x;
+      this.y -= x.y;
     } else if (y !== undefined) {
       this.x -= x;
       this.y -= y;
@@ -80,9 +80,16 @@ export class Vector2 {
     return this;
   }
 
-  multiplyVecSelf(vec: Vector2): Vector2 {
-    this.x *= vec.x;
-    this.y *= vec.y;
+  multiplyVecSelf(x: Vector2 | number, y?: number): Vector2 {
+    if (x instanceof Vector2) {
+      this.x *= x.x;
+      this.y *= x.y;
+    } else if (y != null) {
+      this.x *= x;
+      this.y *= y;
+    } else {
+      throw new Error(`Vector2.multiplyVecSelf(): 'x' is number but no 'y' provided`);
+    }
 
     return this;
   }
