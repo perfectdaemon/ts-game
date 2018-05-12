@@ -1,9 +1,14 @@
-import { Vector2 } from '../math/vector2';
 import { Circle } from './circle';
+import { IFigure } from './figure.interface';
+import { Vector2 } from './vector2';
 
-export class AABB {
+/**
+ * Axis aligned bounding box
+ */
+export class AABB implements IFigure {
   public halfSize: Vector2;
-  constructor(public center: Vector2, size: Vector2) {
+
+  constructor(public center: Vector2 = new Vector2(), size: Vector2 = new Vector2()) {
     this.halfSize = new Vector2(size.x / 2, size.y / 2);
   }
 
@@ -15,5 +20,11 @@ export class AABB {
     } else {
       return other.overlaps(this);
     }
+  }
+
+  hit(point: Vector2): boolean {
+    if (Math.abs(this.center.x - point.x) > this.halfSize.x) { return false; }
+    if (Math.abs(this.center.y - point.y) > this.halfSize.y) { return false; }
+    return true;
   }
 }
