@@ -1,3 +1,4 @@
+import { INPUT } from '../input/input';
 import { InputEvent } from '../input/input-event';
 import { InputType } from '../input/input-type.enum';
 import { Vector3 } from '../math/vector3';
@@ -11,6 +12,8 @@ import { GuiElement } from './gui-element';
  * Gui manager class
  */
 export class GuiManager {
+  enabled = true;
+
   elements: GuiElement[] = [];
 
   constructor(
@@ -18,13 +21,19 @@ export class GuiManager {
     public spriteBatch: SpriteBatch,
     public textBatch: TextBatch,
     public camera: Camera,
-  ) { }
+  ) {
+    INPUT.events.subscribe(event => this.processInput(event));
+  }
 
   /**
    * Updates all enabled elements inside
    * @param deltaTime Time elapsed from previous frame
    */
   update(deltaTime: number): void {
+    if (!this.enabled) {
+      return;
+    }
+
     for (const element of this.elements) {
       if (!element.enabled) { continue; }
 
@@ -36,6 +45,11 @@ export class GuiManager {
    * Renders all visible elements inside
    */
   render(): void {
+    if (!this.enabled) {
+      return;
+    }
+
+
     this.material.bind();
 
     for (const element of this.elements) {
@@ -53,6 +67,10 @@ export class GuiManager {
    * @param inputEvent
    */
   processInput(inputEvent: InputEvent): void {
+    if (!this.enabled) {
+      return;
+    }
+
     const touchVec = this.camera.absoluteMatrix.multiplyVec(new Vector3(inputEvent.x, inputEvent.y));
 
     for (const element of this.elements) {
