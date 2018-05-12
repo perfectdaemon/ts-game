@@ -1,3 +1,4 @@
+import { Subscription } from '../helpers/event/subscription';
 import { INPUT } from '../input/input';
 import { InputEvent } from '../input/input-event';
 import { InputType } from '../input/input-type.enum';
@@ -16,13 +17,19 @@ export class GuiManager {
 
   elements: GuiElement[] = [];
 
+  private inputEventsSubscription: Subscription<InputEvent>;
+
   constructor(
     public material: Material,
     public spriteBatch: SpriteBatch,
     public textBatch: TextBatch,
     public camera: Camera,
   ) {
-    INPUT.events.subscribe(event => this.processInput(event));
+    this.inputEventsSubscription = INPUT.events.subscribe(event => this.processInput(event));
+  }
+
+  free(): void {
+    this.inputEventsSubscription.unsubscribe();
   }
 
   /**
