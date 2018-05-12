@@ -47,8 +47,6 @@ export abstract class GuiElement {
 
   protected _isMouseOver: boolean = false;
 
-  isMouseOver(): boolean { return this._isMouseOver; }
-
   /**
    * Renders gui element itself using provided batches
    * @param spriteBatch Use it to draw element's sprites
@@ -61,6 +59,11 @@ export abstract class GuiElement {
    * @param deltaTime Time elapsed from previous frame
    */
   abstract update(deltaTime: number): void;
+
+  /**
+   * Manually update hit box. Children of GuiElement should implement this method by themselves
+   */
+  abstract updateHitBox(): void;
 
   /**
    * Callback for receiving input events
@@ -109,6 +112,4 @@ export abstract class GuiElement {
         break;
     }
   }
-
-  abstract updateHitBox(): void;
 }
