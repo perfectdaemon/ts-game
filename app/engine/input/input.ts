@@ -1,3 +1,4 @@
+import { Observable } from '../helpers/event/observable';
 import { Vector2 } from '../math/vector2';
 import { InputEvent } from './input-event';
 import { InputType } from './input-type.enum';
@@ -11,6 +12,8 @@ export class Input {
   mousePos: Vector2 = new Vector2(0, 0);
   isKeyDown: boolean[] = new Array<boolean>(256);
   lastWheelDelta: number = 0;
+
+  events = new Observable<InputEvent>();
 
   process(event: InputEvent) {
     const keyCode = event.key as number;
@@ -43,6 +46,8 @@ export class Input {
         this.lastWheelDelta = event.w;
         break;
     }
+
+    this.events.next(event);
   }
 }
 
