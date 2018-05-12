@@ -6,16 +6,25 @@ import { Text } from '../scene/text';
 import { GuiElement } from './gui-element';
 
 export class GuiButton extends GuiElement {
-  sprite: Sprite = new Sprite();
-  label: Text = new Text('Button');
+  sprite: Sprite;
+  label: Text;
 
   hitBox = new AABB();
+
+  constructor() {
+    super();
+
+    this.sprite = new Sprite();
+    this.label = new Text('Button');
+    this.label.parent = this.sprite;
+  }
 
   render(spriteBatch: SpriteBatch, textBatch: TextBatch): void {
     spriteBatch.drawSingle(this.sprite);
     this.label.position.z = this.sprite.position.z + 1;
     textBatch.drawSingle(this.label);
   }
+
   update(deltaTime: number): void { }
 
   updateHitBox(): void {
