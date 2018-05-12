@@ -16,6 +16,7 @@ export class GuiButton extends GuiElement {
 
     this.sprite = new Sprite();
     this.label = new Text('Button');
+    this.label.pivotPoint.set(0.5, 0.5);
     this.label.parent = this.sprite;
   }
 
@@ -29,9 +30,11 @@ export class GuiButton extends GuiElement {
 
   updateHitBox(): void {
     this.hitBox.center
-      .set(this.sprite.position)
-      .addToSelf(this.sprite.pivotPoint);
+      .set(0.5, 0.5)
+      .subtractFromSelf(this.sprite.pivotPoint)
+      .multiplyVecSelf(this.sprite.width, this.sprite.height)
+      .addToSelf(this.sprite.position);
 
-    this.hitBox.halfSize.set(this.sprite.width / 2, this.sprite.height / 2);
+    this.hitBox.halfSize.set(this.sprite.width / 2.0, this.sprite.height / 2.0);
   }
 }
