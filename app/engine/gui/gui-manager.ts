@@ -56,8 +56,9 @@ export class GuiManager {
       return;
     }
 
-
     this.material.bind();
+    this.spriteBatch.start();
+    this.textBatch.start();
 
     for (const element of this.elements) {
       if (!element.visible) { continue; }
@@ -78,13 +79,15 @@ export class GuiManager {
       return;
     }
 
-    const touchVec = this.camera.absoluteMatrix.multiplyVec(new Vector3(inputEvent.x, inputEvent.y));
+    //const touchVec = this.camera.absoluteMatrix.multiplyVec(new Vector3(inputEvent.x, inputEvent.y));
 
     for (const element of this.elements) {
       if (!element.enabled) { continue; }
 
-      const shouldProcess = element.focused
-        || [InputType.KeyDown, InputType.KeyUp, InputType.Wheel].indexOf(inputEvent.inputType) !== -1;
+      const isEventsForFocusedOnly = [InputType.KeyDown, InputType.KeyUp, InputType.Wheel]
+        .indexOf(inputEvent.inputType) !== -1;
+
+      const shouldProcess = !isEventsForFocusedOnly || element.focused;
 
       if (shouldProcess) {
         element.processInput(inputEvent);
