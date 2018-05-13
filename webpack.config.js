@@ -3,7 +3,7 @@ const copy = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    game: './app/main.ts',
+    game: './app/index.ts',
     tools: './app/tools.ts'
   },
   module: {
@@ -25,8 +25,8 @@ module.exports = {
   plugins: [
     new copy([
       {from: 'assets', to: 'assets', ignore: '.gitkeep'},
-      {from: 'index.html'},
-      {from: 'tools.html'}
+      {from: 'app/index.html'},
+      {from: 'app/tools.html'}
     ])
   ]
 };
