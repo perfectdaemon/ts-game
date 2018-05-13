@@ -1,6 +1,6 @@
 import { IPoolItem } from '../../engine/helpers/pool/ipool-item';
+import { Circle } from '../../engine/math/circle';
 import { Vector2 } from '../../engine/math/vector2';
-import { Circle } from '../../engine/physics/circle';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { Sprite } from '../../engine/scene/sprite';
 

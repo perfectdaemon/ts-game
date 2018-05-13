@@ -1,4 +1,6 @@
-import { Keys } from '../../engine/input/keys.enum';
+import { ActionManager } from '../../engine/helpers/action-manager/action-manager';
+import { INPUT } from '../../engine/input/input';
+import { Keys, MouseButtons } from '../../engine/input/keys.enum';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector3 } from '../../engine/math/vector3';
 import { Material } from '../../engine/render/material';
@@ -26,12 +28,13 @@ export class Game extends GameBase {
 
   camera: Camera = new Camera();
   assets: Assets = new Assets();
-  player: Player = new Player(this.input);
+  player: Player = new Player();
   level: Level = new Level();
   bulletManager: BulletManager;
   enemyManager: EnemyManager;
   pickupManager: PickupManager;
   audioManager: AudioManager = new AudioManager();
+  actionManager: ActionManager = new ActionManager();
 
   screenSprite: Sprite;
   screenSpriteAlpha: number = 0;
@@ -91,6 +94,8 @@ export class Game extends GameBase {
       });
 
     this.renderer.setClearColorRGB(0.1, 0.2, 0.2, 0.5);
+    this.audioManager.masterVolume = 0;
+    this.actionManagerTest();
   }
 
   protected onUpdate(deltaTime: number): void {
@@ -101,7 +106,7 @@ export class Game extends GameBase {
         this.screenSprite.setVerticesAlpha(this.screenSpriteAlpha += deltaTime * 0.3);
       }
 
-      if (this.gameOver && this.input.isKeyDown[Keys.Return]) {
+      if (this.gameOver && INPUT.isKeyDown[Keys.Return]) {
         document.location.reload();
       }
     } else {
@@ -109,6 +114,7 @@ export class Game extends GameBase {
       this.bulletManager.update(deltaTime);
       this.enemyManager.update(deltaTime);
       this.pickupManager.update(deltaTime);
+      this.actionManager.update(deltaTime);
 
       if (this.player.health <= 0 && !this.gameOver) {
         this.gameOver = true;
@@ -124,9 +130,6 @@ export class Game extends GameBase {
     super.onRender();
 
     this.camera.update();
-
-    this.assets.shader.updateUniformValue('uModelViewProj', this.renderer.renderParams.modelViewProjection.e);
-    this.assets.shader.updateUniformValue('uColor', this.renderer.renderParams.color.asArray());
 
     this.assets.material.bind();
     this.level.draw();
@@ -156,8 +159,12 @@ export class Game extends GameBase {
     // nothing
   }
 
-  protected onMouseDown(position: Vector2): void {
+  protected onMouseDown(position: Vector2, button: MouseButtons): void {
     // this.pauseAll = !this.pauseAll;
+  }
+
+  protected onMouseUp(position: Vector2, button: MouseButtons): void {
+    // nothing
   }
 
   protected onKeyDown(key: Keys): void {
@@ -165,5 +172,12 @@ export class Game extends GameBase {
   }
   protected onKeyUp(key: Keys): void {
     // nothing
+  }
+
+  private actionManagerTest(): void {
+    this.actionManager.add(() => console.log('simple with 2 seconds timeout'), 2);
+    this.actionManager.add((deltaTime) => console.log('repeat with 1 second timeout for 3 seconds'), 1, 3)
+      .then(dt => console.log('after that repeat for 2 seconds'), 0, 2)
+      .then(() => console.log('after that - simple'));
   }
 }

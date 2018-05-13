@@ -57,6 +57,7 @@ export class TextBatch {
       this._indexBuffer.update(this._indexData, 0);
     }
 
+    this.font.material.bind();
     renderer.renderParams.modelViewProjection = renderer.renderParams.viewProjection;
     renderer.drawTriangles(this._vertexBuffer, this._indexBuffer, 0, this._count * 6);
   }

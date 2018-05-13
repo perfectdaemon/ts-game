@@ -1,5 +1,5 @@
 import { Input } from './input/input';
-import { Keys } from './input/keys.enum';
+import { Keys, MouseButtons } from './input/keys.enum';
 import { Vector2 } from './math/vector2';
 import { WebGLRenderer } from './render/webgl-renderer';
 import { ClearMask } from './render/webgl-types';
@@ -13,12 +13,14 @@ export abstract class GameBase {
   protected lastTime: number = 0.0;
   protected currentTime: number = 0.0;
   protected pauseAll: boolean = false;
-  protected input: Input = new Input();
 
   constructor(canvasElement: HTMLCanvasElement) {
-    this.renderer = new WebGLRenderer(canvasElement, this.input);
+    this.renderer = new WebGLRenderer(canvasElement);
     this.renderer.onMouseMove = (position) => this.onMouseMove(position);
-    this.renderer.onMouseDown = (position) => this.onMouseDown(position);
+    this.renderer.onMouseDown = (position, button) => this.onMouseDown(position, button);
+    this.renderer.onMouseUp = (position, button) => this.onMouseUp(position, button);
+    this.renderer.onKeyDown = (key) => this.onKeyDown(key);
+    this.renderer.onKeyUp = (key) => this.onKeyUp(key);
     this.renderer.setViewPort(0, 0, canvasElement.width, canvasElement.height);
   }
 
@@ -72,7 +74,9 @@ export abstract class GameBase {
   /**
    * Mouse down callback
    */
-  protected abstract onMouseDown(position: Vector2): void;
+  protected abstract onMouseDown(position: Vector2, button: MouseButtons): void;
+
+  protected abstract onMouseUp(position: Vector2, button: MouseButtons): void;
 
   protected abstract onKeyDown(key: Keys): void;
 

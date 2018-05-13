@@ -1,5 +1,5 @@
+import { AABB } from '../math/aabb';
 import { Vector2 } from '../math/vector2';
-import { AABB } from './aabb';
 
 export class MovingObject {
   oldPosition: Vector2 = new Vector2(0, 0);

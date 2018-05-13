@@ -31,8 +31,8 @@ export class Material {
       console.error(`Material.addTexture() failed - no shader at material`);
       return;
     }
-
-    const shaderIndex = this.shader.addUniform(UniformType.Sampler, 1, uniformName, this.textures.length) as number;
+    const textureIndex = this.textures.length;
+    const shaderIndex = this.shader.addUniform(UniformType.Sampler, 1, uniformName, () => [textureIndex]) as number;
 
     if (shaderIndex === null) {
       console.error(`Material.addTexture() failed - can't determine shader index for '${uniformName}'`);

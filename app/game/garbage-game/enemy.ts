@@ -1,8 +1,7 @@
 import { IPoolItem } from '../../engine/helpers/pool/ipool-item';
-import { isEqual } from '../../engine/math/math-base';
+import { AABB } from '../../engine/math/aabb';
 import { Vector2 } from '../../engine/math/vector2';
 import { Vector4 } from '../../engine/math/vector4';
-import { AABB } from '../../engine/physics/aabb';
 import { TextureRegion } from '../../engine/render/texture-atlas';
 import { Sprite } from '../../engine/scene/sprite';
 import { BulletOwner } from './bullet-owner.enum';

@@ -1,8 +1,9 @@
-import { Input } from '../input/input';
+import { Input, INPUT } from '../input/input';
 import { InputEvent } from '../input/input-event';
 import { InputType } from '../input/input-type.enum';
-import { Keys } from '../input/keys.enum';
+import { Keys, MouseButtons } from '../input/keys.enum';
 import { Vector2 } from '../math/vector2';
+import { Vector4 } from '../math/vector4';
 import { FrameBuffer } from './frame-buffer';
 import { IndexBuffer } from './index-buffer';
 import { Material } from './material';
@@ -12,14 +13,10 @@ import { Texture } from './texture';
 import { VertexBuffer } from './vertex-buffer';
 import { gl, WebGLRegisterService } from './webgl';
 import { BlendingMode, ClearMask, CullMode, FuncComparison, IndexFormat, VertexFormat } from './webgl-types';
-import { Vector4 } from '../math/vector4';
 
 const TEXTURE_SAMPLERS_MAX = 8;
 
 export class WebGLRenderer {
-  public onMouseMove: (position: Vector2) => void;
-  public onMouseDown: (position: Vector2) => void;
-
   public renderParams: RenderParams = new RenderParams();
 
   public get textureBinds(): number { return this._statTextureBind; }
@@ -55,7 +52,6 @@ export class WebGLRenderer {
 
   constructor(
     private canvasElement: HTMLCanvasElement,
-    private inputProcessor: Input,
   ) {
     const glContext = (
       canvasElement.getContext('webgl') ||
@@ -76,6 +72,12 @@ export class WebGLRenderer {
 
     canvasElement.focus();
   }
+
+  public onMouseMove: (position: Vector2) => void = p => {};
+  public onMouseDown: (position: Vector2, button: MouseButtons) => void = (p, b) => {};
+  public onMouseUp: (position: Vector2, button: MouseButtons) => void = (p, b) => {};
+  public onKeyDown: (key: Keys) => void = k => {};
+  public onKeyUp: (key: Keys) => void = k => {};
 
   public free(): void {
     this._screenQuadVB.free();
@@ -298,11 +300,7 @@ export class WebGLRenderer {
 
     this.canvasElement.onmousemove = event => {
       const inputEvent = this.getInputEventFromMouseEvent(event);
-      this.inputProcessor.process(inputEvent);
-
-      if (!this.onMouseMove) {
-        return;
-      }
+      INPUT.process(inputEvent);
 
       this.onMouseMove(new Vector2(
         event.pageX - canvasWindowPosition.x,
@@ -314,39 +312,48 @@ export class WebGLRenderer {
       event.preventDefault();
       this.canvasElement.focus();
       const inputEvent = this.getInputEventFromMouseEvent(event);
-      this.inputProcessor.process(inputEvent);
-
-      if (!this.onMouseDown) {
-        return;
-      }
+      INPUT.process(inputEvent);
 
       this.onMouseDown(new Vector2(
         event.pageX - canvasWindowPosition.x,
         event.pageY - canvasWindowPosition.y,
-      ));
+      ), inputEvent.key as MouseButtons);
     };
+
+    this.canvasElement.oncontextmenu = event => {
+      event.preventDefault();
+    }
 
     this.canvasElement.onmouseup = event => {
       const inputEvent = this.getInputEventFromMouseEvent(event);
-      this.inputProcessor.process(inputEvent);
+      INPUT.process(inputEvent);
+
+      this.onMouseUp(new Vector2(
+        event.pageX - canvasWindowPosition.x,
+        event.pageY - canvasWindowPosition.y,
+      ), inputEvent.key as MouseButtons);
     };
 
     this.canvasElement.onwheel = event => {
       event.preventDefault();
       const inputEvent = this.getInputEventFromMouseEvent(event);
-      this.inputProcessor.process(inputEvent);
+      INPUT.process(inputEvent);
     };
 
     this.canvasElement.onkeydown = event => {
       event.preventDefault();
       const inputEvent = this.getInputEventFromKeyEvent(event);
-      this.inputProcessor.process(inputEvent);
+      INPUT.process(inputEvent);
+
+      this.onKeyDown(inputEvent.key);
     };
 
     this.canvasElement.onkeyup = event => {
       event.preventDefault();
       const inputEvent = this.getInputEventFromKeyEvent(event);
-      this.inputProcessor.process(inputEvent);
+      INPUT.process(inputEvent);
+
+      this.onKeyUp(inputEvent.key);
     };
 
   }

@@ -57,11 +57,20 @@ export class Vector3 {
     return new Vector3(this.x + vector.x, this.y + vector.y, this.z + vector.z);
   }
 
-  addToSelf(vector: Vector2 | Vector3): Vector3 {
-    this.x += vector.x;
-    this.y += vector.y;
-    if (vector instanceof Vector3) {
-      this.z += vector.z;
+  addToSelf(vectorOrX: number | Vector2 | Vector3, y?: number, z?: number): Vector3 {
+    if (vectorOrX instanceof Vector2) {
+      this.x += vectorOrX.x;
+      this.y += vectorOrX.y;
+    } else if (vectorOrX instanceof Vector3) {
+      this.x += vectorOrX.x;
+      this.y += vectorOrX.y;
+      this.z += vectorOrX.z;
+    } else if (y != null && z != null) {
+      this.x += vectorOrX;
+      this.y += y;
+      this.z += z;
+    } else {
+      throw new Error('Vector3.addToSelf() first argument is number, but no second and third are provided');
     }
 
     return this;

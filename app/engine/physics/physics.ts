@@ -1,5 +1,5 @@
-import { AABB } from './aabb';
-import { Circle } from './circle';
+import { AABB } from '../math/aabb';
+import { Circle } from '../math/circle';
 import { MovingObject } from './moving-object';
 
 export class Physics {
