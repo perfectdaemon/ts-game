@@ -4,9 +4,9 @@
   "license": "MIT",
   "scripts": {
     "lite": "lite-server --baseDir=\"dist\"",
-    "webpack": "webpack --watch",
-    "start": "concurrently \"npm run webpack\" \"npm run lite\" ",
-    "build": "webpack --optimize-minimize"
+    "webpackWatch": "webpack --config webpack.dev.js --watch",
+    "start": "concurrently \"npm run webpackWatch\" \"npm run lite\" ",
+    "build": "webpack --config webpack.prod.js --optimize-minimize"
   },
   "private": true,
   "devDependencies": {
@@ -16,6 +16,7 @@
     "ts-loader": "^3.2.0",
     "tslint": "~5.8.0",
     "typescript": "^2.6.0",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "webpack-merge": "^4.1.4"
   }
 }
