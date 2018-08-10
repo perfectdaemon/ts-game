@@ -47,7 +47,7 @@ export class Game extends GameBase {
     super(canvasElement);
   }
 
-  protected onInit(): void {
+  protected async onInit(): Promise<void> {
     this.player.body.position.set(this.renderer.width / 2, this.renderer.height / 2, 1);
     this.assets.loadAll()
       .then(() => {

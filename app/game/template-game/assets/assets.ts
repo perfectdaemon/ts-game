@@ -17,20 +17,18 @@ export class Assets {
 
   private loaders: LoaderFactory = new LoaderFactory();
 
-  loadAll(): Promise<void> {
+  async loadAll(): Promise<void> {
     this.gameCamera = new Camera();
     this.guiCamera = new Camera();
 
-    return new Promise<void>(async (resolve, reject) => {
-      this.shader = await this.loaders.loadShaderProgram(DEFAULT_SHADER);
+    this.shader = await this.loaders.loadShaderProgram(DEFAULT_SHADER);
 
-      DEFAULT_MATERIAL.shaderProgram = this.shader;
-      DEFAULT_MATERIAL.textures[0].texture = new Texture();
-      (DEFAULT_FONT.materialData as MaterialData).shaderProgram = this.shader;
-      this.blankMaterial = await this.loaders.loadMaterial(DEFAULT_MATERIAL);
-      this.font = await this.loaders.loadFont(DEFAULT_FONT);
+    DEFAULT_MATERIAL.shaderProgram = this.shader;
+    DEFAULT_MATERIAL.textures[0].texture = new Texture();
+    (DEFAULT_FONT.materialData as MaterialData).shaderProgram = this.shader;
+    this.blankMaterial = await this.loaders.loadMaterial(DEFAULT_MATERIAL);
+    this.font = await this.loaders.loadFont(DEFAULT_FONT);
 
-      resolve();
-    });
+    return Promise.resolve();
   }
 }

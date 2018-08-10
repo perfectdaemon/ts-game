@@ -9,17 +9,16 @@ import { SCENES } from './scenes/scenes.const';
 
 export class Game extends GameBase {
   sceneManager: SceneManager = new SceneManager();
-  protected onInit(): void {
+
+  protected async onInit(): Promise<void> {
     this.renderer.setClearColorRGB(19 / 255, 104 / 255, 138 / 255, 1.0);
 
-    GLOBAL.assets.loadAll()
-      .then(() => {
-        this.sceneManager.addScene(SCENES.game, new GameScene());
-        this.sceneManager.addScene(SCENES.mainMenu, new MainMenuScene());
+    await GLOBAL.assets.loadAll();
 
-        this.sceneManager.switchTo(SCENES.mainMenu);
-      });
+    this.sceneManager.addScene(SCENES.game, new GameScene());
+    this.sceneManager.addScene(SCENES.mainMenu, new MainMenuScene());
 
+    this.sceneManager.switchTo(SCENES.mainMenu);
   }
 
   protected onUpdate(deltaTime: number): void {
