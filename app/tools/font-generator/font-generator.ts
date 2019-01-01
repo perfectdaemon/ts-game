@@ -13,7 +13,7 @@ export class BitmapFontGenerator {
   constructor(private canvasElement: HTMLCanvasElement) {
     canvasElement.ondrop = (event) => {
       event.preventDefault();
-      const file = event.dataTransfer.files[0];
+      // const file = event.dataTransfer.files[0];
       // todo
     };
 
