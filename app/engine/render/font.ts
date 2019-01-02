@@ -20,10 +20,10 @@ export class Font {
     quad.positions[2].set(0, symbolData.startY, 0).multiplyNumSelf(scale);
     quad.positions[3].set(0, symbolData.startY + symbolData.height, 0).multiplyNumSelf(scale);
 
-    quad.texCoords[0].set(symbolData.tx + symbolData.tw, symbolData.ty + symbolData.th).multiplyNumSelf(scale);
-    quad.texCoords[1].set(symbolData.tx + symbolData.tw, symbolData.ty).multiplyNumSelf(scale);
-    quad.texCoords[2].set(symbolData.tx, symbolData.ty).multiplyNumSelf(scale);
-    quad.texCoords[3].set(symbolData.tx, symbolData.ty + symbolData.th).multiplyNumSelf(scale);
+    quad.texCoords[0].set(symbolData.tx + symbolData.tw, symbolData.ty + symbolData.th);
+    quad.texCoords[1].set(symbolData.tx + symbolData.tw, symbolData.ty);
+    quad.texCoords[2].set(symbolData.tx, symbolData.ty);
+    quad.texCoords[3].set(symbolData.tx, symbolData.ty + symbolData.th);
 
     return quad;
   }
