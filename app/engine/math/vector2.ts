@@ -52,7 +52,7 @@ export class Vector2 {
     return this;
   }
 
-  subtract(other: Vector2): Vector2 {
+  subtract(other: Vector2 | Vector3): Vector2 {
     return new Vector2(this.x - other.x, this.y - other.y);
   }
 
