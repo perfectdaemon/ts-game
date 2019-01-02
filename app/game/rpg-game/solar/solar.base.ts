@@ -13,4 +13,8 @@ export abstract class SolarBase {
   getTextsToRender(): Text[] {
     return [];
   }
+
+  update(): void {
+
+  }
 }

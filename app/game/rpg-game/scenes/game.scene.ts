@@ -30,6 +30,10 @@ export class GameScene extends Scene {
   }
 
   onMouseDown(position: Vector2, button: MouseButtons): void {
+    if (button === Keys.LeftButton) {
+      const worldPosition = GLOBAL.assets.gameCamera.screenToWorld(position);
+      this.solarManager.movePlayerToPosition(new Vector2().set(worldPosition));
+    }
   }
 
   onMouseMove(position: Vector2): void {

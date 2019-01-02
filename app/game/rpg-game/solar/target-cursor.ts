@@ -20,5 +20,6 @@ export class TargetCursor extends SolarBase {
     this.sprite.setTextureRegion(cursorTextureRegion, false);
     this.sprite.setSize(24, 24);
     this.sprite.setVerticesColor(new Vector4(0.3, 1.0, 0.3, 1.0));
+    this.sprite.position.set(0, 0, 10);
   }
 }
