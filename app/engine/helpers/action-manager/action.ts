@@ -47,7 +47,7 @@ export class Action implements IPoolItem {
     }
 
     const callbackResult = (this.action as ContinuousAction)(deltaTime, this.time);
-    if (callbackResult || this.time >= this.duration + this.pauseOnStart) {
+    if (callbackResult || (this.duration && this.time >= this.duration + this.pauseOnStart)) {
       this.onDeactivate();
       this.playNextActions();
     }
