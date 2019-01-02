@@ -3,10 +3,10 @@ import { Pool } from '../../../engine/helpers/pool/pool';
 import { Vector2 } from '../../../engine/math/vector2';
 import { Vector4 } from '../../../engine/math/vector4';
 import { renderer } from '../../../engine/render/webgl';
+import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { Sprite } from '../../../engine/scene/sprite';
 import { GLOBAL } from '../global';
 import { SolarBase } from './solar.base';
-import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 
 export class Nebula extends SolarBase implements IPoolItem {
   static build(): Nebula {
