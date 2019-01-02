@@ -1,5 +1,6 @@
-textures: atlas.png
-circle_bordered.png	0	0	128	128	0	0	128	128	
-circle_gradient.png	129	0	126	128	0	0	128	128	r
-triangle.png	0	129	64	64	0	0	64	64	
-circle.png	65	129	32	32	0	0	32	32	
+textures: assets.png
+smoke.png	0	0	338	297	1	2	299	340	r
+circle_bordered.png	339	0	128	128	0	0	128	128	
+circle_gradient.png	339	129	128	126	0	2	128	128	
+triangle.png	447	256	64	64	0	0	64	64	
+circle.png	468	0	32	32	0	0	32	32	
