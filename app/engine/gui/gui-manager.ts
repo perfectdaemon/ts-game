@@ -15,7 +15,7 @@ import { GuiElement } from './gui-element';
 export class GuiManager {
   enabled = true;
 
-  elements: GuiElement[] = [];
+  elements: { [key: string]: GuiElement } = {};
 
   private inputEventsSubscription: Subscription<InputEvent>;
 
@@ -41,7 +41,8 @@ export class GuiManager {
       return;
     }
 
-    for (const element of this.elements) {
+    for (const elementName in this.elements) {
+      const element = this.elements[elementName];
       if (!element.enabled) { continue; }
 
       element.update(deltaTime);
@@ -60,7 +61,8 @@ export class GuiManager {
     this.spriteBatch.start();
     this.textBatch.start();
 
-    for (const element of this.elements) {
+    for (const elementName in this.elements) {
+      const element = this.elements[elementName];
       if (!element.visible) { continue; }
 
       element.render(this.spriteBatch, this.textBatch);
@@ -81,7 +83,8 @@ export class GuiManager {
 
     //const touchVec = this.camera.absoluteMatrix.multiplyVec(new Vector3(inputEvent.x, inputEvent.y));
 
-    for (const element of this.elements) {
+    for (const elementName in this.elements) {
+      const element = this.elements[elementName];
       if (!element.enabled) { continue; }
 
       const isEventsForFocusedOnly = [InputType.KeyDown, InputType.KeyUp, InputType.Wheel]
@@ -93,5 +96,17 @@ export class GuiManager {
         element.processInput(inputEvent);
       }
     }
+  }
+
+  addElement(element: GuiElement): void {
+    if (typeof this.elements[element.name] !== 'undefined') {
+      throw new Error(`Element with name '${element.name}' already exists in GuiManager`);
+    }
+
+    this.elements[element.name] = element;
+  }
+
+  removeElement(element: GuiElement) {
+    delete this.elements[element.name];
   }
 }

@@ -14,6 +14,14 @@ import { GuiCallback } from './gui-callback';
 const emptyFunction = () => { };
 
 export abstract class GuiElement {
+
+  protected static defaultNameIncrementNumber: number = 0;
+
+  /**
+   * Optional element name
+   */
+  name: string = `Element_${GuiElement.defaultNameIncrementNumber++}`;
+
   /**
    * Indicates that element has focus and process additional input events
    */

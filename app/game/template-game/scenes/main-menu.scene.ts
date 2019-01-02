@@ -37,7 +37,7 @@ export class MainMenuScene extends Scene {
 
     button.updateHitBox();
 
-    this.guiManager.elements.push(button);
+    this.guiManager.addElement(button);
 
     return super.load();
   }
