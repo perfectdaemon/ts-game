@@ -1,9 +1,11 @@
 import { Keys, MouseButtons } from '../input/keys.enum';
 import { Vector2 } from '../math/vector2';
+import { SceneManager } from './scene-manager';
 
 export enum SceneState { Hidden, Active, Paused }
 
 export abstract class Scene {
+  sceneManager: SceneManager;
   state: SceneState = SceneState.Hidden;
 
   load(): Promise<void> {

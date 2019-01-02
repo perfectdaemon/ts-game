@@ -13,6 +13,7 @@ export class SceneManager {
     }
 
     this.scenes[name] = scene;
+    scene.sceneManager = this;
   }
 
   switchTo(sceneName: string): void {
