@@ -4,4 +4,5 @@ export const SCENES = {
   mainMenu: 'mainMenu',
   gameOver: 'gameOver',
   help: 'help',
+  fight: 'fight',
 };

@@ -5,6 +5,7 @@ import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
 import { MAIN_MENU_DATA } from '../assets/main-menu.data';
+import { FIGHT_GAME_STATE, PlayerType } from '../fight/game-state';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { SCENES } from './scenes.const';
@@ -34,7 +35,11 @@ export class MainMenuScene extends Scene {
       .elements['HelpButton']
       .onClick = () => this.sceneManager.switchTo(SCENES.help);
 
-      return super.load();
+    this.guiManager
+      .elements['TestFightButton']
+      .onClick = () => this.testFight();
+
+    return super.load();
   }
 
   unload(): Promise<void> {
@@ -62,5 +67,29 @@ export class MainMenuScene extends Scene {
   }
 
   onMouseUp(position: Vector2, button: MouseButtons): void {
+  }
+
+  private testFight(): void {
+    FIGHT_GAME_STATE.enemyData = {
+      attackCount: 2,
+      attackDamage: 10,
+      cellCount: 5,
+      maxCellHealth: 20,
+      playerType: PlayerType.Ai,
+      protectCount: 2,
+      protectMultiplier: 0.5,
+    };
+
+    FIGHT_GAME_STATE.humanData = {
+      attackCount: 2,
+      attackDamage: 10,
+      cellCount: 5,
+      maxCellHealth: 20,
+      playerType: PlayerType.Ai,
+      protectCount: 2,
+      protectMultiplier: 0.5,
+    };
+
+    this.sceneManager.switchTo(SCENES.fight);
   }
 }

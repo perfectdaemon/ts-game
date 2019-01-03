@@ -3,6 +3,7 @@ import { Keys, MouseButtons } from '../../engine/input/keys.enum';
 import { Vector2 } from '../../engine/math/vector2';
 import { SceneManager } from '../../engine/scenes/scene-manager';
 import { GLOBAL } from './global';
+import { FightScene } from './scenes/fight.scene';
 import { GameScene } from './scenes/game.scene';
 import { MainMenuScene } from './scenes/main-menu.scene';
 import { SCENES } from './scenes/scenes.const';
@@ -17,6 +18,7 @@ export class Game extends GameBase {
 
     this.sceneManager.addScene(SCENES.game, new GameScene());
     this.sceneManager.addScene(SCENES.mainMenu, new MainMenuScene());
+    this.sceneManager.addScene(SCENES.fight, new FightScene());
 
     this.sceneManager.switchTo(SCENES.mainMenu);
   }
