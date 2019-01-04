@@ -10,8 +10,8 @@ export class DialogBox implements IRenderable {
   text: Text;
 
   constructor() {
-    this.background = new Sprite(350, 70, new Vector2(0.5, 0));
-    this.background.position.set(renderer.width / 2, 10, 10);
+    this.background = new Sprite(350, 70, new Vector2(0.5, 0.5));
+    this.background.position.set(renderer.width / 2, this.background.height / 2 + 10, 10);
     this.background.setVerticesColor(1, 1, 1, 0.3);
 
     this.text = new Text();
@@ -19,6 +19,8 @@ export class DialogBox implements IRenderable {
     this.text.parent = this.background;
     this.text.color.set(0.2, 0.2, 0.2, 1.0);
     this.text.maxTextWidth = this.background.width - 10;
+    this.text.isWrapped = true;
+    this.text.position.set(0, 0, 15);
   }
 
   getSpritesToRender(): Sprite[] {
