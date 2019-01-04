@@ -18,7 +18,7 @@ export class FightScene extends Scene {
 
   load(): Promise<void> {
     console.log('Fight scene is loaded');
-    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.solarMaterial);
+    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.blankMaterial);
     this.reset();
     return super.load();
   }
