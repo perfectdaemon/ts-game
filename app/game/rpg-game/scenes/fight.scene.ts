@@ -56,6 +56,8 @@ export class FightScene extends Scene {
   }
 
   onMouseDown(position: Vector2, button: MouseButtons): void {
+    if (button !== Keys.LeftButton) { return; }
+
     const worldPosition = GLOBAL.assets.gameCamera
       .screenToWorld(position)
       .asVector2();
@@ -72,7 +74,7 @@ export class FightScene extends Scene {
       const hasMoreCellsToProtect = this.human.ship.cells
         .some(c => c.isAlive() && this.human.protectedCells.every(a => a !== c));
 
-      if (this.human.hasProtectsLeft()) {
+      if (this.human.hasProtectsLeft() && hasMoreCellsToProtect) {
         this.setFightState(FightState.HumanTurnProtect);
       } else {
         this.setFightState(FightState.HumanTurnAttack);
@@ -98,8 +100,8 @@ export class FightScene extends Scene {
           .then(() => this.calculateTurn(this.human, this.enemy), 2.0)
           .then(() => this.calculateTurn(this.enemy, this.human), 2.0)
           .then(() => {
-            const isHumanVictory = false;
-            const isEnemyVictory = false;
+            const isHumanVictory = this.enemy.ship.cells.every(c => !c.isAlive());
+            const isEnemyVictory = this.human.ship.cells.every(c => !c.isAlive());;
 
             if (isEnemyVictory) {
               this.setFightState(FightState.Defeat);
