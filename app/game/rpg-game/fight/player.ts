@@ -44,8 +44,11 @@ export class Player implements IRenderable {
   }
 
   resetTurnState(): void {
+    this.protectedCells.forEach(cell => cell.unmark());
+    this.attackedCells.forEach(cell => cell.unmark());
     this.protectedCells = [];
     this.attackedCells = [];
+
     this.attacksLeft = this.playerData.attackCount;
     this.protectsLeft = this.playerData.protectCount;
   }
