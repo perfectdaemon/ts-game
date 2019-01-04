@@ -128,6 +128,10 @@ export class Vector3 {
   negateVector(): Vector3 {
     return new Vector3(-this.x, -this.y, -this.z);
   }
+
+  asVector2(): Vector2 {
+    return new Vector2(this.x, this.y);
+  }
 }
 
 export const AXIS_Z: Vector3 = new Vector3(0, 0, 1);
