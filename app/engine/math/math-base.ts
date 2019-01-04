@@ -17,3 +17,7 @@ export function isEqual(number1: number, number2: number): boolean {
 export function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
+
+export function div(val: number, by: number): number {
+  return (val - val % by) / by;
+}
