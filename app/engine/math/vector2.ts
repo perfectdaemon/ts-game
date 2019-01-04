@@ -2,6 +2,13 @@ import { isEqual, MathBase } from './math-base';
 import { Vector3 } from './vector3';
 
 export class Vector2 {
+  static fromAngle(rotationAngle: number): Vector2 {
+    return new Vector2(
+      Math.cos(-rotationAngle * MathBase.deg2rad),
+      Math.sin(rotationAngle * MathBase.deg2rad),
+    ).normalize();
+  }
+
   constructor(public x: number = 0, public y: number = 0) { }
 
   set(x: number | Vector2 | Vector3, y?: number): Vector2 {
