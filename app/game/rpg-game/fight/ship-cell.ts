@@ -1,3 +1,5 @@
+import { IFigure } from '../../../engine/math/figure.interface';
+import { Vector2 } from '../../../engine/math/vector2';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 
@@ -8,6 +10,11 @@ export class ShipCell {
 
   isAlive(): boolean {
     return this.health > 0;
+  }
+
+  hit(damage: number): void {
+    this.health = Math.max(this.health -= damage, 0);
+    this.renderable.updateHealthText(this.health);
   }
 
   unmark(): void {
@@ -23,10 +30,19 @@ export class ShipCell {
     this.renderable.mark.visible = true;
     this.renderable.mark.setVerticesColor(1.0, 0.3, 0.3, 1.0);
   }
+
+  isMouseOver(position: Vector2): boolean {
+    return this.renderable.hitBox.hit(position);
+  }
 }
 
 export class ShipCellRenderable {
   sprite: Sprite;
   healthText: Text;
   mark: Sprite;
+  hitBox: IFigure;
+
+  updateHealthText(health: number): void {
+    this.healthText.text = health.toString();
+  }
 }

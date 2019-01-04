@@ -1,3 +1,4 @@
+import { AABB } from '../../../engine/math/aabb';
 import { div } from '../../../engine/math/math-base';
 import { renderer } from '../../../engine/render/webgl';
 import { Sprite } from '../../../engine/scene/sprite';
@@ -32,14 +33,7 @@ export class PlayerRenderableHelper {
 
       renderable.sprite = new Sprite(50, 50);
       renderable.sprite.position.set(35 + 60 * col, 35 + 60 * row, 2);
-      switch (player.playerData.playerType) {
-        case PlayerType.Human:
-          renderable.sprite.setVerticesColor(0.3, 1.0, 0.3, 1.0);
-          break;
-        case PlayerType.Ai:
-          renderable.sprite.setVerticesColor(1.0, 0.3, 0.3, 1.0);
-          break;
-      }
+      renderable.sprite.setVerticesColor(1, 1, 1, 1.0);
       renderable.sprite.parent = ship.sprite;
 
       renderable.mark = new Sprite(15, 15);
@@ -52,6 +46,8 @@ export class PlayerRenderableHelper {
       renderable.healthText.position.set(0, -15, 3);
       renderable.healthText.color.set(0, 0, 0, 1.0);
       renderable.healthText.parent = renderable.sprite;
+
+      renderable.hitBox = new AABB(renderable.sprite.absoluteMatrix.position.asVector2(), renderable.sprite.size);
     });
   }
 
