@@ -7,12 +7,14 @@ import { Sprite } from '../../engine/scene/sprite';
 
 export class Particle implements IPoolItem {
   active: boolean;
+  pause: number;
   t: number;
   lifeTime: number;
   velocity: Vector2 = new Vector2();
   sprite: Sprite = new Sprite();
 
   onActivate(): void {
+    this.pause = 0;
     this.t = 0;
     this.lifeTime = 0;
     this.velocity.set(0, 0);
@@ -27,8 +29,6 @@ export class Particle implements IPoolItem {
 
 export class ParticleEmitter extends Pool<Particle> {
   visible: boolean;
-  enabled: boolean;
-  time: number;
 
   constructor(
     public spriteBatch: SpriteBatch,
@@ -37,17 +37,19 @@ export class ParticleEmitter extends Pool<Particle> {
     initialSize?: number,
   ) {
     super(newItem, initialSize);
-    this.time = 0;
-    this.enabled = true;
     this.visible = true;
   }
 
   update(deltaTime: number): void {
     if (!this.visible) { return; }
 
-    this.time += deltaTime;
     this.poolObjects.forEach(particle => {
       if (!particle.active) {
+        return;
+      }
+
+      if (particle.pause > 0) {
+        particle.pause -= deltaTime;
         return;
       }
 
@@ -61,7 +63,7 @@ export class ParticleEmitter extends Pool<Particle> {
       particle.sprite.position.addToSelf(particle.velocity.multiplyNum(deltaTime));
       const alpha = (particle.lifeTime - particle.t) / particle.lifeTime;
       particle.sprite.setVerticesAlpha(alpha);
-      particle.velocity.multiplyNumSelf(0.95);
+      particle.velocity.multiplyNumSelf(1 - 0.08 * Math.random());
     });
   }
 
@@ -69,6 +71,10 @@ export class ParticleEmitter extends Pool<Particle> {
     this.material.bind();
     this.spriteBatch.start();
     for (const poolObject of this.poolObjects) {
+      if (poolObject.pause > 0) {
+        continue;
+      }
+
       this.spriteBatch.drawSingle(poolObject.sprite);
     }
     this.spriteBatch.finish();
