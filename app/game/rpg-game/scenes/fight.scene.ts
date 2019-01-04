@@ -111,10 +111,10 @@ export class FightScene extends Scene {
         this.setFightState(FightState.HumanTurnAttack);
       } else {
         this.setFightState(FightState.AiTurn);
-        this.actionManager.add(() => this.enemy.aiChooseProtectAndAttack(this.human))
+        this.actionManager.add(() => this.enemy.aiChooseProtectAndAttack(this.human), 2.0)
           .then(() => this.setFightState(FightState.Animation), 2.0)
           .then(() => this.calculateTurn(this.human, this.enemy), 2.0)
-          .then(() => this.calculateTurn(this.enemy, this.human), 6.0)
+          .then(() => this.calculateTurn(this.enemy, this.human), 4.0)
           .then(() => {
             const isHumanVictory = !this.enemy.ship.isAlive();
             const isEnemyVictory = !this.human.ship.isAlive();
