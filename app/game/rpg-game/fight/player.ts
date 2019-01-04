@@ -1,7 +1,7 @@
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { IRenderable } from '../render-helper';
-import { PlayerData } from './game-state';
+import { PlayerData, PlayerType } from './game-state';
 import { PlayerRenderableHelper } from './player-renderable.helper';
 import { Ship } from './ship';
 import { ShipCell } from './ship-cell';
@@ -74,8 +74,25 @@ export class Player implements IRenderable {
       throw new Error(`Wrong cell to protect, perhaps it is enemy's one`);
     }
 
-    this.protectedCells.push(cell);
-    --this.protectsLeft;
+    const alreadyProtected = this.protectedCells.indexOf(cell);
+
+    if (alreadyProtected !== -1) {
+      this.protectedCells.splice(alreadyProtected, 1);
+
+      if (this.playerData.playerType === PlayerType.Human) {
+        cell.unmark();
+      }
+
+      ++this.protectsLeft;
+    } else {
+      this.protectedCells.push(cell);
+
+      if (this.playerData.playerType === PlayerType.Human) {
+        cell.markAsProtected();
+      }
+
+      --this.protectsLeft;
+    }
   }
 
   markAsAttack(cell: ShipCell): void {
@@ -87,8 +104,25 @@ export class Player implements IRenderable {
       throw new Error(`Wrong cell to attack, perhaps it is yours`);
     }
 
-    this.attackedCells.push(cell);
-    --this.attacksLeft;
+    const alreadyAttacked = this.attackedCells.indexOf(cell);
+
+    if (alreadyAttacked !== -1) {
+      this.attackedCells.splice(alreadyAttacked, 1);
+
+      if (this.playerData.playerType === PlayerType.Human) {
+        cell.unmark();
+      }
+
+      ++this.attacksLeft;
+    } else {
+      this.attackedCells.push(cell);
+
+      if (this.playerData.playerType === PlayerType.Human) {
+        cell.markAsAttacked();
+      }
+
+      --this.attacksLeft;
+    }
   }
 
   aiChooseProtectAndAttack(other: Player): boolean {
