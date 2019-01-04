@@ -13,7 +13,7 @@ export class ShipCell {
   }
 
   hit(damage: number): void {
-    this.health = Math.max(this.health -= damage, 0);
+    this.health -= damage;
     this.renderable.updateHealthText(this.health);
   }
 
@@ -43,6 +43,6 @@ export class ShipCellRenderable {
   hitBox: IFigure;
 
   updateHealthText(health: number): void {
-    this.healthText.text = health.toString();
+    this.healthText.text = Math.max(0, health).toString();
   }
 }
