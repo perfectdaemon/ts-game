@@ -85,7 +85,7 @@ export class MainMenuScene extends Scene {
       attackDamage: 10,
       cellCount: 5,
       maxCellHealth: 20,
-      playerType: PlayerType.Ai,
+      playerType: PlayerType.Human,
       protectCount: 2,
       protectMultiplier: 0.5,
     };
