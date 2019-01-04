@@ -10,7 +10,7 @@ export class Particle implements IPoolItem {
   t: number;
   lifeTime: number;
   velocity: Vector2 = new Vector2();
-  sprite: Sprite;
+  sprite: Sprite = new Sprite();
 
   onActivate(): void {
     this.t = 0;
