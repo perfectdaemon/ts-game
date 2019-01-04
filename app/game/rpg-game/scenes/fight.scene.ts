@@ -81,12 +81,14 @@ export class FightScene extends Scene {
 
       const cell = result[0];
 
+      if (cell.markedAsProtected) {
+        console.log('Cell is already protected');
+        return;
+      }
+
       this.human.markAsProtect(cell);
 
-      const hasMoreCellsToProtect = this.human.ship.cells
-        .some(c => c.isAlive() && this.human.protectedCells.every(a => a !== c));
-
-      if (this.human.hasProtectsLeft() && hasMoreCellsToProtect) {
+      if (this.human.hasProtectsLeft()) {
         this.setFightState(FightState.HumanTurnProtect);
       } else {
         this.setFightState(FightState.HumanTurnAttack);
@@ -98,12 +100,14 @@ export class FightScene extends Scene {
 
       const cell = result[0];
 
+      if (cell.markedAsAttacked) {
+        console.log('Cell is already attacked');
+        return;
+      }
+
       this.human.markAsAttack(cell);
 
-      const hasMoreCellsToAttack = this.enemy.ship.cells
-        .some(c => c.isAlive() && this.human.attackedCells.every(a => a !== c));
-
-      if (this.human.hasAttacksLeft() && hasMoreCellsToAttack) {
+      if (this.human.hasAttacksLeft()) {
         this.setFightState(FightState.HumanTurnAttack);
       } else {
         this.setFightState(FightState.AiTurn);
@@ -112,8 +116,8 @@ export class FightScene extends Scene {
           .then(() => this.calculateTurn(this.human, this.enemy), 2.0)
           .then(() => this.calculateTurn(this.enemy, this.human), 6.0)
           .then(() => {
-            const isHumanVictory = this.enemy.ship.cells.every(c => !c.isAlive());
-            const isEnemyVictory = this.human.ship.cells.every(c => !c.isAlive());
+            const isHumanVictory = !this.enemy.ship.isAlive();
+            const isEnemyVictory = !this.human.ship.isAlive();
 
             if (isEnemyVictory) {
               this.setFightState(FightState.Defeat);
@@ -140,28 +144,25 @@ export class FightScene extends Scene {
     this.setFightState(FightState.Start);
   }
 
-  private calculateTurn(first: Player, second: Player): void {
+  private calculateTurn(attacking: Player, defending: Player): void {
     let pauseOnStart = 0;
-    first.attackedCells.forEach(attackedCell => this.actionManager.add(() => {
-      const isCellProtected = second.protectedCells.some(cell => cell === attackedCell);
-      const damageMultiplier = isCellProtected
-        ? second.playerData.protectMultiplier
+    for (const attackedCell of defending.ship.cells.filter(cell => cell.markedAsAttacked)) {
+      const damageMultiplier = attackedCell.markedAsProtected
+        ? defending.playerData.protectMultiplier
         : 1.0;
-      attackedCell.hit(first.playerData.attackDamage * damageMultiplier);
 
-      const cellAbsolutePosition = attackedCell.renderable.sprite.absoluteMatrix.position.asVector2();
+      this.actionManager.add(() => {
+        defending.ship.hit(attacking.playerData.attackDamage * damageMultiplier);
 
-      if (attackedCell.isAlive()) {
-        if (isCellProtected) {
+        const cellAbsolutePosition = attackedCell.renderable.sprite.absoluteMatrix.position.asVector2();
+
+        if (attackedCell.markedAsProtected) {
           this.emitHitWithShield(cellAbsolutePosition);
         } else {
           this.emitHit(cellAbsolutePosition);
         }
-      } else {
-        this.emitCellBoom(cellAbsolutePosition);
-      }
-
-    }, pauseOnStart += 2));
+      }, pauseOnStart += 2);
+    }
   }
 
   private setFightState(newState: FightState): void {

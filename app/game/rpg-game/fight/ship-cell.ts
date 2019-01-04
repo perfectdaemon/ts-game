@@ -4,45 +4,35 @@ import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 
 export class ShipCell {
-  health: number;
+  markedAsAttacked: boolean;
+  markedAsProtected: boolean;
 
   renderable: ShipCellRenderable = new ShipCellRenderable();
 
-  isAlive(): boolean {
-    return this.health > 0;
-  }
-
-  hit(damage: number): void {
-    this.health -= damage;
-    this.renderable.updateHealthText(this.health);
-  }
-
-  unmark(): void {
-    this.renderable.mark.visible = false;
-  }
-
   markAsProtected(): void {
-    this.renderable.mark.visible = true;
-    this.renderable.mark.setVerticesColor(0.3, 0.3, 1.0, 1.0);
+    this.markedAsProtected = true;
+    this.renderable.protectMark.visible = true;
   }
 
   markAsAttacked(): void {
-    this.renderable.mark.visible = true;
-    this.renderable.mark.setVerticesColor(1.0, 0.3, 0.3, 1.0);
+    this.markedAsAttacked = true;
+    this.renderable.attackMark.visible = true;
   }
 
   isMouseOver(position: Vector2): boolean {
     return this.renderable.hitBox.hit(position);
   }
+
+  reset(): void {
+    this.renderable.protectMark.visible = this.renderable.attackMark.visible = false;
+    this.markedAsAttacked = false;
+    this.markedAsProtected = false;
+  }
 }
 
 export class ShipCellRenderable {
   sprite: Sprite;
-  healthText: Text;
-  mark: Sprite;
+  protectMark: Sprite;
+  attackMark: Sprite;
   hitBox: IFigure;
-
-  updateHealthText(health: number): void {
-    this.healthText.text = Math.max(0, health).toString();
-  }
 }

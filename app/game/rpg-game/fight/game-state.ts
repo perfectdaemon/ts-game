@@ -8,7 +8,7 @@ export class PlayerData {
   playerType: PlayerType;
 
   cellCount: number;
-  maxCellHealth: number;
+  shipHealth: number;
 
   attackCount: number;
   attackDamage: number;
