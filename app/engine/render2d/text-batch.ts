@@ -131,11 +131,11 @@ export class TextBatch {
     for (const word of words) {
       const wordLength = this.font.getTextLength(word, true);
       if (wordLength < spaceLeft) {
-        result.push(word);
+        result.push(word + ' ');
         spaceLeft -= wordLength;
       } else {
         result.push('\n');
-        result.push(word);
+        result.push(word + ' ');
         spaceLeft = text.maxTextWidth - wordLength;
       }
     }
@@ -165,13 +165,6 @@ export class TextBatch {
     const textSize = new Vector2();
 
     for (const symbol of text.text) {
-      if (!this.font.hasFontData(symbol)) { continue; }
-
-      const symbolData = this.font.fontData[symbol];
-      if (textSize.y < 1 && symbolData.height > 0) {
-        textSize.y = this.font.maxSymbolHeight + text.lineSpacing;
-      }
-
       if (symbol === '\n') {
         textSize.y += this.font.maxSymbolHeight + text.lineSpacing;
 
@@ -181,6 +174,13 @@ export class TextBatch {
 
         maxWidth = 0;
         continue;
+      }
+
+      if (!this.font.hasFontData(symbol)) { continue; }
+
+      const symbolData = this.font.fontData[symbol];
+      if (textSize.y < 1 && symbolData.height > 0) {
+        textSize.y = this.font.maxSymbolHeight + text.lineSpacing;
       }
 
       maxWidth += symbolData.width + text.letterSpacing;
