@@ -147,12 +147,21 @@ export class FightScene extends Scene {
   private calculateTurn(attacking: Player, defending: Player): void {
     let pauseOnStart = 0;
     for (const attackedCell of defending.ship.cells.filter(cell => cell.markedAsAttacked)) {
-      const damageMultiplier = attackedCell.markedAsProtected
+      let damage = attacking.playerData.attackDamageMin + Math.random() *
+        (attacking.playerData.attackDamageMax - attacking.playerData.attackDamageMin);
+
+      if (Math.random() <= attacking.playerData.criticalChance) {
+        damage *= 2;
+      }
+
+      const protectionMultiplier = attackedCell.markedAsProtected
         ? defending.playerData.protectMultiplier
         : 1.0;
 
+      damage *= protectionMultiplier;
+
       this.actionManager.add(() => {
-        defending.ship.hit(attacking.playerData.attackDamage * damageMultiplier);
+        defending.ship.hit(damage);
 
         const cellAbsolutePosition = attackedCell.renderable.sprite.absoluteMatrix.position.asVector2();
 

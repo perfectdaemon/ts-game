@@ -11,12 +11,22 @@ export class PlayerData {
   shipHealth: number;
 
   attackCount: number;
-  attackDamage: number;
+
+  attackDamageMin: number;
+  attackDamageMax: number;
+  criticalChance: number;
 
   protectCount: number;
   protectMultiplier: number;
+
+  items: {
+    type: ItemType;
+    count: number;
+  }[];
 }
 
 export enum PlayerType { Human, Ai }
+
+export enum ItemType { Heal, MoreAttackCount, MoreProtectCount, IncreaseCriticalChance }
 
 export const FIGHT_GAME_STATE = new InputFightGameState();

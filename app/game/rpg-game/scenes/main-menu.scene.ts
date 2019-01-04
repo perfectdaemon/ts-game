@@ -5,7 +5,7 @@ import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
 import { MAIN_MENU_DATA } from '../assets/main-menu.data';
-import { FIGHT_GAME_STATE, PlayerType } from '../fight/game-state';
+import { FIGHT_GAME_STATE, ItemType, PlayerType } from '../fight/game-state';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { SCENES } from './scenes.const';
@@ -72,8 +72,11 @@ export class MainMenuScene extends Scene {
   private testFight(): void {
     FIGHT_GAME_STATE.enemyData = {
       attackCount: 2,
-      attackDamage: 10,
+      attackDamageMin: 6,
+      attackDamageMax: 12,
+      criticalChance: 0.1,
       cellCount: 5,
+      items: [],
       playerType: PlayerType.Ai,
       protectCount: 2,
       protectMultiplier: 0.5,
@@ -82,8 +85,17 @@ export class MainMenuScene extends Scene {
 
     FIGHT_GAME_STATE.humanData = {
       attackCount: 2,
-      attackDamage: 10,
+      attackDamageMin: 6,
+      attackDamageMax: 12,
+      criticalChance: 0.1,
       cellCount: 5,
+      items: [{
+        count: 1,
+        type: ItemType.IncreaseCriticalChance,
+      }, {
+        count: 2,
+        type: ItemType.MoreProtectCount,
+      }],
       playerType: PlayerType.Human,
       protectCount: 2,
       protectMultiplier: 0.5,

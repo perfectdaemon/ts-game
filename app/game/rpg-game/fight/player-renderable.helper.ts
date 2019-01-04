@@ -4,8 +4,12 @@ import { Vector2 } from '../../../engine/math/vector2';
 import { renderer } from '../../../engine/render/webgl';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
+import { AttackCountItem } from './attack-count-item';
+import { CriticalChanceItem } from './critical-chance-item';
 import { PlayerType } from './game-state';
+import { HealItem } from './heal-item';
 import { Player } from './player';
+import { ProtectCountItem } from './protect-count-item';
 
 export class PlayerRenderableHelper {
   static build(player: Player): void {
@@ -53,6 +57,54 @@ export class PlayerRenderableHelper {
 
       renderable.hitBox = new AABB(renderable.sprite.absoluteMatrix.position.asVector2(), renderable.sprite.size);
     });
+
+    player.items.forEach((item, i) => {
+      const renderable = item.renderable;
+      renderable.background = new Sprite(70, 70);
+      renderable.background.position.set(45 + 80 * i, ship.sprite.height - 45, 2);
+      renderable.background.setVerticesColor(1, 1, 1, 1.0);
+      renderable.background.parent = ship.sprite;
+
+      renderable.countText = new Text();
+      renderable.countText.pivotPoint.set(1, 1);
+      renderable.countText.position.set(renderable.background.width / 2 - 5, renderable.background.height / 2 - 5, 4);
+      renderable.countText.color.set(1, 1, 1, 1.0);
+      renderable.countText.shadowEnabled = true;
+      renderable.countText.shadowColor.set(0, 0, 0, 1.0);
+      renderable.countText.shadowOffset.set(1, 2);
+      renderable.countText.parent = renderable.background;
+
+      renderable.updateCountText(item.count);
+
+      renderable.effectText = new Text();
+      renderable.effectText.pivotPoint.set(0.5, 0.5);
+      renderable.effectText.position.set(0, -12, 3);
+      renderable.effectText.color.set(1, 1, 1, 1.0);
+      renderable.effectText.shadowEnabled = true;
+      renderable.effectText.shadowColor.set(0, 0, 0, 1.0);
+      renderable.effectText.shadowOffset.set(1, 2);
+      renderable.effectText.parent = renderable.background;
+
+      renderable.hitBox = new AABB(
+        renderable.background.absoluteMatrix.position.asVector2(),
+        renderable.background.size,
+      );
+
+      if (item instanceof HealItem) {
+        renderable.background.setVerticesColor(0.1, 0.9, 0.1, 1.0);
+        renderable.effectText.text = '+З';
+      } else if (item instanceof AttackCountItem) {
+        renderable.background.setVerticesColor(0.9, 0.1, 0.1, 1.0);
+        renderable.effectText.text = '+А';
+      } else if (item instanceof CriticalChanceItem) {
+        renderable.background.setVerticesColor(0.9, 0.9, 0.1, 1.0);
+        renderable.effectText.text = '+К';
+      } else if (item instanceof ProtectCountItem) {
+        renderable.background.setVerticesColor(0.1, 0.1, 0.9, 1.0);
+        renderable.effectText.text = '+Щ';
+      }
+
+    });
   }
 
   static getSpritesToRender(player: Player): Sprite[] {
@@ -66,10 +118,22 @@ export class PlayerRenderableHelper {
         cell.renderable.protectMark,
       );
     }
+
+    for (const item of player.items) {
+      result.push(item.renderable.background);
+    }
     return result;
   }
 
   static getTextsToRender(player: Player): Text[] {
-    return [player.ship.renderable.healthText];
+    const result: Text[] = [];
+    result.push(player.ship.renderable.healthText);
+    for (const item of player.items) {
+      result.push(
+        item.renderable.countText,
+        item.renderable.effectText,
+      );
+    }
+    return result;
   }
 }

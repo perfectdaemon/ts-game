@@ -1,8 +1,13 @@
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { IRenderable } from '../render-helper';
-import { PlayerData } from './game-state';
+import { AttackCountItem } from './attack-count-item';
+import { CriticalChanceItem } from './critical-chance-item';
+import { ItemType, PlayerData } from './game-state';
+import { HealItem } from './heal-item';
+import { Item } from './item';
 import { PlayerRenderableHelper } from './player-renderable.helper';
+import { ProtectCountItem } from './protect-count-item';
 import { Ship } from './ship';
 import { ShipCell } from './ship-cell';
 
@@ -14,6 +19,33 @@ export class Player implements IRenderable {
     for (let i = 0; i < playerData.cellCount; ++i) {
       const cell = new ShipCell();
       player.ship.cells.push(cell);
+    }
+
+    for (const itemInfo of playerData.items) {
+      let item: Item;
+      switch (itemInfo.type) {
+        case ItemType.Heal:
+          item = new HealItem();
+          break;
+
+        case ItemType.IncreaseCriticalChance:
+          item = new CriticalChanceItem();
+          break;
+
+        case ItemType.MoreAttackCount:
+          item = new AttackCountItem();
+          break;
+
+        case ItemType.MoreProtectCount:
+          item = new ProtectCountItem();
+          break;
+
+        default:
+          throw new Error(`Unknown item type: ${itemInfo.type}`);
+      }
+
+      item.count = itemInfo.count;
+      player.items.push(item);
     }
 
     player.playerData = playerData;
@@ -30,6 +62,8 @@ export class Player implements IRenderable {
   protectsLeft: number;
 
   ship: Ship = new Ship();
+
+  items: Item[] = [];
 
   getSpritesToRender(): Sprite[] {
     return PlayerRenderableHelper.getSpritesToRender(this);
