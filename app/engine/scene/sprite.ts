@@ -145,12 +145,23 @@ export class Sprite extends Node {
     this.vertices[31] = tmp;
   }
 
-  public setVerticesColor(color: Vector4): void {
-    for (let i = 5; i < 33; i += 9) {
-      this.vertices[i + 0] = color.x;
-      this.vertices[i + 1] = color.y;
-      this.vertices[i + 2] = color.z;
-      this.vertices[i + 3] = color.w;
+  public setVerticesColor(color: Vector4): void;
+  public setVerticesColor(r: number, g: number, b: number, a: number): void;
+  public setVerticesColor(colorOrR: number | Vector4, g?: number, b?: number, a?: number): void {
+    if (colorOrR instanceof Vector4) {
+      this.setVerticesColor(colorOrR.x, colorOrR.y, colorOrR.z, colorOrR.w);
+    } else {
+
+      if (g == null || b == null || a == null) {
+        throw new Error('Not all args passed');
+      }
+
+      for (let i = 5; i < 33; i += 9) {
+        this.vertices[i + 0] = colorOrR;
+        this.vertices[i + 1] = g;
+        this.vertices[i + 2] = b;
+        this.vertices[i + 3] = a;
+      }
     }
   }
 
