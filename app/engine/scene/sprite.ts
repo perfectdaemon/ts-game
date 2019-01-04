@@ -74,6 +74,8 @@ export class Sprite extends Node {
     this.setDefaultVertices();
   }
 
+  get size(): Vector2 { return new Vector2(this.width, this.height); }
+
   public setDefaultVertices(): void {
     this.vertices[0] = (1 - this.pivotPoint.x) * this._width;
     this.vertices[1] = (1 - this.pivotPoint.y) * this._height;
