@@ -160,6 +160,8 @@ export class FightScene extends Scene {
 
       damage *= protectionMultiplier;
 
+      damage = Math.floor(damage);
+
       this.actionManager.add(() => {
         defending.ship.hit(damage);
 
