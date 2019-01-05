@@ -8,6 +8,7 @@ import { MAIN_MENU_DATA } from '../assets/main-menu.data';
 import { FIGHT_GAME_STATE } from '../fight/game-state';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
+import { PLANET_GAME_STATE } from '../planet/game-state';
 import { ItemType } from '../player-data';
 import { SCENES } from './scenes.const';
 
@@ -117,6 +118,31 @@ export class MainMenuScene extends Scene {
   }
 
   private testPlanet(): void {
+    PLANET_GAME_STATE.player = {
+
+      attackCount: 2,
+      attackDamageMin: 6,
+      attackDamageMax: 12,
+      criticalChance: 0.1,
+      cellCount: 5,
+      items: [{
+        count: 1,
+        type: ItemType.IncreaseCriticalChance,
+      }, {
+        count: 2,
+        type: ItemType.MoreProtectCount,
+      }, {
+        count: 2,
+        type: ItemType.MoreAttackCount,
+      }, {
+        count: 1,
+        type: ItemType.Heal,
+      }],
+      protectCount: 2,
+      protectMultiplier: 0.5,
+      shipHealth: 100,
+      shipMaxHealth: 100,
+    };
     this.sceneManager.switchTo(SCENES.planet);
   }
 }

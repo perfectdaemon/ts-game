@@ -7,9 +7,15 @@ import { Scene } from '../../../engine/scenes/scene';
 import { PLANET_DATA } from '../assets/planet.data';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
+import { PLANET_GAME_STATE } from '../planet/game-state';
+import { Player } from '../planet/player';
+import { RenderHelper } from '../render-helper';
 
 export class PlanetScene extends Scene {
   guiManager: GuiManager;
+  renderHelper: RenderHelper;
+
+  player: Player;
 
   constructor() {
     super();
@@ -25,6 +31,10 @@ export class PlanetScene extends Scene {
 
     MenuHelper.loadMenu(this.guiManager, PLANET_DATA);
 
+    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.blankMaterial);
+
+    this.player = Player.build(PLANET_GAME_STATE.player);
+
     return super.load();
   }
 
@@ -36,6 +46,7 @@ export class PlanetScene extends Scene {
 
   render(): void {
     GLOBAL.assets.guiCamera.update();
+    this.renderHelper.render([this.player]);
     this.guiManager.render();
   }
 
