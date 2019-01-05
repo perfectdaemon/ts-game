@@ -23,7 +23,8 @@
     "one-variable-per-declaration": false,
     "array-type": false,
     "no-empty": false,
-    "unified-signatures": false
+    "unified-signatures": false,
+    "object-literal-sort-keys": false,
   },
   "rulesDirectory": []
 }
