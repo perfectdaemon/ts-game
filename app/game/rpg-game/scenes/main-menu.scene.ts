@@ -95,6 +95,12 @@ export class MainMenuScene extends Scene {
       }, {
         count: 2,
         type: ItemType.MoreProtectCount,
+      }, {
+        count: 2,
+        type: ItemType.MoreAttackCount,
+      }, {
+        count: 1,
+        type: ItemType.Heal,
       }],
       playerType: PlayerType.Human,
       protectCount: 2,
