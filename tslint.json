@@ -24,7 +24,7 @@
     "array-type": false,
     "no-empty": false,
     "unified-signatures": false,
-    "object-literal-sort-keys": false,
+    "object-literal-sort-keys": false
   },
   "rulesDirectory": []
 }
