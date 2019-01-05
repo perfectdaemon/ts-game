@@ -15,10 +15,10 @@ In fact it is just a beginning of that.
 * ActionManager (do actions with timeout, continuos and so on, no more timers at your Game class)
 * Menu framework (Main Menu, Settings and so on)
 
-## What is in progress
+## What is in progress at now
 * Tweening (curve-based animations)
 * Sprite animations (spritesheet and object based)
-* Box2d (?)
+* Physics engine - p2 (https://github.com/schteppe/p2.js)
 * GUI (buttons, sliders, inputs)
 * Particles
 
@@ -30,10 +30,10 @@ In fact it is just a beginning of that.
 
 ## Quick start
 
-1. Install **node.js** with **npm**
+1. Install **node.js** with **npm** (https://nodejs.org/en/)
 1. Open your favorite IDE/editor. *I prefer Visual Studio Code.*
 1. Open your favorite terminal (bash, cmd, powershell) at project's root folder
-1. Type ``` $ npm install ``` or ```$ npm i```
-1. Run develop: ``` $ npm run start ``` with watching (file hot reload) and lite-server
+1. Type ``` $ npm install ``` or ```$ npm i``` for package restore
+1. Run develop: ``` $ npm run start ``` with watching (file hot reload) and lite-server   
 or
 1. Get release: ```$ npm run build``` — minified and optimized build at **/dist** folder
