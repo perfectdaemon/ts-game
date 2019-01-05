@@ -85,6 +85,7 @@ export class MainMenuScene extends Scene {
       protectCount: 2,
       protectMultiplier: 0.5,
       shipHealth: 100,
+      shipMaxHealth: 100,
     };
 
     FIGHT_GAME_STATE.humanData = {
@@ -109,6 +110,7 @@ export class MainMenuScene extends Scene {
       protectCount: 2,
       protectMultiplier: 0.5,
       shipHealth: 100,
+      shipMaxHealth: 100,
     };
 
     this.sceneManager.switchTo(SCENES.fight);
