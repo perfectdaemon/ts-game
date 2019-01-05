@@ -7,7 +7,7 @@ import { ParticleEmitterExtensions } from '../fight/emitter-extensions';
 import { FIGHT_GAME_STATE } from '../fight/game-state';
 import { Player } from '../fight/player';
 import { GLOBAL } from '../global';
-import { ParticleEmitter } from '../particles';
+import { SpriteParticleEmitter } from '../particles';
 import { RenderHelper } from '../render-helper';
 
 export enum FightState {
@@ -31,7 +31,7 @@ export class FightScene extends Scene {
   dialog: DialogBox;
 
   renderHelper: RenderHelper;
-  emitter: ParticleEmitter;
+  emitter: SpriteParticleEmitter;
 
   constructor() {
     super();
@@ -41,9 +41,8 @@ export class FightScene extends Scene {
     console.log('Fight scene is loaded');
     this.actionManager = new ActionManager();
     this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.blankMaterial);
-    this.emitter = new ParticleEmitter(
-      this.renderHelper.spriteBatch,
-      GLOBAL.assets.solarMaterial,
+    this.emitter = new SpriteParticleEmitter(
+      this.renderHelper,
       () => ParticleEmitterExtensions.createSmallParticle(),
       64,
     );

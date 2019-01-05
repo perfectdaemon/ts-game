@@ -1,17 +1,17 @@
 import { Vector2 } from '../../../engine/math/vector2';
 import { GLOBAL } from '../global';
-import { Particle, ParticleEmitter } from '../particles';
+import { SpriteParticle, SpriteParticleEmitter } from '../particles';
 
 export class ParticleEmitterExtensions {
-  static createSmallParticle(): Particle {
-    const particle = new Particle();
+  static createSmallParticle(): SpriteParticle {
+    const particle = new SpriteParticle();
     particle.sprite.position.set(0, 0, 50);
     const textureRegion = GLOBAL.assets.solarAtlas.getRegion('circle.png');
     particle.sprite.setTextureRegion(textureRegion, false);
     return particle;
   }
 
-  static emitHit(emitter: ParticleEmitter, position: Vector2): void {
+  static emitHit(emitter: SpriteParticleEmitter, position: Vector2): void {
     for (let i = 0; i < 32; ++i) {
       const particle = emitter.get();
 
@@ -39,7 +39,7 @@ export class ParticleEmitterExtensions {
     }
   }
 
-  static emitHitWithShield(emitter: ParticleEmitter, position: Vector2): void {
+  static emitHitWithShield(emitter: SpriteParticleEmitter, position: Vector2): void {
     for (let i = 0; i < 32; ++i) {
       const particle = emitter.get();
 
@@ -67,7 +67,7 @@ export class ParticleEmitterExtensions {
     }
   }
 
-  static emitCellBoom(emitter: ParticleEmitter, position: Vector2): void {
+  static emitCellBoom(emitter: SpriteParticleEmitter, position: Vector2): void {
     for (let i = 0; i < 64; ++i) {
       const particle = emitter.get();
 
