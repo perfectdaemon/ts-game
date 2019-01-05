@@ -3,6 +3,9 @@
 In theory it is small code-oriented framework for building html5 games.  
 In fact it is just a beginning of that.
 
+## Quick demo
+* https://perfectdaemon.github.io/151/index.html — Simple shooter game for gamedev contest (http://igdc.ru/igdc_top.php?konkurs=151), February, 2018
+
 ## What have we got?
 * WebGL rendering
 * Scene management: camera, node
@@ -15,7 +18,7 @@ In fact it is just a beginning of that.
 * ActionManager (do actions with timeout, continuos and so on, no more timers at your Game class)
 * Menu framework (Main Menu, Settings and so on)
 
-## What is in progress at now
+## What is in progress at now?
 * Tweening (curve-based animations)
 * Sprite animations (spritesheet and object based)
 * Physics engine - p2 (https://github.com/schteppe/p2.js)
