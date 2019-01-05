@@ -1,13 +1,14 @@
 import { ActionManager } from '../../../engine/helpers/action-manager/action-manager';
 import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
 import { Vector2 } from '../../../engine/math/vector2';
+import { Vector4 } from '../../../engine/math/vector4';
 import { Scene } from '../../../engine/scenes/scene';
 import { DialogBox } from '../dialog-box';
 import { ParticleEmitterExtensions } from '../fight/emitter-extensions';
 import { FIGHT_GAME_STATE } from '../fight/game-state';
 import { Player } from '../fight/player';
 import { GLOBAL } from '../global';
-import { SpriteParticleEmitter } from '../particles';
+import { SpriteParticleEmitter, TextParticleEmitter } from '../particles';
 import { RenderHelper } from '../render-helper';
 
 export enum FightState {
@@ -32,6 +33,7 @@ export class FightScene extends Scene {
 
   renderHelper: RenderHelper;
   emitter: SpriteParticleEmitter;
+  textEmitter: TextParticleEmitter;
 
   constructor() {
     super();
@@ -46,6 +48,12 @@ export class FightScene extends Scene {
       () => ParticleEmitterExtensions.createSmallParticle(),
       64,
     );
+
+    this.textEmitter = new TextParticleEmitter(
+      this.renderHelper,
+      () => ParticleEmitterExtensions.createTextParticle(),
+      8,
+    );
     this.dialog = new DialogBox();
     this.reset();
     return super.load();
@@ -55,11 +63,13 @@ export class FightScene extends Scene {
     GLOBAL.assets.gameCamera.update();
     this.renderHelper.render([this.human, this.enemy, this.dialog]);
     this.emitter.render();
+    this.textEmitter.render();
   }
 
   update(deltaTime: number): void {
     this.actionManager.update(deltaTime);
     this.emitter.update(deltaTime);
+    this.textEmitter.update(deltaTime);
   }
 
   onKeyDown(key: Keys): void {
@@ -152,8 +162,11 @@ export class FightScene extends Scene {
       let damage = attacking.playerData.attackDamageMin + Math.random() *
         (attacking.playerData.attackDamageMax - attacking.playerData.attackDamageMin);
 
+      let isCritical: boolean = false;
+
       if (Math.random() <= attacking.playerData.criticalChance) {
         damage *= 2;
+        isCritical = true;
       }
 
       const protectionMultiplier = attackedCell.markedAsProtected
@@ -168,6 +181,12 @@ export class FightScene extends Scene {
         defending.ship.hit(damage);
 
         const cellAbsolutePosition = attackedCell.renderable.sprite.absoluteMatrix.position.asVector2();
+        const damageColor = isCritical
+          ? new Vector4(1, 0.2, 0.2, 1.0)
+          : new Vector4(0.7, 0.7, 0.1, 1.0);
+
+        ParticleEmitterExtensions.emitDamageCount(this.textEmitter, cellAbsolutePosition, damage, damageColor,
+          isCritical ? 1.3 : 1.0);
 
         if (attackedCell.markedAsProtected) {
           ParticleEmitterExtensions.emitHitWithShield(this.emitter, cellAbsolutePosition);

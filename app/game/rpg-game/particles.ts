@@ -74,6 +74,9 @@ export class TextParticle extends ParticleBase {
     this.text.position.addToSelf(this.velocity.multiplyNum(deltaTime));
     const alpha = (this.lifeTime - this.t) / this.lifeTime;
     this.text.color.w = alpha;
+    if (this.text.shadowEnabled) {
+      this.text.shadowColor.w = alpha;
+    }
     this.velocity.multiplyNumSelf(1 - 0.08 * Math.random());
   }
 

@@ -1,6 +1,7 @@
 import { Vector2 } from '../../../engine/math/vector2';
+import { Vector4 } from '../../../engine/math/vector4';
 import { GLOBAL } from '../global';
-import { SpriteParticle, SpriteParticleEmitter } from '../particles';
+import { SpriteParticle, SpriteParticleEmitter, TextParticle, TextParticleEmitter } from '../particles';
 
 export class ParticleEmitterExtensions {
   static createSmallParticle(): SpriteParticle {
@@ -8,6 +9,12 @@ export class ParticleEmitterExtensions {
     particle.sprite.position.set(0, 0, 50);
     const textureRegion = GLOBAL.assets.solarAtlas.getRegion('circle.png');
     particle.sprite.setTextureRegion(textureRegion, false);
+    return particle;
+  }
+
+  static createTextParticle(): TextParticle {
+    const particle = new TextParticle();
+    particle.text.position.set(0, 0, 50);
     return particle;
   }
 
@@ -89,5 +96,22 @@ export class ParticleEmitterExtensions {
         .fromAngle(360 * Math.random())
         .multiplyNumSelf(140 + 100 * Math.random());
     }
+  }
+
+  static emitDamageCount(emitter: TextParticleEmitter, position: Vector2, amount: number, color: Vector4, scale: number): void {
+    const particle = emitter.get();
+
+    particle.text.text = amount.toString();
+    particle.text.color.set(color);
+    particle.text.position.set(position);
+    particle.text.shadowEnabled = true;
+    particle.text.shadowOffset.set(1, 1);
+    particle.text.shadowColor.set(0, 0, 0, 1);
+    particle.text.scale = scale;
+    particle.lifeTime = 1.6;
+    particle.pause = 0;
+    particle.velocity = Vector2
+      .fromAngle(-120 + 60 * Math.random())
+      .multiplyNumSelf(140 + 100 * Math.random());
   }
 }
