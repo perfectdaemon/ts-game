@@ -5,6 +5,10 @@ import { Text } from '../../../engine/scene/text';
 import { Player } from './player';
 
 export abstract class Item {
+  abstract removeAfterNumberOfTurns: number;
+
+  abstract name: string;
+
   count: number;
 
   renderable: ItemRenderable = new ItemRenderable();
