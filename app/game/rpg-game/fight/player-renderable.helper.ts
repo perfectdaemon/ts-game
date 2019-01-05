@@ -91,16 +91,16 @@ export class PlayerRenderableHelper {
       );
 
       if (item instanceof HealItem) {
-        renderable.background.setVerticesColor(0.1, 0.9, 0.1, 1.0);
+        renderable.background.setVerticesColor(0.1, 0.7, 0.1, 1.0);
         renderable.effectText.text = '+З';
       } else if (item instanceof AttackCountItem) {
-        renderable.background.setVerticesColor(0.9, 0.1, 0.1, 1.0);
+        renderable.background.setVerticesColor(0.7, 0.1, 0.1, 1.0);
         renderable.effectText.text = '+А';
       } else if (item instanceof CriticalChanceItem) {
-        renderable.background.setVerticesColor(0.9, 0.9, 0.1, 1.0);
+        renderable.background.setVerticesColor(0.7, 0.7, 0.1, 1.0);
         renderable.effectText.text = '+К';
       } else if (item instanceof ProtectCountItem) {
-        renderable.background.setVerticesColor(0.1, 0.1, 0.9, 1.0);
+        renderable.background.setVerticesColor(0.1, 0.1, 0.7, 1.0);
         renderable.effectText.text = '+Щ';
       }
 
