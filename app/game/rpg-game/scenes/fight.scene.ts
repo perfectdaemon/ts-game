@@ -75,6 +75,8 @@ export class FightScene extends Scene {
       .screenToWorld(position)
       .asVector2();
 
+    this.checkItemsClick(worldPosition);
+
     if (this.fightState === FightState.HumanTurnProtect) {
       const result = this.human.ship.cells.filter(c => c.isMouseOver(worldPosition));
       if (result.length > 1) { throw new Error('Hit too many cells'); }
@@ -212,5 +214,36 @@ export class FightScene extends Scene {
     }
 
     this.fightState = newState;
+  }
+
+  private checkItemsClick(worldPosition: Vector2): void {
+    if (this.fightState !== FightState.HumanTurnAttack && this.fightState !== FightState.HumanTurnProtect) {
+      return;
+    }
+
+    const result = this.human.items.filter(i => i.isMouseOver(worldPosition));
+    if (result.length > 1) { throw new Error('Hit too many items'); }
+    if (result.length === 0) { return; }
+
+    const item = result[0];
+
+    if (!item.canUse(this.human, this.enemy)) {
+      const currentText = this.dialog.text.text;
+      this.actionManager
+        .add(() => this.dialog.text.text = `Нельзя использовать «${item.name}»`)
+        .then(() => this.dialog.text.text = currentText, 2.0);
+      return;
+    }
+
+    this.actionManager
+      .add(() => this.dialog.text.text = `Используем «${item.name}»`)
+      .then(() => this.setFightState(this.fightState), 2.0);
+
+    item.use(this.human, this.enemy);
+    this.human.activeItems.push({
+      item,
+      other: this.enemy,
+      roundLeft: item.removeAfterNumberOfTurns,
+    });
   }
 }

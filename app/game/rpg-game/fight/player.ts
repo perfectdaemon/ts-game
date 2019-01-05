@@ -65,6 +65,12 @@ export class Player implements IRenderable {
 
   items: Item[] = [];
 
+  activeItems: {
+    item: Item,
+    roundLeft: number,
+    other: Player,
+  }[] = [];
+
   getSpritesToRender(): Sprite[] {
     return PlayerRenderableHelper.getSpritesToRender(this);
   }
@@ -80,6 +86,16 @@ export class Player implements IRenderable {
 
     this.attacksLeft = this.playerData.attackCount;
     this.protectsLeft = this.playerData.protectCount;
+
+    for (const activeItem of this.activeItems) {
+      if (--activeItem.roundLeft > 0) {
+        continue;
+      }
+
+      activeItem.item.removeEffect(this, activeItem.other);
+    }
+
+    this.activeItems = this.activeItems.filter(it => it.roundLeft > 0);
   }
 
   hasProtectsLeft(): boolean {
