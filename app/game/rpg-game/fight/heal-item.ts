@@ -6,7 +6,7 @@ export class HealItem extends Item {
 
   removeAfterNumberOfTurns: number = 0;
 
-  private _amount: number;
+  private _amount: number = 30;
 
   canUse(self: Player, other: Player): boolean {
     return super.canUse(self, other) && self.ship.health < self.playerData.shipHealth;
