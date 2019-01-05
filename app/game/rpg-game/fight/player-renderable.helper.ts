@@ -6,9 +6,9 @@ import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { AttackCountItem } from './attack-count-item';
 import { CriticalChanceItem } from './critical-chance-item';
-import { PlayerType } from './game-state';
 import { HealItem } from './heal-item';
 import { Player } from './player';
+import { PlayerType } from './player-type';
 import { ProtectCountItem } from './protect-count-item';
 
 export class PlayerRenderableHelper {
@@ -16,7 +16,7 @@ export class PlayerRenderableHelper {
     const ship = player.ship.renderable;
     ship.sprite = new Sprite(280, 660, new Vector2(0, 0));
 
-    switch (player.playerData.playerType) {
+    switch (player.type) {
       case PlayerType.Human:
         ship.sprite.position.set(10, 10, 1);
         ship.sprite.setVerticesColor(0.8, 0.9, 0.8, 1.0);

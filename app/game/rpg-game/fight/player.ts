@@ -1,21 +1,23 @@
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
+import { ItemType, PlayerData } from '../player-data';
 import { IRenderable } from '../render-helper';
 import { AttackCountItem } from './attack-count-item';
 import { CriticalChanceItem } from './critical-chance-item';
-import { ItemType, PlayerData } from './game-state';
 import { HealItem } from './heal-item';
 import { Item } from './item';
 import { PlayerRenderableHelper } from './player-renderable.helper';
+import { PlayerType } from './player-type';
 import { ProtectCountItem } from './protect-count-item';
 import { Ship } from './ship';
 import { ShipCell } from './ship-cell';
 
 export class Player implements IRenderable {
 
-  static build(playerData: PlayerData): Player {
+  static build(playerData: PlayerData, playerType: PlayerType): Player {
     const player = new Player();
     player.ship.health = playerData.shipHealth;
+    player.type = playerType;
     for (let i = 0; i < playerData.cellCount; ++i) {
       const cell = new ShipCell();
       player.ship.cells.push(cell);
@@ -57,6 +59,7 @@ export class Player implements IRenderable {
   }
 
   playerData: PlayerData;
+  type: PlayerType;
 
   attacksLeft: number;
   protectsLeft: number;

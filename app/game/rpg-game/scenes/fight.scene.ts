@@ -7,6 +7,7 @@ import { DialogBox } from '../dialog-box';
 import { ParticleEmitterExtensions } from '../fight/emitter-extensions';
 import { FIGHT_GAME_STATE } from '../fight/game-state';
 import { Player } from '../fight/player';
+import { PlayerType } from '../fight/player-type';
 import { GLOBAL } from '../global';
 import { SpriteParticleEmitter, TextParticleEmitter } from '../particles';
 import { RenderHelper } from '../render-helper';
@@ -151,8 +152,8 @@ export class FightScene extends Scene {
 
   private reset(): void {
     this.turnNumber = 1;
-    this.human = Player.build(FIGHT_GAME_STATE.humanData);
-    this.enemy = Player.build(FIGHT_GAME_STATE.enemyData);
+    this.human = Player.build(FIGHT_GAME_STATE.humanData, PlayerType.Human);
+    this.enemy = Player.build(FIGHT_GAME_STATE.enemyData, PlayerType.Ai);
     this.setFightState(FightState.Start);
   }
 
