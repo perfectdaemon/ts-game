@@ -5,4 +5,5 @@ export const SCENES = {
   gameOver: 'gameOver',
   help: 'help',
   fight: 'fight',
+  planet: 'planet',
 };

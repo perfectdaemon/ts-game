@@ -40,6 +40,10 @@ export class MainMenuScene extends Scene {
       .elements['TestFightButton']
       .onClick = () => this.testFight();
 
+    this.guiManager
+      .elements['TestPlanetButton']
+      .onClick = () => this.testPlanet();
+
     return super.load();
   }
 
@@ -108,5 +112,9 @@ export class MainMenuScene extends Scene {
     };
 
     this.sceneManager.switchTo(SCENES.fight);
+  }
+
+  private testPlanet(): void {
+    this.sceneManager.switchTo(SCENES.planet);
   }
 }
