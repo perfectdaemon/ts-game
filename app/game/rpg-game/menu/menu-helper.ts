@@ -1,5 +1,6 @@
 import { GuiButton } from '../../../engine/gui/gui-button';
 import { GuiManager } from '../../../engine/gui/gui-manager';
+import { TextureAtlas } from '../../../engine/render/texture-atlas';
 import { MenuData } from './menu-data';
 
 export class MenuHelper {
@@ -16,6 +17,22 @@ export class MenuHelper {
       button.label.color.set(element.labelColor);
       button.label.text = element.labelText;
       button.label.scale = element.labelScale;
+      if (element.labelPosition != null) {
+        button.label.position.set(element.labelPosition);
+      }
+
+      if (element.labelPivot != null) {
+        button.label.pivotPoint.set(element.labelPivot);
+      }
+
+      if (element.textureRegion != null) {
+        const textureAtlas = gui.material.textures[0].texture as TextureAtlas;
+        if (textureAtlas != null) {
+          const region = textureAtlas.getRegion(element.textureRegion.name);
+          button.sprite.setTextureRegion(region, element.textureRegion.adjustSize);
+        }
+      }
+
       button.updateHitBox();
 
       button.onMouseOver = (el, ev) => (el as GuiButton).sprite.setVerticesColor(element.hoverVerticesColor);

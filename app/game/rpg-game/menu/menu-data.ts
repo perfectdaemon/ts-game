@@ -10,10 +10,16 @@ export class MenuData {
       labelText: string;
       labelColor: Vector4;
       labelScale: number;
+      labelPivot?: Vector2;
+      labelPosition?: Vector2;
       size: Vector2;
       position: Vector3;
       pivotPoint: Vector2;
       verticesColor: Vector4;
       hoverVerticesColor: Vector4;
+      textureRegion?: {
+        name: string;
+        adjustSize: boolean;
+      }
     }[];
-};
+}
