@@ -109,4 +109,8 @@ export class GuiManager {
   removeElement(element: GuiElement) {
     delete this.elements[element.name];
   }
+
+  getElement<T extends GuiElement>(name: string): T {
+    return this.elements[name] as T;
+  }
 }
