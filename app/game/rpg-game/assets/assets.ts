@@ -7,13 +7,18 @@ import { Texture } from '../../../engine/render/texture';
 import { TextureAtlas } from '../../../engine/render/texture-atlas';
 import { Camera } from '../../../engine/scene/camera';
 import { DEFAULT_FONT, DEFAULT_MATERIAL, DEFAULT_SHADER } from './default';
-import { DEFAULT_ATLAS_DATA } from './textures';
+import { DEFAULT_ATLAS_DATA, PLANET_ATLAS_DATA } from './textures';
 
 export class Assets {
   shader: ShaderProgram;
   blankMaterial: Material;
+
   solarAtlas: TextureAtlas;
   solarMaterial: Material;
+
+  planetAtlas: TextureAtlas;
+  planetMaterial: Material;
+
   font: Font;
 
   gameCamera: Camera;
@@ -38,6 +43,10 @@ export class Assets {
     DEFAULT_MATERIAL.textures[0].texture = undefined;
     DEFAULT_MATERIAL.textures[0].textureAtlas = this.solarAtlas;
     this.solarMaterial = await this.loaders.loadMaterial(DEFAULT_MATERIAL);
+
+    this.planetAtlas = await this.loaders.loadTextureAtlas(PLANET_ATLAS_DATA);
+    DEFAULT_MATERIAL.textures[0].textureAtlas = this.planetAtlas;
+    this.planetMaterial = await this.loaders.loadMaterial(DEFAULT_MATERIAL);
 
     return Promise.resolve();
   }
