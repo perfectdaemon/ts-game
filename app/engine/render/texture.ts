@@ -33,14 +33,12 @@ export class Texture {
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, this.getWebGLWrap(wrapS));
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, this.getWebGLWrap(wrapT));
-    gl.bindTexture(gl.TEXTURE_2D, null);
   }
 
   public setFilter(filter: TextureFilter): void {
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, this.getWebGLFilter(filter));
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, this.getWebGLFilter(filter));
-    gl.bindTexture(gl.TEXTURE_2D, null);
   }
 
   public bind(sampler: number = 0): void {
@@ -94,6 +92,4 @@ export class Texture {
       case TextureFilter.Nearest: return gl.NEAREST;
     }
   }
-
-
 }
