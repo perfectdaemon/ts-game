@@ -31,7 +31,7 @@ export class PlanetScene extends Scene {
 
     MenuHelper.loadMenu(this.guiManager, PLANET_DATA);
 
-    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.blankMaterial);
+    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
 
     this.player = Player.build(PLANET_GAME_STATE.player);
 
