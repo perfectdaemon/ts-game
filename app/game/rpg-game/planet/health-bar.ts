@@ -53,6 +53,6 @@ export class HealthBar {
       this.modifiedTextureRegion.tw = percentage;
     }
 
-    this.current.setTextureRegion(this.modifiedTextureRegion, true);
-  }*/
+    this.current.setTextureRegion(this.modifiedTextureRegion, true);*/
+  }
 }
