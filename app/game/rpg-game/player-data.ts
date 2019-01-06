@@ -16,6 +16,8 @@ export class PlayerData {
     type: ItemType;
     count: number;
   }[];
+
+  credits: number;
 }
 
 export enum ItemType { Heal, MoreAttackCount, MoreProtectCount, IncreaseCriticalChance }
