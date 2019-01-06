@@ -11,7 +11,7 @@ export const MAIN_MENU_DATA: MenuData = {
   background: {},
   buttons: [
     {
-      name: "StartButton",
+      name: 'StartButton',
       labelText: 'Start',
       labelColor: new Vector4(0.3, 0.3, 0.3, 1.0),
       labelScale: 1.0,
@@ -23,7 +23,7 @@ export const MAIN_MENU_DATA: MenuData = {
     },
 
     {
-      name: "HelpButton",
+      name: 'HelpButton',
       labelText: 'Help',
       labelColor: new Vector4(0.3, 0.3, 0.3, 1.0),
       labelScale: 1.0,
@@ -35,7 +35,7 @@ export const MAIN_MENU_DATA: MenuData = {
     },
 
     {
-      name: "TestFightButton",
+      name: 'TestFightButton',
       labelText: 'Test Fight',
       labelColor: new Vector4(0.3, 0.3, 0.3, 1.0),
       labelScale: 1.0,
@@ -47,7 +47,7 @@ export const MAIN_MENU_DATA: MenuData = {
     },
 
     {
-      name: "TestPlanetButton",
+      name: 'TestPlanetButton',
       labelText: 'Test Planet',
       labelColor: new Vector4(0.3, 0.3, 0.3, 1.0),
       labelScale: 1.0,
