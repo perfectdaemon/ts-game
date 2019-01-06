@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="-176.18185"
-     inkscape:cy="450.16925"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="-93.182913"
+     inkscape:cy="450.98401"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -914,15 +914,15 @@
        sodipodi:nodetypes="cccc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#19de73;fill-opacity:1;stroke:none;stroke-width:0.37795275;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#19de73;fill-opacity:1;stroke:none;stroke-width:0.37795275;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        x="-265.90158"
-       y="383.89029"
+       y="388.84003"
        id="text969"><tspan
          sodipodi:role="line"
          id="tspan967"
          x="-265.90158"
-         y="383.89029"
-         style="font-size:18.66666667px;fill:#19de73;fill-opacity:1;stroke:none;stroke-width:0.37795275;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;-inkscape-font-specification:'sans-serif Bold';font-family:sans-serif;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;">Лазер тысячи истин</tspan></text>
+         y="388.84003"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:18.66666603px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#19de73;fill-opacity:1;stroke:none;stroke-width:0.37795275;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">Лазер тысячи истин</tspan></text>
     <g
        id="g5425"
        transform="translate(51.23023,181.83409)">
@@ -1088,40 +1088,40 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-       x="-86"
-       y="408"
+       x="-100.14214"
+       y="413.65686"
        id="text996"><tspan
          sodipodi:role="line"
          id="tspan994"
-         x="-86"
-         y="408"
+         x="-100.14214"
+         y="413.65686"
          style="font-size:21.33333397px;fill:#e80000;fill-opacity:1">8-12</tspan></text>
     <text
        id="text1010"
-       y="405.61954"
-       x="-266.70279"
+       y="411.2764"
+       x="-265.79221"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        xml:space="preserve"><tspan
          style="font-size:18.66666603px;fill:#ffffff;fill-opacity:1"
-         y="405.61954"
-         x="-266.70279"
+         y="411.2764"
+         x="-265.79221"
          id="tspan1008"
          sodipodi:role="line">Урон</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:13.33333302px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#a8bbef;fill-opacity:1;stroke:none;"
-       x="-268"
-       y="426.5"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:13.33333302px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#a8bbef;fill-opacity:1;stroke:none"
+       x="-267.11969"
+       y="435.69238"
        id="text1014"><tspan
          sodipodi:role="line"
-         x="-268"
-         y="426.5"
-         style="font-size:14.66666698px;line-height:13.33333302px;fill:#a8bbef;fill-opacity:1;"
+         x="-267.11969"
+         y="435.69238"
+         style="font-size:14.66666698px;line-height:13.33333302px;fill:#a8bbef;fill-opacity:1"
          id="tspan1040">Повышает вероятность </tspan><tspan
          sodipodi:role="line"
-         x="-268"
-         y="447.11237"
-         style="font-size:14.66666698px;line-height:13.33333302px;fill:#a8bbef;fill-opacity:1;"
+         x="-267.11969"
+         y="456.30475"
+         style="font-size:14.66666698px;line-height:13.33333302px;fill:#a8bbef;fill-opacity:1"
          id="tspan1052">критического удара</tspan></text>
     <text
        xml:space="preserve"
@@ -1421,8 +1421,8 @@
        id="health_bar"
        width="345.05676"
        height="27.04015"
-       x="-424.14273"
-       y="31.55621"
+       x="-430.14273"
+       y="-19.029503"
        rx="10"
        ry="10"
        inkscape:label="#rect1136" />
