@@ -1,0 +1,11 @@
+textures: planet.png
+health_bar_back.png	0	0	40	357	0	0	357	40	r
+repair_button.png	41	0	56	355	0	0	355	56	r
+health_bar.png	98	0	30	348	0	0	348	30	r
+button_red.png	129	0	56	219	0	0	219	56	r
+button_green.png	186	0	56	219	0	0	219	56	r
+ship_cell.png	162	220	93	93	0	0	93	93	
+laser1.png	218	314	37	87	0	0	37	87	
+shield1.png	153	314	64	64	0	0	64	64	
+inventory_cell.png	41	356	59	59	0	0	59	59	
+dialog_triangle.png	101	349	35	35	0	0	35	35	
