@@ -1,3 +1,4 @@
+import { GuiButton } from '../../../engine/gui/gui-button';
 import { GuiManager } from '../../../engine/gui/gui-manager';
 import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
 import { Vector2 } from '../../../engine/math/vector2';
@@ -30,19 +31,19 @@ export class MainMenuScene extends Scene {
     MenuHelper.loadMenu(this.guiManager, MAIN_MENU_DATA);
 
     this.guiManager
-      .elements['StartButton']
+      .getElement<GuiButton>('StartButton')
       .onClick = () => this.sceneManager.switchTo(SCENES.game);
 
     this.guiManager
-      .elements['HelpButton']
+      .getElement<GuiButton>('HelpButton')
       .onClick = () => this.sceneManager.switchTo(SCENES.help);
 
     this.guiManager
-      .elements['TestFightButton']
+      .getElement<GuiButton>('TestFightButton')
       .onClick = () => this.testFight();
 
     this.guiManager
-      .elements['TestPlanetButton']
+      .getElement<GuiButton>('TestPlanetButton')
       .onClick = () => this.testPlanet();
 
     return super.load();
