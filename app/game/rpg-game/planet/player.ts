@@ -44,7 +44,7 @@ export class Player implements IRenderable {
       new ShipCell(200, 225),
     );
 
-    player.health = new HealthBar(20, 550);
+    player.health = new HealthBar(20, 630);
     player.health.updateHealth(playerData.shipHealth, playerData.shipMaxHealth);
 
     return player;
@@ -57,8 +57,8 @@ export class Player implements IRenderable {
 
   playerData: PlayerData;
 
-  updateText(): void {
-
+  updateHealth(): void {
+    this.health.updateHealth(this.playerData.shipHealth, this.playerData.shipMaxHealth);
   }
 
   getSpritesToRender(): Sprite[] {
