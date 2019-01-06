@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710678"
-     inkscape:cx="-9.8478568"
-     inkscape:cy="537.08981"
+     inkscape:zoom="1"
+     inkscape:cx="-176.18185"
+     inkscape:cy="450.16925"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1388,7 +1388,7 @@
        height="89.285713"
        width="89.285706"
        id="ship_cell"
-       style="fill:#ffffff;fill-opacity:0.45959598;stroke:#373f6e;stroke-width:3.77952766;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.97424897" />
+       style="fill:#ffffff;fill-opacity:1;stroke:#373f6e;stroke-width:3.77952766;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
        sodipodi:nodetypes="cccc"
        inkscape:connector-curvature="0"
@@ -1405,7 +1405,7 @@
        height="57.152004"
        width="57.151997"
        id="inventory_cell"
-       style="fill:#ffffff;fill-opacity:0.45959598;stroke:#373f6e;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43939394" />
+       style="fill:#ffffff;fill-opacity:1;stroke:#373f6e;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
        ry="10"
        rx="10"
@@ -1485,5 +1485,13 @@
        x="-680.96149"
        y="28.190765"
        ry="10" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="blank"
+       width="2"
+       height="2"
+       x="-401.25"
+       y="168.75"
+       inkscape:label="#rect1169" />
   </g>
 </svg>
