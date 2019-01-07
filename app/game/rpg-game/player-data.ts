@@ -12,11 +12,6 @@ export class PlayerData {
   protectCount: number;
   protectMultiplier: number;
 
-  consumableItems: {
-    type: ConsumableItemType;
-    count: number;
-  }[];
-
   credits: number;
   inventorySize: number;
   inventory: InventoryItemData[];
@@ -47,10 +42,15 @@ export class InventoryItemData {
   misc?: {
     count: number;
   };
+
+  consumable?: {
+    type: ConsumableItemType;
+    count: number;
+  };
 }
 
 export enum ConsumableItemType { Heal, MoreAttackCount, MoreProtectCount, IncreaseCriticalChance }
 
-export enum ItemType { Weapon, Shield, Engine, Misc }
+export enum ItemType { Weapon, Shield, Engine, Misc, Consumable }
 
 export enum ItemRarity { Usual, Special, Legendary }

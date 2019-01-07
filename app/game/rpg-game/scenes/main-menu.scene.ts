@@ -10,7 +10,7 @@ import { FIGHT_GAME_STATE } from '../fight/game-state';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
-import { ConsumableItemType } from '../player-data';
+import { ConsumableItemType, ItemRarity, ItemType } from '../player-data';
 import { SCENES } from './scenes.const';
 
 export class MainMenuScene extends Scene {
@@ -83,7 +83,6 @@ export class MainMenuScene extends Scene {
       attackDamageMax: 12,
       criticalChance: 0.1,
       cellCount: 5,
-      consumableItems: [],
       protectCount: 2,
       protectMultiplier: 0.5,
       shipHealth: 100,
@@ -99,28 +98,57 @@ export class MainMenuScene extends Scene {
       attackDamageMax: 12,
       criticalChance: 0.1,
       cellCount: 5,
-      consumableItems: [{
-        count: 1,
-        type: ConsumableItemType.IncreaseCriticalChance,
-      }, {
-        count: 2,
-        type: ConsumableItemType.MoreProtectCount,
-      }, {
-        count: 2,
-        type: ConsumableItemType.MoreAttackCount,
-      }, {
-        count: 1,
-        type: ConsumableItemType.Heal,
-      }],
       protectCount: 2,
       protectMultiplier: 0.5,
       shipHealth: 100,
       shipMaxHealth: 100,
       credits: 0,
       inventorySize: 16,
-      inventory: [],
-    };
+      inventory: [
+        {
+          type: ItemType.Consumable,
+          consumable: {
+            type: ConsumableItemType.Heal,
+            count: 1,
+          },
+          cost: 50,
+          rarity: ItemRarity.Special,
+          name: 'Лечение',
+        },
+        {
+          type: ItemType.Consumable,
+          consumable: {
+            type: ConsumableItemType.IncreaseCriticalChance,
+            count: 1,
+          },
+          cost: 50,
+          rarity: ItemRarity.Special,
+          name: 'Повысить шанс крит. урона',
+        },
 
+        {
+          type: ItemType.Consumable,
+          consumable: {
+            type: ConsumableItemType.MoreProtectCount,
+            count: 2,
+          },
+          cost: 50,
+          rarity: ItemRarity.Special,
+          name: '+1 Защита',
+        },
+
+        {
+          type: ItemType.Consumable,
+          consumable: {
+            type: ConsumableItemType.MoreAttackCount,
+            count: 2,
+          },
+          cost: 50,
+          rarity: ItemRarity.Special,
+          name: '+1 нападение',
+        },
+      ],
+    };
     this.sceneManager.switchTo(SCENES.fight);
   }
 
@@ -132,26 +160,64 @@ export class MainMenuScene extends Scene {
       attackDamageMax: 12,
       criticalChance: 0.1,
       cellCount: 5,
-      consumableItems: [{
-        count: 1,
-        type: ConsumableItemType.IncreaseCriticalChance,
-      }, {
-        count: 2,
-        type: ConsumableItemType.MoreProtectCount,
-      }, {
-        count: 2,
-        type: ConsumableItemType.MoreAttackCount,
-      }, {
-        count: 1,
-        type: ConsumableItemType.Heal,
-      }],
       protectCount: 2,
       protectMultiplier: 0.5,
       shipHealth: 63,
       shipMaxHealth: 100,
       credits: 59,
       inventorySize: 16,
-      inventory: [],
+      inventory: [
+        {
+          type: ItemType.Consumable,
+          consumable: {
+            type: ConsumableItemType.Heal,
+            count: 1,
+          },
+          cost: 50,
+          rarity: ItemRarity.Special,
+          name: 'Лечение',
+        },
+        {
+          type: ItemType.Consumable,
+          consumable: {
+            type: ConsumableItemType.IncreaseCriticalChance,
+            count: 1,
+          },
+          cost: 50,
+          rarity: ItemRarity.Special,
+          name: 'Повысить шанс крит. урона',
+        },
+        {
+          type: ItemType.Consumable,
+          consumable: {
+            type: ConsumableItemType.MoreProtectCount,
+            count: 2,
+          },
+          cost: 50,
+          rarity: ItemRarity.Special,
+          name: '+1 Защита',
+        },
+        {
+          type: ItemType.Consumable,
+          consumable: {
+            type: ConsumableItemType.MoreAttackCount,
+            count: 2,
+          },
+          cost: 50,
+          rarity: ItemRarity.Special,
+          name: '+1 нападение',
+        },
+        {
+          type: ItemType.Weapon,
+          name: 'Какой-то лазер',
+          cost: 300,
+          rarity: ItemRarity.Usual,
+          weapon: {
+            damageMin: 6,
+            damageMax: 12,
+          },
+        },
+      ],
     };
     this.sceneManager.switchTo(SCENES.planet);
   }

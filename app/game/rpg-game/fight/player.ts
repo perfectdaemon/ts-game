@@ -1,11 +1,11 @@
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
-import { ConsumableItemType, PlayerData } from '../player-data';
+import { ConsumableItemType, ItemType, PlayerData } from '../player-data';
 import { IRenderable } from '../render-helper';
 import { AttackCountItem } from './attack-count-item';
+import { ConsumableItem } from './consumable-item';
 import { CriticalChanceItem } from './critical-chance-item';
 import { HealItem } from './heal-item';
-import { ConsumableItem } from './consumable-item';
 import { PlayerRenderableHelper } from './player-renderable.helper';
 import { PlayerType } from './player-type';
 import { ProtectCountItem } from './protect-count-item';
@@ -23,9 +23,16 @@ export class Player implements IRenderable {
       player.ship.cells.push(cell);
     }
 
-    for (const itemInfo of playerData.consumableItems) {
+    const consumableItems = playerData.inventory.filter(it => it.type === ItemType.Consumable);
+
+    for (const itemInfo of consumableItems) {
       let item: ConsumableItem;
-      switch (itemInfo.type) {
+
+      if (itemInfo.consumable == null) {
+        throw new Error('Item type is consumable but no consumable data found')
+      }
+
+      switch (itemInfo.consumable.type) {
         case ConsumableItemType.Heal:
           item = new HealItem();
           break;
@@ -46,7 +53,7 @@ export class Player implements IRenderable {
           throw new Error(`Unknown item type: ${itemInfo.type}`);
       }
 
-      item.count = itemInfo.count;
+      item.count = itemInfo.consumable.count;
       player.consumableItems.push(item);
     }
 

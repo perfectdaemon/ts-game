@@ -13,7 +13,7 @@ export class Inventory {
       const cellX = x + cellSize * (i % cellPerRow);
       const cellY = y + cellSize * (div(i, cellPerRow));
 
-      const itemData = playerData.inventory.length > 1
+      const itemData = playerData.inventory.length > i
         ? playerData.inventory[i]
         : undefined;
 
@@ -80,7 +80,7 @@ export class InventoryCell {
         engineItem.dodgeMultiplier = itemData.engine.dodgeMultiplier;
         engineItem.speedBoost = itemData.engine.speedBoost;
 
-        itemRegionName = 'dialog_triangle.png';
+        itemRegionName = '';
 
         this.item = engineItem;
         break;
@@ -93,9 +93,21 @@ export class InventoryCell {
         const miscItem = new MiscItem();
         miscItem.count = itemData.misc.count;
 
-        itemRegionName = 'blank.png';
+        itemRegionName = '';
 
         this.item = miscItem;
+        break;
+      case ItemType.Consumable:
+        if (itemData.consumable == null) {
+          throw new Error(`ItemType is consumable but no consumable data provided`);
+        }
+
+        const consumableItem = new MiscItem();
+        consumableItem.count = itemData.consumable.count;
+
+        itemRegionName = '';
+
+        this.item = consumableItem;
         break;
       default:
         throw new Error(`Unknown item type: ${itemData.type}`);
@@ -106,10 +118,27 @@ export class InventoryCell {
     this.item.rarity = itemData.rarity;
     this.item.type = itemData.type;
 
-    const itemRegion = GLOBAL.assets.planetAtlas.getRegion(itemRegionName);
-    this.item.sprite = new Sprite();
-    this.item.sprite.setTextureRegion(itemRegion, true);
+    const itemRegion = GLOBAL.assets.planetAtlas.getRegion(itemRegionName || 'blank.png');
+    this.item.sprite = new Sprite(40, 40);
+    this.item.sprite.setTextureRegion(itemRegion, !!itemRegionName);
     this.item.sprite.position.set(0, 0, 6);
+    this.item.sprite.parent = this.back;
+    this.item.sprite.rotation = 45;
+    this.item.sprite.width *= 0.6;
+    this.item.sprite.height *= 0.6;
+    this.item.sprite.setDefaultVertices();
+
+    switch (itemData.rarity) {
+      case ItemRarity.Usual:
+        this.back.setVerticesColor(1, 1, 1, 0.5);
+        break;
+      case ItemRarity.Special:
+        this.back.setVerticesColor(0.5, 0.5, 1.0, 0.5);
+        break;
+      case ItemRarity.Legendary:
+        this.back.setVerticesColor(206 / 255, 92 / 255, 0, 1.0);
+        break;
+    }
   }
 }
 
@@ -140,5 +169,9 @@ export class EngineItem extends BaseItem {
 }
 
 export class MiscItem extends BaseItem {
+  count: number;
+}
+
+export class ConsumableItem extends BaseItem {
   count: number;
 }
