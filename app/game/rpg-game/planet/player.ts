@@ -6,6 +6,7 @@ import { GLOBAL } from '../global';
 import { PlayerData } from '../player-data';
 import { IRenderable } from '../render-helper';
 import { HealthBar } from './health-bar';
+import { Inventory } from './inventory';
 import { PlayerStatsRow } from './player-stats-row';
 import { ShipCell } from './ship-cell';
 
@@ -47,6 +48,8 @@ export class Player implements IRenderable {
     player.health = new HealthBar(20, 630);
     player.health.updateHealth(playerData.shipHealth, playerData.shipMaxHealth);
 
+    player.inventory  = new Inventory(playerData, 480, 200);
+
     return player;
   }
 
@@ -54,6 +57,7 @@ export class Player implements IRenderable {
   playerStats: PlayerStatsRow[] = [];
   shipCells: ShipCell[] = [];
   health: HealthBar;
+  inventory: Inventory;
 
   playerData: PlayerData;
 
@@ -65,6 +69,12 @@ export class Player implements IRenderable {
     const result: Sprite[] = [this.background, this.health.back, this.health.current];
     for (const cell of this.shipCells) {
       result.push(cell.cellSprite);
+    }
+    for (const cell of this.inventory.cells) {
+      result.push(cell.back);
+      if (cell.item != null) {
+        result.push(cell.item.sprite);
+      }
     }
     return result;
   }
