@@ -222,7 +222,7 @@ export class MainMenuScene extends Scene {
 
     PLANET_GAME_STATE.planet = {
       name: 'Земля',
-      shopSize: 32,
+      shopSize: 24,
       shopItems: [{
         type: ItemType.Weapon,
         name: 'Какой-то лазер',
