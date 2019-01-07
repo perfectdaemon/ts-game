@@ -4,7 +4,7 @@ In theory it is small code-oriented framework for building html5 games.
 In fact it is just a beginning of that.
 
 ## Quick demo
-* https://perfectdaemon.github.io/151/index.html — Simple shooter game for gamedev contest (http://igdc.ru/igdc_top.php?konkurs=151), February, 2018
+* [Simple shooter game](https://perfectdaemon.github.io/151/index.html) — for [IGDC-151 contest](http://igdc.ru/igdc_top.php?konkurs=151), February, 2018
 
 ## What have we got?
 * WebGL rendering
