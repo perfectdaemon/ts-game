@@ -91,17 +91,7 @@ export class PlanetScene extends Scene {
     if (data.credits === 0) {
       console.log('No money - no honey');
       return;
-    }/*
-
-    const price = this.getHealthPointPrice()
-      * (this.player.playerData.shipMaxHealth - this.player.playerData.shipHealth);
-
-    if (price <= data.credits) {
-      data.credits -= price;
-      data.shipHealth = data.shipMaxHealth;
-      console.log(`Full repair`);
-      return;
-    }*/
+    }
 
     const healthPointPrice = this.getHealthPointPrice();
 
