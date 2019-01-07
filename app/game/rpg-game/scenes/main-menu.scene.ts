@@ -219,6 +219,32 @@ export class MainMenuScene extends Scene {
         },
       ],
     };
+
+    PLANET_GAME_STATE.planet = {
+      name: 'Земля',
+      shopSize: 32,
+      shopItems: [{
+        type: ItemType.Weapon,
+        name: 'Какой-то лазер',
+        cost: 300,
+        rarity: ItemRarity.Usual,
+        weapon: {
+          damageMin: 6,
+          damageMax: 12,
+        },
+      },
+      {
+        type: ItemType.Shield,
+        name: 'Какой-то щит',
+        cost: 500,
+        rarity: ItemRarity.Legendary,
+        shield: {
+          shieldMultiplier: 0.45,
+        },
+      },
+      ],
+    };
+
     this.sceneManager.switchTo(SCENES.planet);
   }
 }
