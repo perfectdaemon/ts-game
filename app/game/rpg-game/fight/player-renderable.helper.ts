@@ -58,7 +58,7 @@ export class PlayerRenderableHelper {
       renderable.hitBox = new AABB(renderable.sprite.absoluteMatrix.position.asVector2(), renderable.sprite.size);
     });
 
-    player.items.forEach((item, i) => {
+    player.consumableItems.forEach((item, i) => {
       const renderable = item.renderable;
       renderable.background = new Sprite(70, 70);
       renderable.background.position.set(45 + 80 * i, ship.sprite.height - 45, 2);
@@ -119,7 +119,7 @@ export class PlayerRenderableHelper {
       );
     }
 
-    for (const item of player.items) {
+    for (const item of player.consumableItems) {
       result.push(item.renderable.background);
     }
     return result;
@@ -128,7 +128,7 @@ export class PlayerRenderableHelper {
   static getTextsToRender(player: Player): Text[] {
     const result: Text[] = [];
     result.push(player.ship.renderable.healthText);
-    for (const item of player.items) {
+    for (const item of player.consumableItems) {
       result.push(
         item.renderable.countText,
         item.renderable.effectText,

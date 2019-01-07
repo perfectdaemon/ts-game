@@ -1,7 +1,7 @@
-import { Item } from './item';
+import { ConsumableItem } from './consumable-item';
 import { Player } from './player';
 
-export class AttackCountItem extends Item {
+export class AttackCountItem extends ConsumableItem {
   name: string = '+1 Атака';
   removeAfterNumberOfTurns: number = 0;
 

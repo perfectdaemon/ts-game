@@ -1,7 +1,7 @@
-import { Item } from './item';
+import { ConsumableItem } from './consumable-item';
 import { Player } from './player';
 
-export class ProtectCountItem extends Item {
+export class ProtectCountItem extends ConsumableItem {
   name: string = '+1 Защита';
 
   removeAfterNumberOfTurns: number = 0;

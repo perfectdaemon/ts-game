@@ -1,7 +1,7 @@
-import { Item } from './item';
+import { ConsumableItem } from './consumable-item';
 import { Player } from './player';
 
-export class CriticalChanceItem extends Item {
+export class CriticalChanceItem extends ConsumableItem {
   name: string = 'Повысить вероятность крит. урона';
   removeAfterNumberOfTurns: number = 1;
 

@@ -4,7 +4,7 @@ import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { Player } from './player';
 
-export abstract class Item {
+export abstract class ConsumableItem {
   abstract removeAfterNumberOfTurns: number;
 
   abstract name: string;

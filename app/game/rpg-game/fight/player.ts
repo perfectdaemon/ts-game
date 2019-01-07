@@ -5,7 +5,7 @@ import { IRenderable } from '../render-helper';
 import { AttackCountItem } from './attack-count-item';
 import { CriticalChanceItem } from './critical-chance-item';
 import { HealItem } from './heal-item';
-import { Item } from './item';
+import { ConsumableItem } from './consumable-item';
 import { PlayerRenderableHelper } from './player-renderable.helper';
 import { PlayerType } from './player-type';
 import { ProtectCountItem } from './protect-count-item';
@@ -23,8 +23,8 @@ export class Player implements IRenderable {
       player.ship.cells.push(cell);
     }
 
-    for (const itemInfo of playerData.items) {
-      let item: Item;
+    for (const itemInfo of playerData.consumableItems) {
+      let item: ConsumableItem;
       switch (itemInfo.type) {
         case ItemType.Heal:
           item = new HealItem();
@@ -47,7 +47,7 @@ export class Player implements IRenderable {
       }
 
       item.count = itemInfo.count;
-      player.items.push(item);
+      player.consumableItems.push(item);
     }
 
     player.playerData = playerData;
@@ -66,10 +66,10 @@ export class Player implements IRenderable {
 
   ship: Ship = new Ship();
 
-  items: Item[] = [];
+  consumableItems: ConsumableItem[] = [];
 
   activeItems: {
-    item: Item,
+    item: ConsumableItem,
     roundLeft: number,
     other: Player,
   }[] = [];

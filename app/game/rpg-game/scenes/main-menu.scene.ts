@@ -83,7 +83,7 @@ export class MainMenuScene extends Scene {
       attackDamageMax: 12,
       criticalChance: 0.1,
       cellCount: 5,
-      items: [],
+      consumableItems: [],
       protectCount: 2,
       protectMultiplier: 0.5,
       shipHealth: 100,
@@ -98,7 +98,7 @@ export class MainMenuScene extends Scene {
       attackDamageMax: 12,
       criticalChance: 0.1,
       cellCount: 5,
-      items: [{
+      consumableItems: [{
         count: 1,
         type: ItemType.IncreaseCriticalChance,
       }, {
@@ -130,7 +130,7 @@ export class MainMenuScene extends Scene {
       attackDamageMax: 12,
       criticalChance: 0.1,
       cellCount: 5,
-      items: [{
+      consumableItems: [{
         count: 1,
         type: ItemType.IncreaseCriticalChance,
       }, {

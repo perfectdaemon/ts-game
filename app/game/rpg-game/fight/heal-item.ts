@@ -1,7 +1,7 @@
-import { Item } from './item';
+import { ConsumableItem } from './consumable-item';
 import { Player } from './player';
 
-export class HealItem extends Item {
+export class HealItem extends ConsumableItem {
   get name(): string { return `Вылечить ${this._amount} единиц здоровья`; }
 
   removeAfterNumberOfTurns: number = 0;

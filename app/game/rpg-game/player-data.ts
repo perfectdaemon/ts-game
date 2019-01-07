@@ -12,7 +12,7 @@ export class PlayerData {
   protectCount: number;
   protectMultiplier: number;
 
-  items: {
+  consumableItems: {
     type: ItemType;
     count: number;
   }[];
