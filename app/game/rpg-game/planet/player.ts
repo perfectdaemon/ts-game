@@ -19,13 +19,13 @@ export class Player implements IRenderable {
 
     const playerW = 400;
 
-    player.background = new Sprite(playerW, renderer.height - 20, new Vector2(0, 0));
-    player.background.position.set(10, 10, 1);
+    player.background = new Sprite(playerW, renderer.height - 80, new Vector2(0, 0));
+    player.background.position.set(10, 70, 1);
     player.background.setVerticesColor(52 / 255, 111 / 255, 149 / 255, 1.0);
     const region = GLOBAL.assets.planetAtlas.getRegion('blank.png');
     player.background.setTextureRegion(region, false);
 
-    const start = 300;
+    const start = 340;
     player.playerStats.push(
       new PlayerStatsRow('Урон (сумм)', `${playerData.attackDamageMin * playerData.attackCount}–${playerData.attackDamageMax * playerData.attackCount}`, 10, start),
       new PlayerStatsRow('Щит', `${playerData.protectCount} x ${playerData.protectMultiplier * 100} %`, 10, start + 25),
@@ -38,17 +38,31 @@ export class Player implements IRenderable {
     }
 
     player.shipCells.push(
-      new ShipCell(150, 100),
-      new ShipCell(250, 100),
-      new ShipCell(100, 200),
-      new ShipCell(300, 200),
-      new ShipCell(200, 225),
+      new ShipCell(150, 140),
+      new ShipCell(250, 140),
+      new ShipCell(100, 240),
+      new ShipCell(300, 240),
+      new ShipCell(200, 265),
     );
 
     player.health = new HealthBar(20, 630);
-    player.health.updateHealth(playerData.shipHealth, playerData.shipMaxHealth);
+    player.updateHealth();
 
-    player.inventory  = new Inventory(playerData, 480, 200);
+    player.inventory  = new Inventory(playerData.inventorySize, playerData.inventory, 480, 150);
+
+    player.inventoryCaption = new Text('Инвентарь');
+    player.inventoryCaption.position.set(450, 70, 2);
+    player.inventoryCaption.color.set(1, 1, 1, 1);
+    player.inventoryCaption.pivotPoint.set(0, 0);
+    player.inventoryCaption.scale = 1.3;
+
+    player.creditsText = new Text('$---');
+    player.creditsText.position.set(920, 70, 2);
+    player.creditsText.color.set(1, 1, 1, 1);
+    player.creditsText.pivotPoint.set(1, 0);
+    player.creditsText.scale = 1.3;
+
+    player.updateCreditsText();
 
     return player;
   }
@@ -58,6 +72,8 @@ export class Player implements IRenderable {
   shipCells: ShipCell[] = [];
   health: HealthBar;
   inventory: Inventory;
+  inventoryCaption: Text;
+  creditsText: Text;
 
   playerData: PlayerData;
 
@@ -65,27 +81,26 @@ export class Player implements IRenderable {
     this.health.updateHealth(this.playerData.shipHealth, this.playerData.shipMaxHealth);
   }
 
+  updateCreditsText(): void {
+    this.creditsText.text = `$${this.playerData.credits}`;
+  }
+
   getSpritesToRender(): Sprite[] {
     const result: Sprite[] = [this.background, this.health.back, this.health.current];
     for (const cell of this.shipCells) {
       result.push(cell.cellSprite);
     }
-    for (const cell of this.inventory.cells) {
-      result.push(cell.back);
-      if (cell.item != null) {
-        result.push(cell.item.sprite);
-      }
-    }
-    return result;
+
+    return result.concat(this.inventory.getSpritesToRender());
   }
 
   getTextsToRender(): Text[] {
-    const result: Text[] = [];
+    const result: Text[] = [this.inventoryCaption, this.creditsText];
 
     for (const stat of this.playerStats) {
       result.push(stat.caption, stat.value);
     }
 
-    return result;
+    return result.concat(this.inventory.getTextsToRender());
   }
 }

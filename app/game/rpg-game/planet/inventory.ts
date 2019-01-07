@@ -1,24 +1,43 @@
 import { div } from '../../../engine/math/math-base';
 import { Sprite } from '../../../engine/scene/sprite';
+import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
-import { InventoryItemData, ItemRarity, ItemType, PlayerData } from '../player-data';
+import { InventoryItemData, ItemRarity, ItemType } from '../player-data';
+import { IRenderable } from '../render-helper';
 
-export class Inventory {
+export class Inventory implements IRenderable {
   cells: InventoryCell[] = [];
 
-  constructor(playerData: PlayerData, x: number, y: number) {
+  constructor(inventorySize: number, inventoryItems: InventoryItemData[], x: number, y: number) {
     const cellPerRow = 8;
     const cellSize = 59;
-    for (let i = 0; i < playerData.inventorySize; ++i) {
+    for (let i = 0; i < inventorySize; ++i) {
       const cellX = x + cellSize * (i % cellPerRow);
       const cellY = y + cellSize * (div(i, cellPerRow));
 
-      const itemData = playerData.inventory.length > i
-        ? playerData.inventory[i]
+      const itemData = inventoryItems.length > i
+        ? inventoryItems[i]
         : undefined;
 
       this.cells.push(new InventoryCell(cellX, cellY, itemData));
     }
+  }
+
+  getSpritesToRender(): Sprite[] {
+    const result: Sprite[] = [];
+
+    for (const cell of this.cells) {
+      result.push(cell.back);
+      if (cell.item != null) {
+        result.push(cell.item.sprite);
+      }
+    }
+
+    return result;
+  }
+
+  getTextsToRender(): Text[] {
+    return [];
   }
 }
 
@@ -136,7 +155,7 @@ export class InventoryCell {
         this.back.setVerticesColor(0.5, 0.5, 1.0, 0.5);
         break;
       case ItemRarity.Legendary:
-        this.back.setVerticesColor(206 / 255, 92 / 255, 0, 1.0);
+        this.back.setVerticesColor(206 / 255, 92 / 255, 0, 0.5);
         break;
     }
   }

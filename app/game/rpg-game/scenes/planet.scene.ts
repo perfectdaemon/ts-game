@@ -5,19 +5,25 @@ import { div } from '../../../engine/math/math-base';
 import { Vector2 } from '../../../engine/math/vector2';
 import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
+import { Sprite } from '../../../engine/scene/sprite';
+import { Text } from '../../../engine/scene/text';
 import { Scene } from '../../../engine/scenes/scene';
 import { PLANET_DATA } from '../assets/planet.data';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
 import { Player } from '../planet/player';
-import { RenderHelper } from '../render-helper';
+import { Shop } from '../planet/shop';
+import { IRenderable, RenderHelper } from '../render-helper';
 
-export class PlanetScene extends Scene {
+export class PlanetScene extends Scene implements IRenderable {
   guiManager: GuiManager;
   renderHelper: RenderHelper;
 
   player: Player;
+
+  planetName: Text;
+  shop: Shop;
 
   repairButton: GuiButton;
 
@@ -42,6 +48,12 @@ export class PlanetScene extends Scene {
     this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
 
     this.player = Player.build(PLANET_GAME_STATE.player);
+    this.shop = new Shop(PLANET_GAME_STATE.planet, 480, 320);
+    this.planetName = new Text(`Планета «${PLANET_GAME_STATE.planet.name}»`);
+    this.planetName.position.set(480, 25, 1);
+    this.planetName.scale = 1.5;
+    this.planetName.pivotPoint.set(0.5, 0.5);
+
     this.updateRepairText();
     return super.load();
   }
@@ -54,7 +66,7 @@ export class PlanetScene extends Scene {
 
   render(): void {
     GLOBAL.assets.guiCamera.update();
-    this.renderHelper.render([this.player]);
+    this.renderHelper.render([this.player, this.shop, this]);
     this.guiManager.render();
   }
 
@@ -72,6 +84,13 @@ export class PlanetScene extends Scene {
   }
 
   onMouseUp(position: Vector2, button: MouseButtons): void {
+  }
+
+  getSpritesToRender(): Sprite[] {
+    return [];
+  }
+  getTextsToRender(): Text[] {
+    return [this.planetName];
   }
 
   private updateRepairText(): void {
@@ -105,6 +124,7 @@ export class PlanetScene extends Scene {
     data.shipHealth += pointsToHeal;
     this.updateRepairText();
     this.player.updateHealth();
+    this.player.updateCreditsText();
     console.log(`Healed ${pointsToHeal} points for ${price} (${healthPointPrice} per point)`);
   }
 
