@@ -240,7 +240,7 @@ export class FightScene extends Scene {
       return;
     }
 
-    const result = this.human.items.filter(i => i.isMouseOver(worldPosition));
+    const result = this.human.consumableItems.filter(i => i.isMouseOver(worldPosition));
     if (result.length > 1) { throw new Error('Hit too many items'); }
     if (result.length === 0) { return; }
 
