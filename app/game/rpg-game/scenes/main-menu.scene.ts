@@ -90,6 +90,7 @@ export class MainMenuScene extends Scene {
       shipMaxHealth: 100,
       credits: 0,
       inventorySize: 16,
+      inventory: [],
     };
 
     FIGHT_GAME_STATE.humanData = {
@@ -117,6 +118,7 @@ export class MainMenuScene extends Scene {
       shipMaxHealth: 100,
       credits: 0,
       inventorySize: 16,
+      inventory: [],
     };
 
     this.sceneManager.switchTo(SCENES.fight);
@@ -149,6 +151,7 @@ export class MainMenuScene extends Scene {
       shipMaxHealth: 100,
       credits: 59,
       inventorySize: 16,
+      inventory: [],
     };
     this.sceneManager.switchTo(SCENES.planet);
   }
