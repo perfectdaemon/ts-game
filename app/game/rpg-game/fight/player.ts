@@ -1,6 +1,6 @@
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
-import { ItemType, PlayerData } from '../player-data';
+import { ConsumableItemType, PlayerData } from '../player-data';
 import { IRenderable } from '../render-helper';
 import { AttackCountItem } from './attack-count-item';
 import { CriticalChanceItem } from './critical-chance-item';
@@ -26,19 +26,19 @@ export class Player implements IRenderable {
     for (const itemInfo of playerData.consumableItems) {
       let item: ConsumableItem;
       switch (itemInfo.type) {
-        case ItemType.Heal:
+        case ConsumableItemType.Heal:
           item = new HealItem();
           break;
 
-        case ItemType.IncreaseCriticalChance:
+        case ConsumableItemType.IncreaseCriticalChance:
           item = new CriticalChanceItem();
           break;
 
-        case ItemType.MoreAttackCount:
+        case ConsumableItemType.MoreAttackCount:
           item = new AttackCountItem();
           break;
 
-        case ItemType.MoreProtectCount:
+        case ConsumableItemType.MoreProtectCount:
           item = new ProtectCountItem();
           break;
 

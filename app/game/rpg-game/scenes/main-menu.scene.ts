@@ -10,7 +10,7 @@ import { FIGHT_GAME_STATE } from '../fight/game-state';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
-import { ItemType } from '../player-data';
+import { ConsumableItemType } from '../player-data';
 import { SCENES } from './scenes.const';
 
 export class MainMenuScene extends Scene {
@@ -100,16 +100,16 @@ export class MainMenuScene extends Scene {
       cellCount: 5,
       consumableItems: [{
         count: 1,
-        type: ItemType.IncreaseCriticalChance,
+        type: ConsumableItemType.IncreaseCriticalChance,
       }, {
         count: 2,
-        type: ItemType.MoreProtectCount,
+        type: ConsumableItemType.MoreProtectCount,
       }, {
         count: 2,
-        type: ItemType.MoreAttackCount,
+        type: ConsumableItemType.MoreAttackCount,
       }, {
         count: 1,
-        type: ItemType.Heal,
+        type: ConsumableItemType.Heal,
       }],
       protectCount: 2,
       protectMultiplier: 0.5,
@@ -132,16 +132,16 @@ export class MainMenuScene extends Scene {
       cellCount: 5,
       consumableItems: [{
         count: 1,
-        type: ItemType.IncreaseCriticalChance,
+        type: ConsumableItemType.IncreaseCriticalChance,
       }, {
         count: 2,
-        type: ItemType.MoreProtectCount,
+        type: ConsumableItemType.MoreProtectCount,
       }, {
         count: 2,
-        type: ItemType.MoreAttackCount,
+        type: ConsumableItemType.MoreAttackCount,
       }, {
         count: 1,
-        type: ItemType.Heal,
+        type: ConsumableItemType.Heal,
       }],
       protectCount: 2,
       protectMultiplier: 0.5,

@@ -13,7 +13,7 @@ export class PlayerData {
   protectMultiplier: number;
 
   consumableItems: {
-    type: ItemType;
+    type: ConsumableItemType;
     count: number;
   }[];
 
@@ -21,4 +21,4 @@ export class PlayerData {
   inventorySize: number;
 }
 
-export enum ItemType { Heal, MoreAttackCount, MoreProtectCount, IncreaseCriticalChance }
+export enum ConsumableItemType { Heal, MoreAttackCount, MoreProtectCount, IncreaseCriticalChance }
