@@ -18,6 +18,7 @@ export class PlayerData {
   }[];
 
   credits: number;
+  inventorySize: number;
 }
 
 export enum ItemType { Heal, MoreAttackCount, MoreProtectCount, IncreaseCriticalChance }
