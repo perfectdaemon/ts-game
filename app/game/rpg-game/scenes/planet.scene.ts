@@ -50,7 +50,7 @@ export class PlanetScene extends Scene implements IRenderable {
     this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
 
     this.player = Player.build(PLANET_GAME_STATE.player, this.guiManager);
-    this.shop = new Shop(PLANET_GAME_STATE.planet, 480, 260);
+    this.shop = new Shop(PLANET_GAME_STATE.planet, 480, 260, this.guiManager);
 
     this.planetName = new Text(`Планета «${PLANET_GAME_STATE.planet.name}»`);
     this.planetName.position.set(480, 25, 1);

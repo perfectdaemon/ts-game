@@ -1,3 +1,5 @@
+import { GuiButton } from '../../../engine/gui/gui-button';
+import { GuiManager } from '../../../engine/gui/gui-manager';
 import { div } from '../../../engine/math/math-base';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
@@ -8,7 +10,7 @@ import { IRenderable } from '../render-helper';
 export class Inventory implements IRenderable {
   cells: InventoryCell[] = [];
 
-  constructor(inventorySize: number, inventoryItems: InventoryItemData[], x: number, y: number) {
+  constructor(inventorySize: number, inventoryItems: InventoryItemData[], x: number, y: number, gui: GuiManager) {
     const cellPerRow = 8;
     const cellSize = 59;
     for (let i = 0; i < inventorySize; ++i) {
@@ -19,7 +21,7 @@ export class Inventory implements IRenderable {
         ? inventoryItems[i]
         : undefined;
 
-      this.cells.push(new InventoryCell(cellX, cellY, itemData));
+      this.cells.push(new InventoryCell(cellX, cellY, gui, itemData));
     }
   }
 
@@ -27,7 +29,6 @@ export class Inventory implements IRenderable {
     const result: Sprite[] = [];
 
     for (const cell of this.cells) {
-      result.push(cell.back);
       if (cell.item != null) {
         result.push(cell.item.sprite);
       }
@@ -42,16 +43,23 @@ export class Inventory implements IRenderable {
 }
 
 export class InventoryCell {
-  back: Sprite;
+  back: GuiButton;
   item?: BaseItem;
 
-  constructor(x: number, y: number, itemData?: InventoryItemData) {
+  constructor(x: number, y: number, gui: GuiManager, itemData?: InventoryItemData) {
     const region = GLOBAL.assets.planetAtlas.getRegion('inventory_cell.png');
 
-    this.back = new Sprite();
-    this.back.position.set(x, y, 5);
-    this.back.setTextureRegion(region, true);
-    this.back.setVerticesAlpha(0.5);
+    this.back = new GuiButton();
+    this.back.sprite.position.set(x, y, 5);
+    this.back.sprite.setTextureRegion(region, true);
+    this.back.sprite.setVerticesAlpha(0.3);
+    this.back.label.visible = false;
+    this.back.updateHitBox();
+
+    this.back.onMouseOver = () => this.back.sprite.setVerticesAlpha(0.7);
+    this.back.onMouseOut = () => this.back.sprite.setVerticesAlpha(0.3);
+
+    gui.addElement(this.back);
 
     if (itemData == null) {
       return;
@@ -141,7 +149,7 @@ export class InventoryCell {
     this.item.sprite = new Sprite(40, 40);
     this.item.sprite.setTextureRegion(itemRegion, !!itemRegionName);
     this.item.sprite.position.set(0, 0, 6);
-    this.item.sprite.parent = this.back;
+    this.item.sprite.parent = this.back.sprite;
     this.item.sprite.rotation = 45;
     this.item.sprite.width *= 0.6;
     this.item.sprite.height *= 0.6;
@@ -149,13 +157,13 @@ export class InventoryCell {
 
     switch (itemData.rarity) {
       case ItemRarity.Usual:
-        this.back.setVerticesColor(1, 1, 1, 0.5);
+        this.back.sprite.setVerticesColor(1, 1, 1, 0.5);
         break;
       case ItemRarity.Special:
-        this.back.setVerticesColor(0.5, 0.5, 1.0, 0.5);
+        this.back.sprite.setVerticesColor(0.5, 0.5, 1.0, 0.5);
         break;
       case ItemRarity.Legendary:
-        this.back.setVerticesColor(206 / 255, 92 / 255, 0, 0.5);
+        this.back.sprite.setVerticesColor(206 / 255, 92 / 255, 0, 0.5);
         break;
     }
   }

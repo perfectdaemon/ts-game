@@ -54,7 +54,7 @@ export class Player implements IRenderable {
     player.health = new HealthBar(20, 630);
     player.updateHealth();
 
-    player.inventory  = new Inventory(playerData.inventorySize, playerData.inventory, 480, 150);
+    player.inventory  = new Inventory(playerData.inventorySize, playerData.inventory, 480, 150, gui);
 
     player.inventoryCaption = new Text('Инвентарь');
     player.inventoryCaption.position.set(450, 70, 2);

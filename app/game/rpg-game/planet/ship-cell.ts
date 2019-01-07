@@ -12,9 +12,9 @@ export class ShipCell {
     this.cellSprite.label.visible = false;
     this.cellSprite.sprite.setTextureRegion(region, true);
     this.cellSprite.sprite.position.set(x, y, 2);
-    this.cellSprite.sprite.setVerticesAlpha(0.5);
+    this.cellSprite.sprite.setVerticesAlpha(0.3);
     this.cellSprite.onMouseOver = () => this.cellSprite.sprite.setVerticesAlpha(0.7);
-    this.cellSprite.onMouseOut = () => this.cellSprite.sprite.setVerticesAlpha(0.5);
+    this.cellSprite.onMouseOut = () => this.cellSprite.sprite.setVerticesAlpha(0.3);
 
     this.cellSprite.updateHitBox();
     gui.addElement(this.cellSprite);
