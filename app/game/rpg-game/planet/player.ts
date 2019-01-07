@@ -1,3 +1,4 @@
+import { GuiManager } from '../../../engine/gui/gui-manager';
 import { Vector2 } from '../../../engine/math/vector2';
 import { renderer } from '../../../engine/render/webgl';
 import { Sprite } from '../../../engine/scene/sprite';
@@ -12,7 +13,7 @@ import { ShipCell } from './ship-cell';
 
 export class Player implements IRenderable {
 
-  static build(playerData: PlayerData): Player {
+  static build(playerData: PlayerData, gui: GuiManager): Player {
     const player = new Player();
 
     player.playerData = playerData;
@@ -43,11 +44,11 @@ export class Player implements IRenderable {
     }
 
     player.shipCells.push(
-      new ShipCell(150, 140),
-      new ShipCell(250, 140),
-      new ShipCell(100, 240),
-      new ShipCell(300, 240),
-      new ShipCell(200, 265),
+      new ShipCell(150, 140, gui),
+      new ShipCell(250, 140, gui),
+      new ShipCell(100, 240, gui),
+      new ShipCell(300, 240, gui),
+      new ShipCell(200, 265, gui),
     );
 
     player.health = new HealthBar(20, 630);
@@ -92,9 +93,9 @@ export class Player implements IRenderable {
 
   getSpritesToRender(): Sprite[] {
     const result: Sprite[] = [this.background, this.health.back, this.health.current];
-    for (const cell of this.shipCells) {
-      result.push(cell.cellSprite);
-    }
+    // for (const cell of this.shipCells) {
+    //   result.push(cell.cellSprite);
+    // }
 
     return result.concat(this.inventory.getSpritesToRender());
   }
