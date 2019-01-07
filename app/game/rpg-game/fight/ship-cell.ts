@@ -1,7 +1,6 @@
 import { IFigure } from '../../../engine/math/figure.interface';
 import { Vector2 } from '../../../engine/math/vector2';
 import { Sprite } from '../../../engine/scene/sprite';
-import { Text } from '../../../engine/scene/text';
 
 export class ShipCell {
   markedAsAttacked: boolean;

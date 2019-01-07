@@ -1,4 +1,4 @@
-import { PlayerData } from "../player-data";
+import { PlayerData } from '../player-data';
 
 export class InputFightGameState {
   humanData: PlayerData;
