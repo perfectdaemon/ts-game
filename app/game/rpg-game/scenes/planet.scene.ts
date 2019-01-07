@@ -54,7 +54,7 @@ export class PlanetScene extends Scene implements IRenderable {
 
     this.planetName = new Text(`Планета «${PLANET_GAME_STATE.planet.name}»`);
     this.planetName.position.set(480, 25, 1);
-    this.planetName.scale = 1.5;
+    this.planetName.scale = 1.7;
     this.planetName.pivotPoint.set(0.5, 0.5);
 
     this.itemDescription = new ItemDescription(480 - 59 / 2, 490);

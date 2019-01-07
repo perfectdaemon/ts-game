@@ -21,7 +21,7 @@ export class ItemDescription implements IRenderable {
     const itemBackRegion = GLOBAL.assets.planetAtlas.getRegion('ship_cell.png');
     const blankRegion = GLOBAL.assets.planetAtlas.getRegion('blank.png');
 
-    this.back = new Sprite(473, 190, new Vector2(0, 0));
+    this.back = new Sprite(473, 205, new Vector2(0, 0));
     this.back.position.set(x, y, 1);
     this.back.setVerticesColor(52 / 255, 111 / 255, 249 / 255, 0.5);
     this.back.setTextureRegion(blankRegion, false);
