@@ -129,7 +129,7 @@ export class TextBatch {
     let spaceLeft = text.maxTextWidth;
 
     for (const word of words) {
-      const wordLength = this.font.getTextLength(word, true);
+      const wordLength = this.font.getTextLength(word, true) * text.scale;
       if (wordLength < spaceLeft) {
         result.push(word + ' ');
         spaceLeft -= wordLength;
