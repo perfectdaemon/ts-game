@@ -12,6 +12,7 @@ import { PLANET_DATA } from '../assets/planet.data';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
+import { ItemDescription } from '../planet/item-description';
 import { Player } from '../planet/player';
 import { Shop } from '../planet/shop';
 import { IRenderable, RenderHelper } from '../render-helper';
@@ -24,6 +25,7 @@ export class PlanetScene extends Scene implements IRenderable {
 
   planetName: Text;
   shop: Shop;
+  itemDescription: ItemDescription;
 
   repairButton: GuiButton;
 
@@ -49,10 +51,13 @@ export class PlanetScene extends Scene implements IRenderable {
 
     this.player = Player.build(PLANET_GAME_STATE.player);
     this.shop = new Shop(PLANET_GAME_STATE.planet, 480, 260);
+
     this.planetName = new Text(`Планета «${PLANET_GAME_STATE.planet.name}»`);
     this.planetName.position.set(480, 25, 1);
     this.planetName.scale = 1.5;
     this.planetName.pivotPoint.set(0.5, 0.5);
+
+    this.itemDescription = new ItemDescription(480 - 59 / 2, 490);
 
     this.updateRepairText();
     return super.load();
@@ -66,7 +71,7 @@ export class PlanetScene extends Scene implements IRenderable {
 
   render(): void {
     GLOBAL.assets.guiCamera.update();
-    this.renderHelper.render([this.player, this.shop, this]);
+    this.renderHelper.render([this.player, this.shop, this.itemDescription, this]);
     this.guiManager.render();
   }
 
