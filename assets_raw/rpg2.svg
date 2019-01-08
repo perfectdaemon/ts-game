@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="-93.182913"
-     inkscape:cy="450.98401"
+     inkscape:zoom="0.50000001"
+     inkscape:cx="237.74512"
+     inkscape:cy="494.64784"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -92,6 +92,85 @@
        fx="-193"
        fy="386"
        r="57.566929" />
+    <filter
+       inkscape:label="Glowing Bubble"
+       inkscape:menu="Ridges"
+       inkscape:menu-tooltip="Bubble effect with refraction and glow"
+       x="-0.25"
+       y="-0.25"
+       width="1.5"
+       height="1.5"
+       style="color-interpolation-filters:sRGB;"
+       id="filter1104">
+      <feGaussianBlur
+         stdDeviation="1"
+         result="result1"
+         id="feGaussianBlur1080" />
+      <feGaussianBlur
+         stdDeviation="10"
+         result="result6"
+         in="result1"
+         id="feGaussianBlur1082" />
+      <feComposite
+         operator="atop"
+         in="result6"
+         in2="result1"
+         result="result8"
+         id="feComposite1084" />
+      <feComposite
+         operator="xor"
+         result="fbSourceGraphic"
+         in="result6"
+         in2="result8"
+         id="feComposite1086" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 2 0 "
+         id="feColorMatrix1088" />
+      <feGaussianBlur
+         result="result0"
+         in="fbSourceGraphicAlpha"
+         stdDeviation="1"
+         id="feGaussianBlur1090" />
+      <feSpecularLighting
+         specularExponent="35"
+         specularConstant="1.5"
+         surfaceScale="-2"
+         lighting-color="rgb(255,255,255)"
+         result="result1"
+         in="result0"
+         id="feSpecularLighting1094">
+        <feDistantLight
+           azimuth="230"
+           elevation="60"
+           id="feDistantLight1092" />
+      </feSpecularLighting>
+      <feComposite
+         operator="in"
+         result="result2"
+         in="result1"
+         in2="fbSourceGraphicAlpha"
+         id="feComposite1096" />
+      <feComposite
+         k3="1"
+         k2="1"
+         operator="arithmetic"
+         result="result4"
+         in="fbSourceGraphic"
+         in2="result2"
+         id="feComposite1098" />
+      <feComposite
+         operator="atop"
+         in="result9"
+         in2="result4"
+         result="result91"
+         id="feComposite1100" />
+      <feBlend
+         mode="multiply"
+         in2="result91"
+         id="feBlend1102" />
+    </filter>
   </defs>
   <metadata
      id="metadata855">
@@ -109,6 +188,14 @@
      id="layer1"
      inkscape:groupmode="layer"
      inkscape:label="Layer 1">
+    <rect
+       style="fill:#132b35;fill-opacity:1;stroke:none;stroke-width:8;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3076"
+       width="1996.8695"
+       height="1335.0176"
+       x="1034.8199"
+       y="-373.22864"
+       inkscape:label="rect3076" />
     <rect
        style="fill:#638da9;fill-opacity:1;stroke:none;stroke-width:1.98763263;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1417"
@@ -648,7 +735,7 @@
        style="fill:#ffffff;fill-opacity:0.45959598;stroke:#373f6e;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43939394" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#346f95;fill-opacity:1;stroke:none;"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#346f95;fill-opacity:1;stroke:none"
        x="451.53815"
        y="327.57349"
        id="text1540"><tspan
@@ -670,7 +757,7 @@
        id="text1548"
        y="112.411"
        x="448.50769"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#346f95;fill-opacity:1;stroke:none;"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#346f95;fill-opacity:1;stroke:none"
        xml:space="preserve"><tspan
          y="112.411"
          x="448.50769"
@@ -678,7 +765,7 @@
          sodipodi:role="line">Инвентарь</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#638da9;fill-opacity:1;stroke:none;"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#638da9;fill-opacity:1;stroke:none"
        x="807.11188"
        y="117.46176"
        id="text1552"><tspan
@@ -1136,14 +1223,14 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot1044"
-       style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px"><flowRegion
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
          id="flowRegion1046"><rect
            id="rect1048"
            width="29.5"
            height="46.5"
            x="-261.5"
            y="430.5" /></flowRegion><flowPara
-         id="flowPara1050"></flowPara></flowRoot>    <g
+         id="flowPara1050" /></flowRoot>    <g
        id="g1074"
        transform="rotate(45,251.99251,594.45802)">
       <rect
@@ -1389,13 +1476,6 @@
        width="89.285706"
        id="ship_cell"
        style="fill:#ffffff;fill-opacity:1;stroke:#373f6e;stroke-width:3.77952766;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       sodipodi:nodetypes="cccc"
-       inkscape:connector-curvature="0"
-       id="dialog_triangle"
-       d="m -400.33893,78.040823 h 35.35533 l -17.67767,35.355337 z"
-       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       inkscape:label="#path1126" />
     <rect
        inkscape:label="#rect1419"
        ry="6.4010248"
@@ -1417,12 +1497,12 @@
        style="fill:#ffffff;fill-opacity:1;stroke:#373f6e;stroke-width:2.43230605;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43939394"
        inkscape:label="#rect1134" />
     <rect
-       style="fill:#cc0000;fill-opacity:1;stroke:#373f6e;stroke-width:2.93132114;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43939394"
+       style="fill:#cc0000;fill-opacity:1;stroke:#ffffff;stroke-width:2.93132114;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43939394"
        id="health_bar"
        width="345.05676"
        height="27.04015"
-       x="-430.14273"
-       y="-19.029503"
+       x="-429.5918"
+       y="-78.010246"
        rx="10"
        ry="10"
        inkscape:label="#rect1136" />
@@ -1449,7 +1529,7 @@
        id="repair_button"
        inkscape:label="#g1160">
       <rect
-         style="fill:#ce5c00;fill-opacity:1;stroke:#373f6e;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43939394"
+         style="fill:#ce5c00;fill-opacity:1;stroke:#ce5c00;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43921569"
          id="rect1154"
          width="124.25934"
          height="54.285706"
@@ -1463,7 +1543,7 @@
          height="54.285706"
          width="244.36646"
          id="rect1156"
-         style="fill:#73d216;fill-opacity:1;stroke:#373f6e;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43939394"
+         style="fill:#73d216;fill-opacity:1;stroke:#73d216;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.44017095"
          ry="10"
          rx="10" />
     </g>
@@ -1474,11 +1554,11 @@
        height="54.285713"
        width="217.14285"
        id="button_red"
-       style="fill:#ef2929;fill-opacity:1;stroke:#373f6e;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43939394"
+       style="fill:#ef2929;fill-opacity:1;stroke:#ef2929;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43921569"
        inkscape:label="#rect1162" />
     <rect
        inkscape:label="#rect1162"
-       style="fill:#4e9a06;fill-opacity:1;stroke:#373f6e;stroke-width:1.88976383;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43939394"
+       style="fill:#4e9a06;fill-opacity:1;stroke:#4e9a06;stroke-width:1.88999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43921569"
        id="button_green"
        width="217.14285"
        height="54.285713"
@@ -1493,5 +1573,15 @@
        x="-401.25"
        y="168.75"
        inkscape:label="#rect1169" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#ef2929;stroke-width:7.22034407;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="inventory_cell_selected"
+       width="60.318687"
+       height="60.318695"
+       x="-428.92462"
+       y="179.1115"
+       rx="6.7556944"
+       ry="6.7556944"
+       inkscape:label="#rect1419" />
   </g>
 </svg>
