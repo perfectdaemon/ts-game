@@ -70,6 +70,10 @@ export class Player implements IRenderable {
 
     player.updateCreditsText();
 
+    for (const shipCell of player.shipCells) {
+      shipCell.cellSprite.onClick = () => player.onShipCellClick(shipCell);
+    }
+
     return player;
   }
 
@@ -83,6 +87,8 @@ export class Player implements IRenderable {
 
   playerData: PlayerData;
 
+  onShipCellClick: (shipCell: ShipCell) => void = () => {};
+
   updateHealth(): void {
     this.health.updateHealth(this.playerData.shipHealth, this.playerData.shipMaxHealth);
   }
@@ -93,9 +99,6 @@ export class Player implements IRenderable {
 
   getSpritesToRender(): Sprite[] {
     const result: Sprite[] = [this.background, this.health.back, this.health.current];
-    // for (const cell of this.shipCells) {
-    //   result.push(cell.cellSprite);
-    // }
 
     return result.concat(this.inventory.getSpritesToRender());
   }

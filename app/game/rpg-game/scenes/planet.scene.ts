@@ -12,8 +12,10 @@ import { PLANET_DATA } from '../assets/planet.data';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
+import { InventoryCell } from '../planet/inventory';
 import { ItemDescription } from '../planet/item-description';
 import { Player } from '../planet/player';
+import { ShipCell } from '../planet/ship-cell';
 import { Shop } from '../planet/shop';
 import { IRenderable, RenderHelper } from '../render-helper';
 
@@ -26,8 +28,11 @@ export class PlanetScene extends Scene implements IRenderable {
   planetName: Text;
   shop: Shop;
   itemDescription: ItemDescription;
+  selectedCell: Sprite;
 
   repairButton: GuiButton;
+  buyOrSellButton: GuiButton;
+  shipTransferButton: GuiButton;
 
   constructor() {
     super();
@@ -47,6 +52,13 @@ export class PlanetScene extends Scene implements IRenderable {
       this.tryRepairShip();
     };
 
+    this.buyOrSellButton = this.guiManager.getElement<GuiButton>('BuySellButton');
+    this.buyOrSellButton.visible = false;
+    this.buyOrSellButton.onClick = () => alert('buy or sell!');
+
+    this.shipTransferButton = this.guiManager.getElement<GuiButton>('ShipTransferButton');
+    this.shipTransferButton.visible = false;
+
     this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
 
     this.player = Player.build(PLANET_GAME_STATE.player, this.guiManager);
@@ -57,7 +69,17 @@ export class PlanetScene extends Scene implements IRenderable {
     this.planetName.scale = 1.7;
     this.planetName.pivotPoint.set(0.5, 0.5);
 
+    this.selectedCell = new Sprite();
+    const selectedCellRegion = GLOBAL.assets.planetAtlas.getRegion('inventory_cell_selected.png');
+    this.selectedCell.setTextureRegion(selectedCellRegion);
+    this.selectedCell.setVerticesAlpha(1);
+    this.selectedCell.position.set(-100, -100, 10);
+
     this.itemDescription = new ItemDescription(480 - 59 / 2, 490);
+
+    this.player.inventory.onClick = cell => this.onInventoryClick(cell, false);
+    this.shop.inventory.onClick = cell => this.onInventoryClick(cell, true);
+    this.player.onShipCellClick = cell => this.onShipCellClick(cell);
 
     this.updateRepairText();
     return super.load();
@@ -92,7 +114,7 @@ export class PlanetScene extends Scene implements IRenderable {
   }
 
   getSpritesToRender(): Sprite[] {
-    return [];
+    return [this.selectedCell];
   }
   getTextsToRender(): Text[] {
     return [this.planetName];
@@ -135,5 +157,24 @@ export class PlanetScene extends Scene implements IRenderable {
 
   private getHealthPointPrice(): number {
     return 3;
+  }
+
+  private onInventoryClick(cell: InventoryCell, isShop: boolean): void {
+    this.selectedCell.position.set(cell.back.sprite.absoluteMatrix.position.asVector2());
+
+    if (!cell.item) {
+      this.itemDescription.setVisible(false);
+      this.buyOrSellButton.visible = false;
+      return;
+    }
+
+    this.itemDescription.setVisible(true);
+    this.buyOrSellButton.visible = true;
+    this.buyOrSellButton.label.text = isShop ? 'Купить' : 'Продать';
+    this.itemDescription.update(cell.item);
+  }
+
+  private onShipCellClick(shipCell: ShipCell): void {
+    alert('ShipCell clicked!');
   }
 }

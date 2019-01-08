@@ -4,7 +4,7 @@ import { div } from '../../../engine/math/math-base';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
-import { InventoryItemData, ItemRarity, ItemType } from '../player-data';
+import { ConsumableItemType, InventoryItemData, ItemRarity, ItemType } from '../player-data';
 import { IRenderable } from '../render-helper';
 
 export class Inventory implements IRenderable {
@@ -21,9 +21,13 @@ export class Inventory implements IRenderable {
         ? inventoryItems[i]
         : undefined;
 
-      this.cells.push(new InventoryCell(cellX, cellY, gui, itemData));
+      const cell = new InventoryCell(cellX, cellY, gui, itemData)
+      cell.back.onClick = () => this.onClick(cell);
+      this.cells.push(cell);
     }
   }
+
+  onClick: (cell: InventoryCell) => void = (cell) => {};
 
   getSpritesToRender(): Sprite[] {
     const result: Sprite[] = [];
@@ -129,9 +133,9 @@ export class InventoryCell {
           throw new Error(`ItemType is consumable but no consumable data provided`);
         }
 
-        const consumableItem = new MiscItem();
+        const consumableItem = new ConsumableItem();
         consumableItem.count = itemData.consumable.count;
-
+        consumableItem.consType = itemData.consumable.type;
         itemRegionName = '';
 
         this.item = consumableItem;
@@ -200,5 +204,6 @@ export class MiscItem extends BaseItem {
 }
 
 export class ConsumableItem extends BaseItem {
+  consType: ConsumableItemType;
   count: number;
 }

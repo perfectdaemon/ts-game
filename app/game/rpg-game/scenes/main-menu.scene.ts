@@ -185,7 +185,7 @@ export class MainMenuScene extends Scene {
           },
           cost: 50,
           rarity: ItemRarity.Special,
-          name: 'Повысить шанс крит. урона',
+          name: '+Шанс крит. урона',
         },
         {
           type: ItemType.Consumable,
