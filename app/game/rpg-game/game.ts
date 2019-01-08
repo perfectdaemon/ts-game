@@ -13,7 +13,7 @@ export class Game extends GameBase {
   sceneManager: SceneManager = new SceneManager();
 
   protected async onInit(): Promise<void> {
-    this.renderer.setClearColorRGB(19 / 255, 104 / 255, 138 / 255, 1.0);
+    this.renderer.setClearColorRGB(10 / 255, 53 / 255, 71 / 255, 1.0);
 
     await GLOBAL.assets.loadAll();
 
