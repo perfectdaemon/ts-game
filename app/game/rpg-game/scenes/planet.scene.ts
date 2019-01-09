@@ -44,6 +44,8 @@ export class PlanetScene extends Scene implements IRenderable {
   selectedShipCell?: ShipCell;
   selectedInventoryCell?: InventoryCell;
 
+  noMoneyText: Text;
+
   constructor() {
     super();
   }
@@ -79,6 +81,12 @@ export class PlanetScene extends Scene implements IRenderable {
     this.planetName.position.set(480, 25, 1);
     this.planetName.scale = 1.7;
     this.planetName.pivotPoint.set(0.5, 0.5);
+
+    this.noMoneyText = new Text(`Недостаточно денег\nдля покупки`);
+    this.noMoneyText.position.set(480 - 59 / 2, 700, 1);
+    this.noMoneyText.pivotPoint.set(0.0, 0.0);
+    this.noMoneyText.color.set(1, 0.1, 0.1, 1.0);
+    this.noMoneyText.visible = false;
 
     this.selectedCellBorder = new Sprite();
     const selectedCellRegion = GLOBAL.assets.planetAtlas.getRegion('inventory_cell_selected.png');
@@ -129,7 +137,7 @@ export class PlanetScene extends Scene implements IRenderable {
     return [this.selectedCellBorder];
   }
   getTextsToRender(): Text[] {
-    return [this.planetName];
+    return [this.planetName, this.noMoneyText];
   }
 
   private updateRepairText(): void {
@@ -181,17 +189,24 @@ export class PlanetScene extends Scene implements IRenderable {
       this.itemDescription.setVisible(false);
       this.buyOrSellButton.visible = false;
       this.shipTransferButton.visible = false;
+      this.noMoneyText.visible = false;
       return;
     }
 
     this.itemDescription.setVisible(true);
     this.buyOrSellButton.visible = true;
     this.buyOrSellButton.label.text = isShop ? 'Купить' : 'Продать';
-    this.itemDescription.update(cell.item);
 
-    if (isShop) {
+    this.itemDescription.update(cell.item, isShop ? this.getItemBuyPrice(cell.item) : this.getItemSellPrice(cell.item));
+
+    const notEnoughMoneyToBuy = isShop && !this.isEnoughMoneyToBuy(cell.item);
+
+    this.noMoneyText.visible = notEnoughMoneyToBuy;
+    this.buyOrSellButton.enabled = !notEnoughMoneyToBuy;
+
+    if (isShop || !this.hasEmptyShipCells() || !this.canSetupOnShip(cell.item)) {
       this.shipTransferButton.visible = false;
-    } else if (this.hasEmptyShipCells() && this.canSetupOnShip(cell.item)) {
+    } else {
       this.shipTransferButton.visible = true;
       this.shipTransferButton.label.text = 'Поставить';
       this.shipMode = ShipMode.Setup;
@@ -200,6 +215,7 @@ export class PlanetScene extends Scene implements IRenderable {
 
   private onShipCellClick(shipCell: ShipCell): void {
     this.buyOrSellButton.visible = false;
+    this.noMoneyText.visible = false;
 
     this.selectedCellBorder.position.set(shipCell.cellSprite.sprite.absoluteMatrix.position.asVector2());
 
@@ -215,7 +231,7 @@ export class PlanetScene extends Scene implements IRenderable {
     this.shipTransferButton.label.text = 'Убрать';
     this.shipMode = ShipMode.Remove;
     this.selectedShipCell = shipCell;
-    this.itemDescription.update(shipCell.item);
+    this.itemDescription.update(shipCell.item, this.getItemSellPrice(shipCell.item));
   }
 
   private hasEmptyShipCells(): boolean {
@@ -223,7 +239,19 @@ export class PlanetScene extends Scene implements IRenderable {
   }
 
   private canSetupOnShip(item: BaseItem): boolean {
-    return item.type === ItemType.Engine || item.type === ItemType.Shield || item.type == ItemType.Weapon;
+    return item.type === ItemType.Engine || item.type === ItemType.Shield || item.type === ItemType.Weapon;
+  }
+
+  private getItemBuyPrice(item: BaseItem): number {
+    return Math.ceil(item.cost * this.getPlayerBuyMultiplier());
+  }
+
+  private getItemSellPrice(item: BaseItem): number {
+    return Math.ceil(item.cost * this.getPlayerSellMultiplier());
+  }
+
+  private isEnoughMoneyToBuy(item: BaseItem): boolean {
+    return this.player.playerData.credits >= this.getItemBuyPrice(item);
   }
 
   private onShipTransferButtonClick(): void {
@@ -274,6 +302,61 @@ export class PlanetScene extends Scene implements IRenderable {
   }
 
   private onBuySellButtonClick(): void {
+    if (this.shopMode === ShopMode.Buy) {
+      const emptyInventoryCells = this.player.inventory.cells.filter(it => !it.item);
+      if (emptyInventoryCells.length === 0) {
+        throw new Error('Can not buy item - no emptyCells in inventory');
+      }
 
+      if (!this.selectedInventoryCell) {
+        throw new Error('Can not buy item - no selected inventory cell');
+      }
+
+      if (!this.selectedInventoryCell.item) {
+        throw new Error('Can not buy item - selected inventory cell has no item');
+      }
+
+      if (!this.isEnoughMoneyToBuy) {
+        throw new Error('Can not buy item - not enough money');
+      }
+
+      const emptyCell = emptyInventoryCells[0];
+      emptyCell.setItem(this.selectedInventoryCell.item);
+      this.player.playerData.credits -= this.getItemBuyPrice(this.selectedInventoryCell.item);
+      this.selectedInventoryCell.setItem();
+      this.player.updateCreditsText();
+      this.onInventoryClick(this.selectedInventoryCell, true);
+    } else {
+      // ShopModel === Sell
+      if (!this.selectedInventoryCell) {
+        throw new Error('Can not sell item - no selected inventory cell');
+      }
+
+      if (!this.selectedInventoryCell.item) {
+        throw new Error('Can not sell item - selected inventory cell has no item');
+      }
+
+      const emptyInventoryCells = this.shop.inventory.cells.filter(it => !it.item);
+
+      const emptyCell = emptyInventoryCells.length > 0
+        ? emptyInventoryCells[0]
+        : this.shop.inventory.cells[this.shop.inventory.cells.length - 1];
+
+      emptyCell.setItem(this.selectedInventoryCell.item);
+      this.player.playerData.credits += this.getItemSellPrice(this.selectedInventoryCell.item);
+      this.selectedInventoryCell.setItem();
+      this.player.updateCreditsText();
+      this.onInventoryClick(this.selectedInventoryCell, false);
+    }
+  }
+
+  private getPlayerBuyMultiplier(): number {
+    // todo: брать исходя из характеристик персонажа
+    return 1.3;
+  }
+
+  private getPlayerSellMultiplier(): number {
+    // todo: брать исходя из характеристик персонажа
+    return 0.7;
   }
 }

@@ -67,8 +67,8 @@ export class ItemDescription implements IRenderable {
     this.cost.position.set(this.back.width - 5, this.back.height - 5, 2);
   }
 
-  update(baseItem: BaseItem): void {
-    this.cost.text = `$${baseItem.cost}`;
+  update(baseItem: BaseItem, concreteCost: number): void {
+    this.cost.text = `$${concreteCost}`;
     this.name.text = baseItem.name;
 
     switch (baseItem.rarity) {
