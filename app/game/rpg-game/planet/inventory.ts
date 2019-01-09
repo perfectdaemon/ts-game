@@ -199,6 +199,17 @@ export class BaseItem {
   name: string;
 
   sprite: Sprite;
+
+  toItemData(): InventoryItemData {
+    const itemData: InventoryItemData = {
+      cost: this.cost,
+      name: this.name,
+      rarity: this.rarity,
+      type: this.type,
+    };
+
+    return itemData;
+  }
 }
 
 export class WeaponItem extends BaseItem {
@@ -206,22 +217,72 @@ export class WeaponItem extends BaseItem {
   damageMax: number;
   criticalChanceMultiplier?: number;
   shieldPiercing?: number;
+
+  toItemData(): InventoryItemData {
+    const itemData = super.toItemData();
+    itemData.weapon = {
+      damageMin: this.damageMin,
+      damageMax: this.damageMax,
+      shieldPiercing: this.shieldPiercing,
+      criticalChanceMultiplier: this.criticalChanceMultiplier,
+    };
+
+    return itemData;
+  }
 }
 
 export class ShieldItem extends BaseItem {
   shieldMultiplier: number;
+
+  toItemData(): InventoryItemData {
+    const itemData = super.toItemData();
+    itemData.shield = {
+      shieldMultiplier: this.shieldMultiplier,
+    };
+
+    return itemData;
+  }
 }
 
 export class EngineItem extends BaseItem {
   speedBoost: number;
   dodgeMultiplier: number;
+
+  toItemData(): InventoryItemData {
+    const itemData = super.toItemData();
+    itemData.engine = {
+      dodgeMultiplier: this.dodgeMultiplier,
+      speedBoost: this.speedBoost,
+    };
+
+    return itemData;
+  }
 }
 
 export class MiscItem extends BaseItem {
   count: number;
+
+  toItemData(): InventoryItemData {
+    const itemData = super.toItemData();
+    itemData.misc = {
+      count: this.count,
+    };
+
+    return itemData;
+  }
 }
 
 export class ConsumableItem extends BaseItem {
   consType: ConsumableItemType;
   count: number;
+
+  toItemData(): InventoryItemData {
+    const itemData = super.toItemData();
+    itemData.consumable = {
+      count: this.count,
+      type: this.consType,
+    };
+
+    return itemData;
+  }
 }
