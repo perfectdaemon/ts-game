@@ -19,6 +19,7 @@ import { ShipCell } from '../planet/ship-cell';
 import { Shop } from '../planet/shop';
 import { ItemType } from '../player-data';
 import { IRenderable, RenderHelper } from '../render-helper';
+import { SCENES } from './scenes.const';
 
 export enum ShopMode { Buy, Sell }
 export enum ShipMode { Setup, Remove }
@@ -34,6 +35,7 @@ export class PlanetScene extends Scene implements IRenderable {
   itemDescription: ItemDescription;
   selectedCellBorder: Sprite;
 
+  takeOffButton: GuiButton;
   repairButton: GuiButton;
   buyOrSellButton: GuiButton;
   shipTransferButton: GuiButton;
@@ -114,6 +116,12 @@ export class PlanetScene extends Scene implements IRenderable {
     );
 
     MenuHelper.loadMenu(this.guiManager, PLANET_DATA);
+
+    this.takeOffButton = this.guiManager.getElement<GuiButton>('TakeOffButton');
+    this.takeOffButton.onClick = () => {
+      alert('Взлетаем!');
+    };
+
     this.repairButton = this.guiManager.getElement<GuiButton>('RepairButton');
     this.repairButton.onClick = () => {
       this.tryRepairShip();
@@ -279,10 +287,11 @@ export class PlanetScene extends Scene implements IRenderable {
       }
 
       const emptyCell = emptyCells[0];
-
       emptyCell.setItem(this.selectedInventoryCell.item);
       this.selectedInventoryCell.item = undefined;
       this.onInventoryClick(this.selectedInventoryCell, false);
+
+      this.updatePlayerData();
     } else {
       // ShipMode == Remove
       const emptyInventoryCells = this.player.inventory.cells.filter(it => !it.item);
@@ -299,10 +308,12 @@ export class PlanetScene extends Scene implements IRenderable {
       }
 
       const emptyCell = emptyInventoryCells[0];
-
       emptyCell.setItem(this.selectedShipCell.item);
+
       this.selectedShipCell.item = undefined;
       this.onShipCellClick(this.selectedShipCell);
+
+      this.updatePlayerData();
     }
   }
 
@@ -331,6 +342,8 @@ export class PlanetScene extends Scene implements IRenderable {
       this.selectedInventoryCell.setItem();
       this.player.updateCreditsText();
       this.onInventoryClick(this.selectedInventoryCell, true);
+
+      this.updatePlayerData();
     } else {
       // ShopModel === Sell
       if (!this.selectedInventoryCell) {
@@ -352,6 +365,8 @@ export class PlanetScene extends Scene implements IRenderable {
       this.selectedInventoryCell.setItem();
       this.player.updateCreditsText();
       this.onInventoryClick(this.selectedInventoryCell, false);
+
+      this.updatePlayerData();
     }
   }
 
@@ -363,5 +378,15 @@ export class PlanetScene extends Scene implements IRenderable {
   private getPlayerSellMultiplier(): number {
     // todo: брать исходя из характеристик персонажа
     return 0.7;
+  }
+
+  private updatePlayerData(): void {
+    const data = this.player.playerData;
+    data.cells = this.player.shipCells.map(it => it.toShipCellData());
+
+    data.inventory = this.player.inventory.cells
+      .filter(it => it.item)
+      .map(it => it.item as BaseItem)
+      .map(it => it.toItemData());
   }
 }
