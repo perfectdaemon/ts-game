@@ -30,10 +30,12 @@ export class InventoryItemData {
     damageMax: number;
     criticalChanceMultiplier?: number;
     shieldPiercing?: number;
+    addAttack?: number;
   };
 
   shield?: {
     shieldMultiplier: number;
+    addProtect?: number;
   };
 
   engine?: {

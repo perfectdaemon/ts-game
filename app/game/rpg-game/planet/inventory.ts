@@ -114,6 +114,7 @@ export class BaseItem {
         weaponItem.damageMax = itemData.weapon.damageMax;
         weaponItem.shieldPiercing = itemData.weapon.shieldPiercing;
         weaponItem.criticalChanceMultiplier = itemData.weapon.criticalChanceMultiplier;
+        weaponItem.addAttack = itemData.weapon.addAttack;
 
         itemRegionName = 'laser1.png';
 
@@ -127,6 +128,7 @@ export class BaseItem {
 
         const shieldItem = new ShieldItem();
         shieldItem.shieldMultiplier = itemData.shield.shieldMultiplier;
+        shieldItem.addProtect = itemData.shield.addProtect;
 
         itemRegionName = 'shield1.png';
 
@@ -217,6 +219,7 @@ export class WeaponItem extends BaseItem {
   damageMax: number;
   criticalChanceMultiplier?: number;
   shieldPiercing?: number;
+  addAttack?: number;
 
   toItemData(): InventoryItemData {
     const itemData = super.toItemData();
@@ -225,6 +228,7 @@ export class WeaponItem extends BaseItem {
       damageMax: this.damageMax,
       shieldPiercing: this.shieldPiercing,
       criticalChanceMultiplier: this.criticalChanceMultiplier,
+      addAttack: this.addAttack,
     };
 
     return itemData;
@@ -233,11 +237,13 @@ export class WeaponItem extends BaseItem {
 
 export class ShieldItem extends BaseItem {
   shieldMultiplier: number;
+  addProtect?: number;
 
   toItemData(): InventoryItemData {
     const itemData = super.toItemData();
     itemData.shield = {
       shieldMultiplier: this.shieldMultiplier,
+      addProtect: this.addProtect,
     };
 
     return itemData;
