@@ -1,5 +1,6 @@
+import { Vector2 } from '../../engine/math/vector2';
+
 export class PlayerData {
-  cellCount: number;
   shipHealth: number;
   shipMaxHealth: number;
 
@@ -15,6 +16,7 @@ export class PlayerData {
   credits: number;
   inventorySize: number;
   inventory: InventoryItemData[];
+  cells: ShipCellData[];
 }
 
 export class InventoryItemData {
@@ -47,6 +49,11 @@ export class InventoryItemData {
     type: ConsumableItemType;
     count: number;
   };
+}
+
+export class ShipCellData {
+  position: Vector2;
+  item?: InventoryItemData;
 }
 
 export enum ConsumableItemType { Heal, MoreAttackCount, MoreProtectCount, IncreaseCriticalChance }

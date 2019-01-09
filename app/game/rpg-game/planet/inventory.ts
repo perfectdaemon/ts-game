@@ -21,7 +21,7 @@ export class Inventory implements IRenderable {
         ? inventoryItems[i]
         : undefined;
 
-      const cell = new InventoryCell(cellX, cellY, gui, itemData)
+      const cell = new InventoryCell(cellX, cellY, gui, itemData);
       cell.back.onClick = () => this.onClick(cell);
       this.cells.push(cell);
     }
@@ -69,94 +69,7 @@ export class InventoryCell {
       return;
     }
 
-    let itemRegionName: string;
-
-    switch (itemData.type) {
-      case ItemType.Weapon:
-        if (itemData.weapon == null) {
-          throw new Error(`ItemType is weapon but no weapon data provided`);
-        }
-
-        const weaponItem = new WeaponItem();
-
-        weaponItem.damageMin = itemData.weapon.damageMin;
-        weaponItem.damageMax = itemData.weapon.damageMax;
-        weaponItem.shieldPiercing = itemData.weapon.shieldPiercing;
-        weaponItem.criticalChanceMultiplier = itemData.weapon.criticalChanceMultiplier;
-
-        itemRegionName = 'laser1.png';
-
-        this.item = weaponItem;
-        break;
-
-      case ItemType.Shield:
-        if (itemData.shield == null) {
-          throw new Error(`ItemType is shield but no shield data provided`);
-        }
-
-        const shieldItem = new ShieldItem();
-        shieldItem.shieldMultiplier = itemData.shield.shieldMultiplier;
-
-        itemRegionName = 'shield1.png';
-
-        this.item = shieldItem;
-        break;
-
-      case ItemType.Engine:
-        if (itemData.engine == null) {
-          throw new Error(`ItemType is engine but no engine data provided`);
-        }
-
-        const engineItem = new EngineItem();
-        engineItem.dodgeMultiplier = itemData.engine.dodgeMultiplier;
-        engineItem.speedBoost = itemData.engine.speedBoost;
-
-        itemRegionName = '';
-
-        this.item = engineItem;
-        break;
-
-      case ItemType.Misc:
-        if (itemData.misc == null) {
-          throw new Error(`ItemType is misc but no misc data provided`);
-        }
-
-        const miscItem = new MiscItem();
-        miscItem.count = itemData.misc.count;
-
-        itemRegionName = '';
-
-        this.item = miscItem;
-        break;
-      case ItemType.Consumable:
-        if (itemData.consumable == null) {
-          throw new Error(`ItemType is consumable but no consumable data provided`);
-        }
-
-        const consumableItem = new ConsumableItem();
-        consumableItem.count = itemData.consumable.count;
-        consumableItem.consType = itemData.consumable.type;
-        itemRegionName = '';
-
-        this.item = consumableItem;
-        break;
-      default:
-        throw new Error(`Unknown item type: ${itemData.type}`);
-    }
-
-    this.item.cost = itemData.cost;
-    this.item.name = itemData.name;
-    this.item.rarity = itemData.rarity;
-    this.item.type = itemData.type;
-
-    const itemRegion = GLOBAL.assets.planetAtlas.getRegion(itemRegionName || 'blank.png');
-    this.item.sprite = new Sprite(40, 40);
-    this.item.sprite.setTextureRegion(itemRegion, !!itemRegionName);
-    this.item.sprite.position.set(0, 0, 6);
-    this.item.sprite.rotation = 45;
-    this.item.sprite.width *= 0.6;
-    this.item.sprite.height *= 0.6;
-    this.item.sprite.setDefaultVertices();
+    this.item = BaseItem.build(itemData);
 
     this.setItem(this.item);
   }
@@ -186,6 +99,99 @@ export class InventoryCell {
 }
 
 export class BaseItem {
+  static build(itemData: InventoryItemData): BaseItem {
+    let itemRegionName: string;
+    let item: BaseItem;
+    switch (itemData.type) {
+      case ItemType.Weapon:
+        if (itemData.weapon == null) {
+          throw new Error(`ItemType is weapon but no weapon data provided`);
+        }
+
+        const weaponItem = new WeaponItem();
+
+        weaponItem.damageMin = itemData.weapon.damageMin;
+        weaponItem.damageMax = itemData.weapon.damageMax;
+        weaponItem.shieldPiercing = itemData.weapon.shieldPiercing;
+        weaponItem.criticalChanceMultiplier = itemData.weapon.criticalChanceMultiplier;
+
+        itemRegionName = 'laser1.png';
+
+        item = weaponItem;
+        break;
+
+      case ItemType.Shield:
+        if (itemData.shield == null) {
+          throw new Error(`ItemType is shield but no shield data provided`);
+        }
+
+        const shieldItem = new ShieldItem();
+        shieldItem.shieldMultiplier = itemData.shield.shieldMultiplier;
+
+        itemRegionName = 'shield1.png';
+
+        item = shieldItem;
+        break;
+
+      case ItemType.Engine:
+        if (itemData.engine == null) {
+          throw new Error(`ItemType is engine but no engine data provided`);
+        }
+
+        const engineItem = new EngineItem();
+        engineItem.dodgeMultiplier = itemData.engine.dodgeMultiplier;
+        engineItem.speedBoost = itemData.engine.speedBoost;
+
+        itemRegionName = '';
+
+        item = engineItem;
+        break;
+
+      case ItemType.Misc:
+        if (itemData.misc == null) {
+          throw new Error(`ItemType is misc but no misc data provided`);
+        }
+
+        const miscItem = new MiscItem();
+        miscItem.count = itemData.misc.count;
+
+        itemRegionName = '';
+
+        item = miscItem;
+        break;
+      case ItemType.Consumable:
+        if (itemData.consumable == null) {
+          throw new Error(`ItemType is consumable but no consumable data provided`);
+        }
+
+        const consumableItem = new ConsumableItem();
+        consumableItem.count = itemData.consumable.count;
+        consumableItem.consType = itemData.consumable.type;
+        itemRegionName = '';
+
+        item = consumableItem;
+        break;
+      default:
+        throw new Error(`Unknown item type: ${itemData.type}`);
+    }
+
+    item.cost = itemData.cost;
+    item.name = itemData.name;
+    item.rarity = itemData.rarity;
+    item.type = itemData.type;
+
+    const itemRegion = GLOBAL.assets.planetAtlas.getRegion(itemRegionName || 'blank.png');
+    item.sprite = new Sprite(40, 40);
+    item.sprite.setTextureRegion(itemRegion, !!itemRegionName);
+    item.sprite.position.set(0, 0, 6);
+    item.sprite.rotation = 45;
+    item.sprite.width *= 0.6;
+    item.sprite.height *= 0.6;
+    item.sprite.setDefaultVertices();
+
+    return item;
+  }
+
   type: ItemType;
   rarity: ItemRarity;
   cost: number;

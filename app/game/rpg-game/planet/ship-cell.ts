@@ -7,7 +7,7 @@ export class ShipCell {
   cellSprite: GuiButton;
   item?: BaseItem;
 
-  constructor(x: number, y: number, gui: GuiManager) {
+  constructor(x: number, y: number, gui: GuiManager, item?: BaseItem) {
     const region = GLOBAL.assets.planetAtlas.getRegion('ship_cell.png');
 
     this.cellSprite = new GuiButton();
@@ -20,6 +20,8 @@ export class ShipCell {
 
     this.cellSprite.updateHitBox();
     gui.addElement(this.cellSprite);
+
+    this.setItem(item);
   }
 
   setItem(item?: BaseItem) {

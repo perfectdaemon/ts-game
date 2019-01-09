@@ -82,7 +82,13 @@ export class MainMenuScene extends Scene {
       attackDamageMin: 6,
       attackDamageMax: 12,
       criticalChance: 0.1,
-      cellCount: 5,
+      cells: [
+        { position: new Vector2(-50, 0) },
+        { position: new Vector2(50, 0) },
+        { position: new Vector2(-100, 100) },
+        { position: new Vector2(100, 100) },
+        { position: new Vector2(0, 125) },
+      ],
       protectCount: 2,
       protectMultiplier: 0.5,
       shipHealth: 100,
@@ -97,7 +103,13 @@ export class MainMenuScene extends Scene {
       attackDamageMin: 6,
       attackDamageMax: 12,
       criticalChance: 0.1,
-      cellCount: 5,
+      cells: [
+        { position: new Vector2(-50, 0) },
+        { position: new Vector2(50, 0) },
+        { position: new Vector2(-100, 100) },
+        { position: new Vector2(100, 100) },
+        { position: new Vector2(0, 125) },
+      ],
       protectCount: 2,
       protectMultiplier: 0.5,
       shipHealth: 100,
@@ -159,7 +171,43 @@ export class MainMenuScene extends Scene {
       attackDamageMin: 6,
       attackDamageMax: 12,
       criticalChance: 0.1,
-      cellCount: 5,
+      cells: [
+        {
+          position: new Vector2(-50, 0),
+          item: {
+            type: ItemType.Weapon,
+            name: 'Чумовой лазер',
+            cost: 1000,
+            rarity: ItemRarity.Legendary,
+            weapon: {
+              damageMin: 8,
+              damageMax: 16,
+            },
+          },
+        },
+        {
+          position: new Vector2(50, 0),
+          item: {
+            type: ItemType.Weapon,
+            name: 'Крутой лазер',
+            cost: 500,
+            rarity: ItemRarity.Special,
+            weapon: {
+              damageMin: 7,
+              damageMax: 13,
+            },
+          },
+        },
+        {
+          position: new Vector2(-100, 100),
+        },
+        {
+          position: new Vector2(100, 100),
+        },
+        {
+          position: new Vector2(0, 125),
+        },
+      ],
       protectCount: 2,
       protectMultiplier: 0.5,
       shipHealth: 63,

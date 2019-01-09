@@ -7,7 +7,7 @@ import { GLOBAL } from '../global';
 import { PlayerData } from '../player-data';
 import { IRenderable } from '../render-helper';
 import { HealthBar } from './health-bar';
-import { Inventory } from './inventory';
+import { BaseItem, Inventory } from './inventory';
 import { PlayerStatsRow } from './player-stats-row';
 import { ShipCell } from './ship-cell';
 
@@ -43,13 +43,18 @@ export class Player implements IRenderable {
       stat.caption.parent = player.background;
     }
 
-    player.shipCells.push(
-      new ShipCell(150, 140, gui),
-      new ShipCell(250, 140, gui),
-      new ShipCell(100, 240, gui),
-      new ShipCell(300, 240, gui),
-      new ShipCell(200, 265, gui),
-    );
+    const cellStart = new Vector2(200, 140);
+
+    for (const shipCellData of playerData.cells) {
+      player.shipCells.push(
+        new ShipCell(
+          cellStart.x + shipCellData.position.x,
+          cellStart.y + shipCellData.position.y,
+          gui,
+          shipCellData.item ? BaseItem.build(shipCellData.item) : undefined,
+        ),
+      );
+    }
 
     player.health = new HealthBar(20, 630);
     player.updateHealth();

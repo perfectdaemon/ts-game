@@ -18,7 +18,7 @@ export class Player implements IRenderable {
     const player = new Player();
     player.ship.health = playerData.shipHealth;
     player.type = playerType;
-    for (let i = 0; i < playerData.cellCount; ++i) {
+    for (const shipCellData of playerData.cells) {
       const cell = new ShipCell();
       player.ship.cells.push(cell);
     }
@@ -29,7 +29,7 @@ export class Player implements IRenderable {
       let item: ConsumableItem;
 
       if (itemInfo.consumable == null) {
-        throw new Error('Item type is consumable but no consumable data found')
+        throw new Error('Item type is consumable but no consumable data found');
       }
 
       switch (itemInfo.consumable.type) {
