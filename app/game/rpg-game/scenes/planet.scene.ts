@@ -51,55 +51,19 @@ export class PlanetScene extends Scene implements IRenderable {
   }
 
   load(): Promise<void> {
-    this.guiManager = new GuiManager(
-      GLOBAL.assets.planetMaterial,
-      new SpriteBatch(),
-      new TextBatch(GLOBAL.assets.font),
-      GLOBAL.assets.guiCamera,
-    );
-
-    MenuHelper.loadMenu(this.guiManager, PLANET_DATA);
-    this.repairButton = this.guiManager.getElement<GuiButton>('RepairButton');
-    this.repairButton.onClick = () => {
-      this.tryRepairShip();
-    };
-
-    this.buyOrSellButton = this.guiManager.getElement<GuiButton>('BuySellButton');
-    this.buyOrSellButton.visible = false;
-    this.buyOrSellButton.onClick = () => this.onBuySellButtonClick();
-
-    this.shipTransferButton = this.guiManager.getElement<GuiButton>('ShipTransferButton');
-    this.shipTransferButton.visible = false;
-    this.shipTransferButton.onClick = () => this.onShipTransferButtonClick();
+    this.initGui();
 
     this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
 
     this.player = Player.build(PLANET_GAME_STATE.player, this.guiManager);
     this.shop = new Shop(PLANET_GAME_STATE.planet, 480, 260, this.guiManager);
 
-    this.planetName = new Text(`Планета «${PLANET_GAME_STATE.planet.name}»`);
-    this.planetName.position.set(480, 25, 1);
-    this.planetName.scale = 1.7;
-    this.planetName.pivotPoint.set(0.5, 0.5);
-
-    this.noMoneyText = new Text(`Недостаточно денег\nдля покупки`);
-    this.noMoneyText.position.set(480 - 59 / 2, 700, 1);
-    this.noMoneyText.pivotPoint.set(0.0, 0.0);
-    this.noMoneyText.color.set(1, 0.1, 0.1, 1.0);
-    this.noMoneyText.visible = false;
-
-    this.selectedCellBorder = new Sprite();
-    const selectedCellRegion = GLOBAL.assets.planetAtlas.getRegion('inventory_cell_selected.png');
-    this.selectedCellBorder.setTextureRegion(selectedCellRegion);
-    this.selectedCellBorder.setVerticesAlpha(1);
-    this.selectedCellBorder.position.set(-100, -100, 10);
-
-    this.itemDescription = new ItemDescription(480 - 59 / 2, 490);
-    this.itemDescription.setVisible(false);
-
     this.player.inventory.onClick = cell => this.onInventoryClick(cell, false);
     this.shop.inventory.onClick = cell => this.onInventoryClick(cell, true);
     this.player.onShipCellClick = cell => this.onShipCellClick(cell);
+
+    this.itemDescription = new ItemDescription(480 - 59 / 2, 490);
+    this.itemDescription.setVisible(false);
 
     this.updateRepairText();
     return super.load();
@@ -136,8 +100,49 @@ export class PlanetScene extends Scene implements IRenderable {
   getSpritesToRender(): Sprite[] {
     return [this.selectedCellBorder];
   }
+
   getTextsToRender(): Text[] {
     return [this.planetName, this.noMoneyText];
+  }
+
+  private initGui(): void {
+    this.guiManager = new GuiManager(
+      GLOBAL.assets.planetMaterial,
+      new SpriteBatch(),
+      new TextBatch(GLOBAL.assets.font),
+      GLOBAL.assets.guiCamera,
+    );
+
+    MenuHelper.loadMenu(this.guiManager, PLANET_DATA);
+    this.repairButton = this.guiManager.getElement<GuiButton>('RepairButton');
+    this.repairButton.onClick = () => {
+      this.tryRepairShip();
+    };
+
+    this.buyOrSellButton = this.guiManager.getElement<GuiButton>('BuySellButton');
+    this.buyOrSellButton.visible = false;
+    this.buyOrSellButton.onClick = () => this.onBuySellButtonClick();
+
+    this.shipTransferButton = this.guiManager.getElement<GuiButton>('ShipTransferButton');
+    this.shipTransferButton.visible = false;
+    this.shipTransferButton.onClick = () => this.onShipTransferButtonClick();
+
+    this.planetName = new Text(`Планета «${PLANET_GAME_STATE.planet.name}»`);
+    this.planetName.position.set(480, 25, 1);
+    this.planetName.scale = 1.7;
+    this.planetName.pivotPoint.set(0.5, 0.5);
+
+    this.noMoneyText = new Text(`Недостаточно денег\nдля покупки`);
+    this.noMoneyText.position.set(480 - 59 / 2, 700, 1);
+    this.noMoneyText.pivotPoint.set(0.0, 0.0);
+    this.noMoneyText.color.set(1, 0.1, 0.1, 1.0);
+    this.noMoneyText.visible = false;
+
+    this.selectedCellBorder = new Sprite();
+    const selectedCellRegion = GLOBAL.assets.planetAtlas.getRegion('inventory_cell_selected.png');
+    this.selectedCellBorder.setTextureRegion(selectedCellRegion);
+    this.selectedCellBorder.setVerticesAlpha(1);
+    this.selectedCellBorder.position.set(-100, -100, 10);
   }
 
   private updateRepairText(): void {
