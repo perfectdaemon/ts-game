@@ -46,20 +46,13 @@ export class Player implements IRenderable {
     const cellStart = new Vector2(200, 140);
 
     for (const shipCellData of playerData.cells) {
-      player.shipCells.push(
-        new ShipCell(
-          cellStart.x + shipCellData.position.x,
-          cellStart.y + shipCellData.position.y,
-          gui,
-          shipCellData.item ? BaseItem.build(shipCellData.item) : undefined,
-        ),
-      );
+      player.shipCells.push(new ShipCell(shipCellData, cellStart.x, cellStart.y, gui));
     }
 
     player.health = new HealthBar(20, 630);
     player.updateHealth();
 
-    player.inventory  = new Inventory(playerData.inventorySize, playerData.inventory, 480, 150, gui);
+    player.inventory = new Inventory(playerData.inventorySize, playerData.inventory, 480, 150, gui);
 
     player.inventoryCaption = new Text('Инвентарь');
     player.inventoryCaption.position.set(450, 70, 2);
@@ -92,7 +85,7 @@ export class Player implements IRenderable {
 
   playerData: PlayerData;
 
-  onShipCellClick: (shipCell: ShipCell) => void = () => {};
+  onShipCellClick: (shipCell: ShipCell) => void = () => { };
 
   updateHealth(): void {
     this.health.updateHealth(this.playerData.shipHealth, this.playerData.shipMaxHealth);
