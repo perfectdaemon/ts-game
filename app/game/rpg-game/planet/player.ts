@@ -100,6 +100,11 @@ export class Player implements IRenderable {
   getSpritesToRender(): Sprite[] {
     const result: Sprite[] = [this.background, this.health.back, this.health.current];
 
+    for (const shipCell of this.shipCells) {
+      if (shipCell.item) {
+        result.push(shipCell.item.sprite);
+      }
+    }
     return result.concat(this.inventory.getSpritesToRender());
   }
 

@@ -1,9 +1,11 @@
 import { GuiButton } from '../../../engine/gui/gui-button';
 import { GuiManager } from '../../../engine/gui/gui-manager';
 import { GLOBAL } from '../global';
+import { BaseItem } from './inventory';
 
 export class ShipCell {
   cellSprite: GuiButton;
+  item?: BaseItem;
 
   constructor(x: number, y: number, gui: GuiManager) {
     const region = GLOBAL.assets.planetAtlas.getRegion('ship_cell.png');
@@ -18,5 +20,15 @@ export class ShipCell {
 
     this.cellSprite.updateHitBox();
     gui.addElement(this.cellSprite);
+  }
+
+  setItem(item?: BaseItem) {
+    this.item = item;
+
+    if (!this.item) {
+      return;
+    }
+
+    this.item.sprite.parent = this.cellSprite.sprite;
   }
 }

@@ -56,12 +56,12 @@ export class InventoryCell {
     this.back = new GuiButton();
     this.back.sprite.position.set(x, y, 5);
     this.back.sprite.setTextureRegion(region, true);
-    this.back.sprite.setVerticesAlpha(0.3);
+    this.back.sprite.setVerticesAlpha(0.5);
     this.back.label.visible = false;
     this.back.updateHitBox();
 
     this.back.onMouseOver = () => this.back.sprite.setVerticesAlpha(0.7);
-    this.back.onMouseOut = () => this.back.sprite.setVerticesAlpha(0.3);
+    this.back.onMouseOut = () => this.back.sprite.setVerticesAlpha(0.5);
 
     gui.addElement(this.back);
 
@@ -153,13 +153,25 @@ export class InventoryCell {
     this.item.sprite = new Sprite(40, 40);
     this.item.sprite.setTextureRegion(itemRegion, !!itemRegionName);
     this.item.sprite.position.set(0, 0, 6);
-    this.item.sprite.parent = this.back.sprite;
     this.item.sprite.rotation = 45;
     this.item.sprite.width *= 0.6;
     this.item.sprite.height *= 0.6;
     this.item.sprite.setDefaultVertices();
 
-    switch (itemData.rarity) {
+    this.setItem(this.item);
+  }
+
+  setItem(item?: BaseItem) {
+    this.item = item;
+
+    if (!this.item) {
+      this.back.sprite.setVerticesColor(1, 1, 1, 0.5);
+      return;
+    }
+
+    this.item.sprite.parent = this.back.sprite;
+
+    switch (this.item.rarity) {
       case ItemRarity.Usual:
         this.back.sprite.setVerticesColor(1, 1, 1, 0.5);
         break;

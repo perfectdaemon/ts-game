@@ -12,12 +12,16 @@ import { PLANET_DATA } from '../assets/planet.data';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
-import { InventoryCell } from '../planet/inventory';
+import { BaseItem, InventoryCell } from '../planet/inventory';
 import { ItemDescription } from '../planet/item-description';
 import { Player } from '../planet/player';
 import { ShipCell } from '../planet/ship-cell';
 import { Shop } from '../planet/shop';
+import { ItemType } from '../player-data';
 import { IRenderable, RenderHelper } from '../render-helper';
+
+export enum ShopMode { Buy, Sell }
+export enum ShipMode { Setup, Remove }
 
 export class PlanetScene extends Scene implements IRenderable {
   guiManager: GuiManager;
@@ -28,11 +32,17 @@ export class PlanetScene extends Scene implements IRenderable {
   planetName: Text;
   shop: Shop;
   itemDescription: ItemDescription;
-  selectedCell: Sprite;
+  selectedCellBorder: Sprite;
 
   repairButton: GuiButton;
   buyOrSellButton: GuiButton;
   shipTransferButton: GuiButton;
+
+  shipMode: ShipMode;
+  shopMode: ShopMode;
+
+  selectedShipCell?: ShipCell;
+  selectedInventoryCell?: InventoryCell;
 
   constructor() {
     super();
@@ -54,10 +64,11 @@ export class PlanetScene extends Scene implements IRenderable {
 
     this.buyOrSellButton = this.guiManager.getElement<GuiButton>('BuySellButton');
     this.buyOrSellButton.visible = false;
-    this.buyOrSellButton.onClick = () => alert('buy or sell!');
+    this.buyOrSellButton.onClick = () => this.onBuySellButtonClick();
 
     this.shipTransferButton = this.guiManager.getElement<GuiButton>('ShipTransferButton');
     this.shipTransferButton.visible = false;
+    this.shipTransferButton.onClick = () => this.onShipTransferButtonClick();
 
     this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
 
@@ -69,13 +80,14 @@ export class PlanetScene extends Scene implements IRenderable {
     this.planetName.scale = 1.7;
     this.planetName.pivotPoint.set(0.5, 0.5);
 
-    this.selectedCell = new Sprite();
+    this.selectedCellBorder = new Sprite();
     const selectedCellRegion = GLOBAL.assets.planetAtlas.getRegion('inventory_cell_selected.png');
-    this.selectedCell.setTextureRegion(selectedCellRegion);
-    this.selectedCell.setVerticesAlpha(1);
-    this.selectedCell.position.set(-100, -100, 10);
+    this.selectedCellBorder.setTextureRegion(selectedCellRegion);
+    this.selectedCellBorder.setVerticesAlpha(1);
+    this.selectedCellBorder.position.set(-100, -100, 10);
 
     this.itemDescription = new ItemDescription(480 - 59 / 2, 490);
+    this.itemDescription.setVisible(false);
 
     this.player.inventory.onClick = cell => this.onInventoryClick(cell, false);
     this.shop.inventory.onClick = cell => this.onInventoryClick(cell, true);
@@ -114,7 +126,7 @@ export class PlanetScene extends Scene implements IRenderable {
   }
 
   getSpritesToRender(): Sprite[] {
-    return [this.selectedCell];
+    return [this.selectedCellBorder];
   }
   getTextsToRender(): Text[] {
     return [this.planetName];
@@ -160,11 +172,15 @@ export class PlanetScene extends Scene implements IRenderable {
   }
 
   private onInventoryClick(cell: InventoryCell, isShop: boolean): void {
-    this.selectedCell.position.set(cell.back.sprite.absoluteMatrix.position.asVector2());
+    this.shopMode = isShop ? ShopMode.Buy : ShopMode.Sell;
+    this.selectedInventoryCell = cell.item ? cell : undefined;
+
+    this.selectedCellBorder.position.set(cell.back.sprite.absoluteMatrix.position.asVector2());
 
     if (!cell.item) {
       this.itemDescription.setVisible(false);
       this.buyOrSellButton.visible = false;
+      this.shipTransferButton.visible = false;
       return;
     }
 
@@ -172,9 +188,92 @@ export class PlanetScene extends Scene implements IRenderable {
     this.buyOrSellButton.visible = true;
     this.buyOrSellButton.label.text = isShop ? 'Купить' : 'Продать';
     this.itemDescription.update(cell.item);
+
+    if (isShop) {
+      this.shipTransferButton.visible = false;
+    } else if (this.hasEmptyShipCells() && this.canSetupOnShip(cell.item)) {
+      this.shipTransferButton.visible = true;
+      this.shipTransferButton.label.text = 'Поставить';
+      this.shipMode = ShipMode.Setup;
+    }
   }
 
   private onShipCellClick(shipCell: ShipCell): void {
-    alert('ShipCell clicked!');
+    this.buyOrSellButton.visible = false;
+
+    this.selectedCellBorder.position.set(shipCell.cellSprite.sprite.absoluteMatrix.position.asVector2());
+
+    if (!shipCell.item) {
+      this.itemDescription.setVisible(false);
+      this.shipTransferButton.visible = false;
+      this.selectedShipCell = undefined;
+      return;
+    }
+
+    this.itemDescription.setVisible(true);
+    this.shipTransferButton.visible = true;
+    this.shipTransferButton.label.text = 'Убрать';
+    this.shipMode = ShipMode.Remove;
+    this.selectedShipCell = shipCell;
+    this.itemDescription.update(shipCell.item);
+  }
+
+  private hasEmptyShipCells(): boolean {
+    return this.player.shipCells.some(it => !it.item);
+  }
+
+  private canSetupOnShip(item: BaseItem): boolean {
+    return item.type === ItemType.Engine || item.type === ItemType.Shield || item.type == ItemType.Weapon;
+  }
+
+  private onShipTransferButtonClick(): void {
+    if (this.shipMode === ShipMode.Setup) {
+      const emptyCells = this.player.shipCells.filter(it => !it.item);
+      if (emptyCells.length === 0) {
+        throw new Error('Can not setup item - no emptyCells');
+      }
+
+      if (this.shopMode === ShopMode.Buy) {
+        throw new Error('Can not setup item - ShopMode is Buy');
+      }
+
+      if (!this.selectedInventoryCell) {
+        throw new Error('Can not setup item - not selected inventory cell');
+      }
+
+      if (!this.selectedInventoryCell.item) {
+        throw new Error('Can not setup item - selected inventory cell has no item');
+      }
+
+      const emptyCell = emptyCells[0];
+
+      emptyCell.setItem(this.selectedInventoryCell.item);
+      this.selectedInventoryCell.item = undefined;
+      this.onInventoryClick(this.selectedInventoryCell, false);
+    } else {
+      // ShipMode == Remove
+      const emptyInventoryCells = this.player.inventory.cells.filter(it => !it.item);
+      if (emptyInventoryCells.length === 0) {
+        throw new Error('Can not remove item - no emptyCells in inventory');
+      }
+
+      if (!this.selectedShipCell) {
+        throw new Error('Can not remove item - no selected ship cell');
+      }
+
+      if (!this.selectedShipCell.item) {
+        throw new Error('Can not remove item - selected ship cell has no item');
+      }
+
+      const emptyCell = emptyInventoryCells[0];
+
+      emptyCell.setItem(this.selectedShipCell.item);
+      this.selectedShipCell.item = undefined;
+      this.onShipCellClick(this.selectedShipCell);
+    }
+  }
+
+  private onBuySellButtonClick(): void {
+
   }
 }
