@@ -288,7 +288,7 @@ export class PlanetScene extends Scene implements IRenderable {
 
       const emptyCell = emptyCells[0];
       emptyCell.setItem(this.selectedInventoryCell.item);
-      this.selectedInventoryCell.item = undefined;
+      this.selectedInventoryCell.setItem();
       this.onInventoryClick(this.selectedInventoryCell, false);
 
       this.updatePlayerData();
@@ -310,7 +310,7 @@ export class PlanetScene extends Scene implements IRenderable {
       const emptyCell = emptyInventoryCells[0];
       emptyCell.setItem(this.selectedShipCell.item);
 
-      this.selectedShipCell.item = undefined;
+      this.selectedShipCell.setItem();
       this.onShipCellClick(this.selectedShipCell);
 
       this.updatePlayerData();
