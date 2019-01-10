@@ -259,7 +259,7 @@ export class MainMenuScene extends Scene {
       ],
       shipHealth: 63,
       shipMaxHealth: 100,
-      credits: 59,
+      credits: 5000,
       inventorySize: 16,
       inventory: [
         {
