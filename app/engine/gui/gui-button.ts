@@ -33,7 +33,7 @@ export class GuiButton extends GuiElement {
       .set(0.5, 0.5)
       .subtractFromSelf(this.sprite.pivotPoint)
       .multiplyVecSelf(this.sprite.width, this.sprite.height)
-      .addToSelf(this.sprite.position);
+      .addToSelf(this.sprite.absoluteMatrix.position);
 
     this.hitBox.halfSize.set(this.sprite.width / 2.0, this.sprite.height / 2.0);
   }
