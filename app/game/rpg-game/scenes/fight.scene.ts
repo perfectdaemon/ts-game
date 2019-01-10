@@ -10,6 +10,7 @@ import { Player } from '../fight/player';
 import { PlayerType } from '../fight/player-type';
 import { GLOBAL } from '../global';
 import { SpriteParticleEmitter, TextParticleEmitter } from '../particles';
+import { DamageInfo, PlayerDataExtensions, ProtectionInfo } from '../player-data-extensions';
 import { RenderHelper } from '../render-helper';
 
 export enum FightState {
@@ -100,12 +101,7 @@ export class FightScene extends Scene {
       }
 
       this.human.markAsProtect(cell);
-
-      if (this.human.hasProtectsLeft()) {
-        this.setFightState(FightState.HumanTurnProtect);
-      } else {
-        this.setFightState(FightState.HumanTurnAttack);
-      }
+      this.setFightState(FightState.HumanTurnProtect);
     } else if (this.fightState === FightState.HumanTurnAttack) {
       const result = this.enemy.ship.cells.filter(c => c.isMouseOver(worldPosition));
       if (result.length > 1) { throw new Error('Hit too many cells'); }
@@ -119,28 +115,7 @@ export class FightScene extends Scene {
       }
 
       this.human.markAsAttack(cell);
-
-      if (this.human.hasAttacksLeft()) {
-        this.setFightState(FightState.HumanTurnAttack);
-      } else {
-        this.setFightState(FightState.AiTurn);
-        this.actionManager.add(() => this.enemy.aiChooseProtectAndAttack(this.human), 2.0)
-          .then(() => this.setFightState(FightState.Animation), 2.0)
-          .then(() => this.calculateTurn(this.human, this.enemy), 2.0)
-          .then(() => this.calculateTurn(this.enemy, this.human), 4.0)
-          .then(() => {
-            const isHumanVictory = !this.enemy.ship.isAlive();
-            const isEnemyVictory = !this.human.ship.isAlive();
-
-            if (isEnemyVictory) {
-              this.setFightState(FightState.Defeat);
-            } else if (isHumanVictory) {
-              this.setFightState(FightState.Victory);
-            } else {
-              this.setFightState(FightState.Start);
-            }
-          }, 5);
-      }
+      this.setFightState(FightState.HumanTurnAttack);
     }
   }
 
@@ -159,35 +134,40 @@ export class FightScene extends Scene {
 
   private calculateTurn(attacking: Player, defending: Player): void {
     let pauseOnStart = 0;
+    let damages = PlayerDataExtensions.calculateDamages(attacking.playerData);
+    let protections = PlayerDataExtensions.calculateProtections(defending.playerData);
+
     for (const attackedCell of defending.ship.cells.filter(cell => cell.markedAsAttacked)) {
-      let damage = attacking.playerData.attackDamageMin + Math.random() *
-        (attacking.playerData.attackDamageMax - attacking.playerData.attackDamageMin);
-
-      let isCritical: boolean = false;
-
-      if (Math.random() <= attacking.playerData.criticalChance) {
-        damage *= 2;
-        isCritical = true;
+      // Generate new damages and protections if no left
+      // It may occur when you are using consumable items "+1 attack" or "+1 protect"
+      if (damages.length === 0) {
+        damages = PlayerDataExtensions.calculateDamages(attacking.playerData);
       }
 
-      const protectionMultiplier = attackedCell.markedAsProtected
-        ? defending.playerData.protectMultiplier
-        : 1.0;
+      if (protections.length === 0) {
+        protections = PlayerDataExtensions.calculateProtections(defending.playerData);
+      }
 
-      damage *= protectionMultiplier;
+      const damage = damages.pop() as DamageInfo;
 
-      damage = Math.floor(damage);
+      if (attackedCell.markedAsProtected) {
+        const protection = protections.pop() as ProtectionInfo;
+        const multiplier = Math.min(1.0, 1.0 - protection.protectionMultiplier + damage.shieldPiercing);
+        damage.damage *= multiplier;
+      }
+
+      damage.damage = Math.floor(damage.damage);
 
       this.actionManager.add(() => {
-        defending.ship.hit(damage);
+        defending.ship.hit(damage.damage);
 
         const cellAbsolutePosition = attackedCell.renderable.sprite.absoluteMatrix.position.asVector2();
-        const damageColor = isCritical
+        const damageColor = damage.isCritical
           ? new Vector4(1, 0.2, 0.2, 1.0)
           : new Vector4(0.7, 0.7, 0.1, 1.0);
 
-        ParticleEmitterExtensions.emitDamageCount(this.textEmitter, cellAbsolutePosition, damage, damageColor,
-          isCritical ? 1.3 : 1.0);
+        ParticleEmitterExtensions.emitDamageCount(this.textEmitter, cellAbsolutePosition, damage.damage, damageColor,
+          damage.isCritical ? 1.3 : 1.0);
 
         if (attackedCell.markedAsProtected) {
           ParticleEmitterExtensions.emitHitWithShield(this.emitter, cellAbsolutePosition);
@@ -208,19 +188,47 @@ export class FightScene extends Scene {
         break;
 
       case FightState.HumanTurnProtect:
-        this.dialog.text.text = `Выберите ${this.human.protectsLeft} своих отсека для защиты`;
+        if (this.human.hasProtectsLeft()) {
+          this.dialog.text.text = `Выберите ${this.human.protectsLeft} своих отсека для защиты`;
+        } else {
+          this.setFightState(FightState.HumanTurnAttack);
+          return;
+        }
         break;
 
       case FightState.HumanTurnAttack:
-        this.dialog.text.text = `Выберите ${this.human.attacksLeft} отсека противника для атаки`;
+        if (this.human.hasAttacksLeft()) {
+          this.dialog.text.text = `Выберите ${this.human.attacksLeft} отсека противника для атаки`;
+        } else {
+          this.setFightState(FightState.AiTurn);
+          return;
+        }
         break;
 
       case FightState.AiTurn:
         this.dialog.text.text = `Ход противника`;
+        this.actionManager
+          .add(() => this.enemy.aiChooseProtectAndAttack(this.human), 2.0)
+          .then(() => this.setFightState(FightState.Animation), 2.0);
         break;
 
       case FightState.Animation:
         this.dialog.text.text = `Рассчитываем бой...`;
+        this.actionManager
+          .add(() => this.calculateTurn(this.human, this.enemy), 0.5)
+          .then(() => this.calculateTurn(this.enemy, this.human), 4.0) // TODO not 4, calculate it!!!
+          .then(() => {
+            const isHumanVictory = !this.enemy.ship.isAlive();
+            const isEnemyVictory = !this.human.ship.isAlive();
+
+            if (isEnemyVictory) {
+              this.setFightState(FightState.Defeat);
+            } else if (isHumanVictory) {
+              this.setFightState(FightState.Victory);
+            } else {
+              this.setFightState(FightState.Start);
+            }
+          }, 5); // TODO not 5, calculate it!
         break;
 
       case FightState.Victory:

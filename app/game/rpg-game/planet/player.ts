@@ -28,15 +28,11 @@ export class Player implements IRenderable {
 
     const start = 340;
 
-    // tslint:disable-next-line:max-line-length
-    const damageText = `${playerData.attackDamageMin * playerData.attackCount}–${playerData.attackDamageMax * playerData.attackCount}`;
-    const shieldText = `${playerData.protectCount} x ${playerData.protectMultiplier * 100} %`;
-
     player.playerStats.push(
-      new PlayerStatsRow('Урон (сумм)', damageText, 10, start, 250),
-      new PlayerStatsRow('Щит', shieldText, 10, start + 25, 250),
-      new PlayerStatsRow('Крит. шанс', `${playerData.criticalChance * 100} %`, 10, start + 50, 250),
-      new PlayerStatsRow('Крит. урон', `200 %`, 10, start + 75, 250),
+      new PlayerStatsRow('Урон (сумм)', '', 10, start, 250),
+      new PlayerStatsRow('Щит', '', 10, start + 25, 250),
+      new PlayerStatsRow('Крит. шанс', '', 10, start + 50, 250),
+      new PlayerStatsRow('Крит. урон', '', 10, start + 75, 250),
     );
 
     for (const stat of player.playerStats) {
@@ -93,6 +89,10 @@ export class Player implements IRenderable {
 
   updateCreditsText(): void {
     this.creditsText.text = `$${this.playerData.credits}`;
+  }
+
+  updateStats(): void {
+
   }
 
   getSpritesToRender(): Sprite[] {

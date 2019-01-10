@@ -4,14 +4,8 @@ export class PlayerData {
   shipHealth: number;
   shipMaxHealth: number;
 
-  attackCount: number;
-
-  attackDamageMin: number;
-  attackDamageMax: number;
   criticalChance: number;
-
-  protectCount: number;
-  protectMultiplier: number;
+  criticalMultiplier: number;
 
   credits: number;
   inventorySize: number;

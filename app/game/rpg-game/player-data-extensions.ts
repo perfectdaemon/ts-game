@@ -54,10 +54,10 @@ export class PlayerDataExtensions {
     return protectCount;
   }
 
-  static calculateDamages(data: PlayerData): { damage: number, isCritical: boolean }[] {
+  static calculateDamages(data: PlayerData): DamageInfo[] {
     const weapons = this.get(data, ItemType.Weapon);
 
-    const result: { damage: number, isCritical: boolean }[] = [];
+    const result: DamageInfo[] = [];
 
     for (const weapon of weapons) {
       if (!weapon.weapon) {
@@ -69,11 +69,29 @@ export class PlayerDataExtensions {
       // Critical
       let isCritical: boolean = false;
       if (Math.random() <= data.criticalChance) {
-        damage *= 2;
+        damage *= data.criticalMultiplier;
         isCritical = true;
       }
 
-      result.push({ damage, isCritical });
+      result.push({ damage, isCritical, shieldPiercing: weapon.weapon.shieldPiercing || 0 });
+    }
+
+    return result;
+  }
+
+  static calculateProtections(data: PlayerData): ProtectionInfo[] {
+    const shields = this.get(data, ItemType.Shield);
+
+    const result: ProtectionInfo[] = [];
+
+    for (const shield of shields) {
+      if (!shield.shield) {
+        throw new Error(`Type is shield, but no shield data provided`);
+      }
+      // Base
+      const protectionMultiplier = shield.shield.shieldMultiplier;
+
+      result.push({ protectionMultiplier });
     }
 
     return result;
@@ -84,4 +102,14 @@ export class PlayerDataExtensions {
       .filter(it => !!it.item && it.item.type === type)
       .map(it => it.item as InventoryItemData);
   }
+}
+
+export class DamageInfo {
+  damage: number;
+  isCritical: boolean;
+  shieldPiercing: number;
+}
+
+export class ProtectionInfo {
+  protectionMultiplier: number;
 }

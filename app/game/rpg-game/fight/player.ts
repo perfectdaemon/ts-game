@@ -1,6 +1,7 @@
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { ConsumableItemType, ItemType, PlayerData } from '../player-data';
+import { PlayerDataExtensions } from '../player-data-extensions';
 import { IRenderable } from '../render-helper';
 import { AttackCountItem } from './attack-count-item';
 import { ConsumableItem } from './consumable-item';
@@ -94,8 +95,8 @@ export class Player implements IRenderable {
       cell.reset();
     }
 
-    this.attacksLeft = this.playerData.attackCount;
-    this.protectsLeft = this.playerData.protectCount;
+    this.attacksLeft = PlayerDataExtensions.attackCount(this.playerData);
+    this.protectsLeft = PlayerDataExtensions.protectCount(this.playerData);
 
     for (const activeItem of this.activeItems) {
       if (--activeItem.roundLeft > 0) {

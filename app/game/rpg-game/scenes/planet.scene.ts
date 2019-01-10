@@ -290,8 +290,6 @@ export class PlanetScene extends Scene implements IRenderable {
       emptyCell.setItem(this.selectedInventoryCell.item);
       this.selectedInventoryCell.setItem();
       this.onInventoryClick(this.selectedInventoryCell, false);
-
-      this.updatePlayerData();
     } else {
       // ShipMode == Remove
       const emptyInventoryCells = this.player.inventory.cells.filter(it => !it.item);
@@ -312,9 +310,11 @@ export class PlanetScene extends Scene implements IRenderable {
 
       this.selectedShipCell.setItem();
       this.onShipCellClick(this.selectedShipCell);
-
-      this.updatePlayerData();
     }
+
+    this.updatePlayerData();
+    this.player.updateStats();
+    this.player.updateHealth();
   }
 
   private onBuySellButtonClick(): void {
