@@ -19,6 +19,7 @@ import { ShipCell } from '../planet/ship-cell';
 import { Shop } from '../planet/shop';
 import { ItemType } from '../player-data';
 import { IRenderable, RenderHelper } from '../render-helper';
+import { SCENES } from './scenes.const';
 
 export enum ShopMode { Buy, Sell }
 export enum ShipMode { Setup, Remove }
@@ -119,7 +120,8 @@ export class PlanetScene extends Scene implements IRenderable {
 
     this.takeOffButton = this.guiManager.getElement<GuiButton>('TakeOffButton');
     this.takeOffButton.onClick = () => {
-      alert('Взлетаем!');
+      this.updatePlayerData();
+      this.sceneManager.switchTo(SCENES.game);
     };
 
     this.repairButton = this.guiManager.getElement<GuiButton>('RepairButton');
