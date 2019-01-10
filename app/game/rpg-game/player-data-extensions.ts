@@ -71,7 +71,7 @@ export class PlayerDataExtensions {
 
   static criticalChanceSummary(data: PlayerData): string {
     const chance = this.criticalChance(data);
-    return `${chance * 100} %`;
+    return `${Math.floor(chance * 100)} %`;
   }
 
   static criticalMultiplierSummary(data: PlayerData): string {

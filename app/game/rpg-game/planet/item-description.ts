@@ -4,7 +4,7 @@ import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
 import { ConsumableItemType, ItemRarity, ItemType } from '../player-data';
 import { IRenderable } from '../render-helper';
-import { BaseItem, ConsumableItem } from './inventory';
+import { BaseItem, ConsumableItem, EngineItem, ShieldItem, WeaponItem } from './inventory';
 import { PlayerStatsRow } from './player-stats-row';
 
 export class ItemDescription implements IRenderable {
@@ -42,8 +42,8 @@ export class ItemDescription implements IRenderable {
 
     this.type = new Text('Тип предмета');
     this.type.parent = this.back;
-    this.type.pivotPoint.set(0.5, 0);
-    this.type.position.set(this.back.width / 2, 35, 2);
+    this.type.pivotPoint.set(0, 1);
+    this.type.position.set(5, this.back.height - 5, 2);
 
     this.name = new Text('Название');
     this.name.parent = this.back;
@@ -65,12 +65,27 @@ export class ItemDescription implements IRenderable {
     this.cost.parent = this.back;
     this.cost.pivotPoint.set(1, 1);
     this.cost.position.set(this.back.width - 5, this.back.height - 5, 2);
+
+    const statX = this.itemBack.width / 2 + this.itemBack.position.x + 10;
+    for (let i = 0; i < 5; i++) {
+      const row = new PlayerStatsRow('', '', statX, 40 + (i * 25), 200);
+      row.caption.parent = this.back;
+      this.stats.push(row);
+    }
   }
 
   update(baseItem: BaseItem, concreteCost: number): void {
+    // Reset
+    for (const stat of this.stats) {
+      stat.caption.text = stat.value.text = '';
+    }
+    this.description.text = '';
+
+    // Base data
     this.cost.text = `$${concreteCost}`;
     this.name.text = baseItem.name;
 
+    // Rarity (color)
     switch (baseItem.rarity) {
       case ItemRarity.Usual:
         this.itemBack.setVerticesColor(1, 1, 1, 1.0);
@@ -83,12 +98,13 @@ export class ItemDescription implements IRenderable {
         break;
     }
 
-    this.description.text = '';
-
     switch (baseItem.type) {
       case ItemType.Consumable:
         this.type.text = 'Расходуемое';
+
         const consumable = baseItem as ConsumableItem;
+        this.stats[0].caption.text = 'Количество';
+        this.stats[0].value.text = `${consumable.count}`;
         switch (consumable.consType) {
           case ConsumableItemType.Heal:
             this.description.text = 'Лечит корабль на некоторое количество единиц, которое определяется во время боя';
@@ -115,6 +131,12 @@ export class ItemDescription implements IRenderable {
 
       case ItemType.Engine:
         this.type.text = 'Двигатель';
+
+        const engine = baseItem as EngineItem;
+        this.stats[0].caption.text = 'Уклонение';
+        this.stats[0].value.text = `${engine.dodgeMultiplier}`;
+        this.stats[1].caption.text = 'Скорость';
+        this.stats[1].value.text = `${engine.speedBoost}`;
         break;
 
       case ItemType.Misc:
@@ -125,10 +147,42 @@ export class ItemDescription implements IRenderable {
 
       case ItemType.Shield:
         this.type.text = 'Генератор щита';
+
+        const shield = baseItem as ShieldItem;
+        this.stats[0].caption.text = 'Сила щита';
+        this.stats[0].value.text = `${shield.shieldMultiplier}`;
+        if (shield.addProtect) {
+          this.stats[1].caption.text = 'Доп. щиты';
+          this.stats[1].value.text = `+${shield.addProtect}`;
+        }
+
         break;
 
       case ItemType.Weapon:
         this.type.text = 'Оружие';
+
+        const weapon = baseItem as WeaponItem;
+        this.stats[0].caption.text = 'Урон';
+        this.stats[0].value.text = `${weapon.damageMin}–${weapon.damageMax}`;
+        let nextIndex = 1;
+        if (weapon.criticalChanceMultiplier) {
+          this.stats[nextIndex].caption.text = 'Крит. шанс';
+          this.stats[nextIndex].value.text = `+${weapon.criticalChanceMultiplier * 100} %`;
+          ++nextIndex;
+        }
+
+        if (weapon.shieldPiercing) {
+          this.stats[nextIndex].caption.text = 'Пробитие щита';
+          this.stats[nextIndex].value.text = `+${weapon.shieldPiercing * 100} %`;
+          ++nextIndex;
+        }
+
+        if (weapon.addAttack) {
+          this.stats[nextIndex].caption.text = 'Доп. атаки';
+          this.stats[nextIndex].value.text = `+${weapon.addAttack}`;
+          ++nextIndex;
+        }
+
         break;
 
       default:
