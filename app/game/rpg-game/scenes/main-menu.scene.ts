@@ -231,6 +231,8 @@ export class MainMenuScene extends Scene {
             weapon: {
               damageMin: 8,
               damageMax: 16,
+              addAttack: 1,
+              criticalChanceMultiplier: 0.2,
             },
           },
         },
@@ -326,6 +328,7 @@ export class MainMenuScene extends Scene {
         weapon: {
           damageMin: 6,
           damageMax: 12,
+          shieldPiercing: 0.1,
         },
       },
       {
