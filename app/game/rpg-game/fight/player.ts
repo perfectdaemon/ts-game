@@ -1,5 +1,4 @@
 import { GuiManager } from '../../../engine/gui/gui-manager';
-import { AABB } from '../../../engine/math/aabb';
 import { Vector2 } from '../../../engine/math/vector2';
 import { renderer } from '../../../engine/render/webgl';
 import { Sprite } from '../../../engine/scene/sprite';
@@ -80,72 +79,27 @@ export class Player implements IRenderable {
 
       switch (itemInfo.consumable.type) {
         case ConsumableItemType.Heal:
-          item = new HealItem();
+          item = new HealItem(itemInfo, 45 + 80 * i++, player.background.height - 45, gui);
           break;
 
         case ConsumableItemType.IncreaseCriticalChance:
-          item = new CriticalChanceItem();
+          item = new CriticalChanceItem(itemInfo, 45 + 80 * i++, player.background.height - 45, gui);
           break;
 
         case ConsumableItemType.MoreAttackCount:
-          item = new AttackCountItem();
+          item = new AttackCountItem(itemInfo, 45 + 80 * i++, player.background.height - 45, gui);
           break;
 
         case ConsumableItemType.MoreProtectCount:
-          item = new ProtectCountItem();
+          item = new ProtectCountItem(itemInfo, 45 + 80 * i++, player.background.height - 45, gui);
           break;
 
         default:
           throw new Error(`Unknown item type: ${itemInfo.type}`);
       }
 
-      item.count = itemInfo.consumable.count;
-      const consRegion = GLOBAL.assets.planetAtlas.getRegion('blank.png');
-      item.background = new Sprite(70, 70);
-      item.background.position.set(45 + 80 * i++, player.background.height - 45, 2);
-      item.background.setVerticesColor(1, 1, 1, 1.0);
-      item.background.parent = player.background;
-      item.background.setTextureRegion(consRegion, false);
-
-      item.countText = new Text();
-      item.countText.pivotPoint.set(1, 1);
-      item.countText.position.set(item.background.width / 2 - 5, item.background.height / 2 - 5, 4);
-      item.countText.color.set(1, 1, 1, 1.0);
-      item.countText.shadowEnabled = true;
-      item.countText.shadowColor.set(0, 0, 0, 1.0);
-      item.countText.shadowOffset.set(1, 2);
-      item.countText.parent = item.background;
-
-      item.updateCountText();
-
-      item.effectText = new Text();
-      item.effectText.pivotPoint.set(0.5, 0.5);
-      item.effectText.position.set(0, -12, 3);
-      item.effectText.color.set(1, 1, 1, 1.0);
-      item.effectText.shadowEnabled = true;
-      item.effectText.shadowColor.set(0, 0, 0, 1.0);
-      item.effectText.shadowOffset.set(1, 2);
-      item.effectText.parent = item.background;
-
-      item.hitBox = new AABB(
-        item.background.absoluteMatrix.position.asVector2(),
-        item.background.size,
-      );
-
-      if (item instanceof HealItem) {
-        item.background.setVerticesColor(0.1, 0.7, 0.1, 1.0);
-        item.effectText.text = '+З';
-      } else if (item instanceof AttackCountItem) {
-        item.background.setVerticesColor(0.7, 0.1, 0.1, 1.0);
-        item.effectText.text = '+А';
-      } else if (item instanceof CriticalChanceItem) {
-        item.background.setVerticesColor(0.7, 0.7, 0.1, 1.0);
-        item.effectText.text = '+К';
-      } else if (item instanceof ProtectCountItem) {
-        item.background.setVerticesColor(0.1, 0.1, 0.7, 1.0);
-        item.effectText.text = '+Щ';
-      }
-
+      item.background.sprite.parent = player.background;
+      item.background.updateHitBox();
       player.consumableItems.push(item);
     }
 
@@ -191,7 +145,7 @@ export class Player implements IRenderable {
     }
 
     for (const cons of this.consumableItems) {
-      result.push(cons.background);
+      result.push(cons.background.sprite);
     }
 
     return result;
