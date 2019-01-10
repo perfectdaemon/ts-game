@@ -1,7 +1,10 @@
+import { GuiManager } from '../../../engine/gui/gui-manager';
 import { ActionManager } from '../../../engine/helpers/action-manager/action-manager';
 import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
 import { Vector2 } from '../../../engine/math/vector2';
 import { Vector4 } from '../../../engine/math/vector4';
+import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
+import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
 import { DialogBox } from '../dialog-box';
 import { ParticleEmitterExtensions } from '../fight/emitter-extensions';
@@ -24,6 +27,7 @@ export enum FightState {
 }
 
 export class FightScene extends Scene {
+  guiManager: GuiManager;
   human: Player;
   enemy: Player;
   fightState: FightState;
@@ -43,8 +47,15 @@ export class FightScene extends Scene {
 
   load(): Promise<void> {
     console.log('Fight scene is loaded');
+    this.guiManager = new GuiManager(
+      GLOBAL.assets.planetMaterial,
+      new SpriteBatch(),
+      new TextBatch(GLOBAL.assets.font),
+      GLOBAL.assets.guiCamera,
+    );
+
     this.actionManager = new ActionManager();
-    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.blankMaterial);
+    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
     this.emitter = new SpriteParticleEmitter(
       this.renderHelper,
       () => ParticleEmitterExtensions.createSmallParticle(),
@@ -69,6 +80,7 @@ export class FightScene extends Scene {
   }
 
   update(deltaTime: number): void {
+    this.guiManager.update(deltaTime);
     this.actionManager.update(deltaTime);
     this.emitter.update(deltaTime);
     this.textEmitter.update(deltaTime);
@@ -89,7 +101,7 @@ export class FightScene extends Scene {
     this.checkItemsClick(worldPosition);
 
     if (this.fightState === FightState.HumanTurnProtect) {
-      const result = this.human.ship.cells.filter(c => c.isMouseOver(worldPosition));
+      const result = this.human.shipCells.filter(c => c.isMouseOver(worldPosition));
       if (result.length > 1) { throw new Error('Hit too many cells'); }
       if (result.length === 0) { return; }
 
@@ -103,7 +115,7 @@ export class FightScene extends Scene {
       this.human.markAsProtect(cell);
       this.setFightState(FightState.HumanTurnProtect);
     } else if (this.fightState === FightState.HumanTurnAttack) {
-      const result = this.enemy.ship.cells.filter(c => c.isMouseOver(worldPosition));
+      const result = this.enemy.shipCells.filter(c => c.isMouseOver(worldPosition));
       if (result.length > 1) { throw new Error('Hit too many cells'); }
       if (result.length === 0) { return; }
 
@@ -127,8 +139,8 @@ export class FightScene extends Scene {
 
   private reset(): void {
     this.turnNumber = 1;
-    this.human = Player.build(FIGHT_GAME_STATE.humanData, PlayerType.Human);
-    this.enemy = Player.build(FIGHT_GAME_STATE.enemyData, PlayerType.Ai);
+    this.human = Player.build(FIGHT_GAME_STATE.humanData, PlayerType.Human, this.guiManager);
+    this.enemy = Player.build(FIGHT_GAME_STATE.enemyData, PlayerType.Ai, this.guiManager);
     this.setFightState(FightState.Start);
   }
 
@@ -137,7 +149,7 @@ export class FightScene extends Scene {
     let damages = PlayerDataExtensions.calculateDamages(attacking.playerData);
     let protections = PlayerDataExtensions.calculateProtections(defending.playerData);
 
-    for (const attackedCell of defending.ship.cells.filter(cell => cell.markedAsAttacked)) {
+    for (const attackedCell of defending.shipCells.filter(cell => cell.markedAsAttacked)) {
       // Generate new damages and protections if no left
       // It may occur when you are using consumable items "+1 attack" or "+1 protect"
       if (damages.length === 0) {
@@ -159,9 +171,9 @@ export class FightScene extends Scene {
       damage.damage = Math.floor(damage.damage);
 
       this.actionManager.add(() => {
-        defending.ship.hit(damage.damage);
+        defending.hit(damage.damage);
 
-        const cellAbsolutePosition = attackedCell.renderable.sprite.absoluteMatrix.position.asVector2();
+        const cellAbsolutePosition = attackedCell.cellSprite.sprite.absoluteMatrix.position.asVector2();
         const damageColor = damage.isCritical
           ? new Vector4(1, 0.2, 0.2, 1.0)
           : new Vector4(0.7, 0.7, 0.1, 1.0);
@@ -218,8 +230,8 @@ export class FightScene extends Scene {
           .add(() => this.calculateTurn(this.human, this.enemy), 0.5)
           .then(() => this.calculateTurn(this.enemy, this.human), 4.0) // TODO not 4, calculate it!!!
           .then(() => {
-            const isHumanVictory = !this.enemy.ship.isAlive();
-            const isEnemyVictory = !this.human.ship.isAlive();
+            const isHumanVictory = !this.enemy.isAlive();
+            const isEnemyVictory = !this.human.isAlive();
 
             if (isEnemyVictory) {
               this.setFightState(FightState.Defeat);
