@@ -19,7 +19,6 @@ import { ShipCell } from '../planet/ship-cell';
 import { Shop } from '../planet/shop';
 import { ItemType } from '../player-data';
 import { IRenderable, RenderHelper } from '../render-helper';
-import { SCENES } from './scenes.const';
 
 export enum ShopMode { Buy, Sell }
 export enum ShipMode { Setup, Remove }
@@ -68,6 +67,7 @@ export class PlanetScene extends Scene implements IRenderable {
     this.itemDescription.setVisible(false);
 
     this.updateRepairText();
+    this.player.updateStats();
     return super.load();
   }
 

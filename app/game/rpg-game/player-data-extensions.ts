@@ -1,7 +1,7 @@
 import { InventoryItemData, ItemType, PlayerData } from './player-data';
 
 export class PlayerDataExtensions {
-  static attackDamageMinMaxSummary(data: PlayerData): [number, number] {
+  static attackDamageMinMaxSummary(data: PlayerData): string {
     const weapons = this.get(data, ItemType.Weapon);
 
     let sumMin = 0;
@@ -15,7 +15,7 @@ export class PlayerDataExtensions {
       sumMax += weapon.weapon.damageMax;
     }
 
-    return [sumMin, sumMax];
+    return `${sumMin}–${sumMax}`;
   }
 
   static attackCount(data: PlayerData): number {
@@ -54,6 +54,31 @@ export class PlayerDataExtensions {
     return protectCount;
   }
 
+  static protectSummary(data: PlayerData): string {
+    const shields = this.get(data, ItemType.Shield);
+
+    const result: string[] = [];
+
+    for (const shield of shields) {
+      if (!shield.shield) {
+        throw new Error(`Type is shield, but no shield data provided`);
+      }
+      result.push(`${1 + (shield.shield.addProtect || 0)} x ${shield.shield.shieldMultiplier}`);
+    }
+
+    return result.join('\n') || '—';
+  }
+
+  static criticalChanceSummary(data: PlayerData): string {
+    const chance = this.criticalChance(data);
+    return `${chance * 100} %`;
+  }
+
+  static criticalMultiplierSummary(data: PlayerData): string {
+    const multiplier = this.criticalMultiplier(data);
+    return `${multiplier * 100} %`;
+  }
+
   static calculateDamages(data: PlayerData): DamageInfo[] {
     const weapons = this.get(data, ItemType.Weapon);
 
@@ -68,7 +93,7 @@ export class PlayerDataExtensions {
 
       // Critical
       let isCritical: boolean = false;
-      if (Math.random() <= data.criticalChance) {
+      if (Math.random() <= this.criticalChance(data)) {
         damage *= data.criticalMultiplier;
         isCritical = true;
       }
@@ -77,6 +102,26 @@ export class PlayerDataExtensions {
     }
 
     return result;
+  }
+
+  static criticalChance(data: PlayerData): number {
+    const weapons = this.get(data, ItemType.Weapon);
+
+    let result = data.criticalChance;
+
+    for (const weapon of weapons) {
+      if (!weapon.weapon) {
+        throw new Error(`Type is weapon, but no weapon data provided`);
+      }
+      // Base
+      result += weapon.weapon.criticalChanceMultiplier || 0;
+    }
+
+    return result;
+  }
+
+  static criticalMultiplier(data: PlayerData): number {
+    return data.criticalMultiplier;
   }
 
   static calculateProtections(data: PlayerData): ProtectionInfo[] {

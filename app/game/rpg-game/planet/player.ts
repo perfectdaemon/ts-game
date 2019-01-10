@@ -5,9 +5,10 @@ import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
 import { PlayerData } from '../player-data';
+import { PlayerDataExtensions } from '../player-data-extensions';
 import { IRenderable } from '../render-helper';
 import { HealthBar } from './health-bar';
-import { BaseItem, Inventory } from './inventory';
+import { Inventory } from './inventory';
 import { PlayerStatsRow } from './player-stats-row';
 import { ShipCell } from './ship-cell';
 
@@ -30,9 +31,9 @@ export class Player implements IRenderable {
 
     player.playerStats.push(
       new PlayerStatsRow('Урон (сумм)', '', 10, start, 250),
-      new PlayerStatsRow('Щит', '', 10, start + 25, 250),
-      new PlayerStatsRow('Крит. шанс', '', 10, start + 50, 250),
-      new PlayerStatsRow('Крит. урон', '', 10, start + 75, 250),
+      new PlayerStatsRow('Крит. шанс', '', 10, start + 25, 250),
+      new PlayerStatsRow('Крит. урон', '', 10, start + 50, 250),
+      new PlayerStatsRow('Щит', '', 10, start + 75, 250),
     );
 
     for (const stat of player.playerStats) {
@@ -92,7 +93,10 @@ export class Player implements IRenderable {
   }
 
   updateStats(): void {
-
+    this.playerStats[0].value.text = PlayerDataExtensions.attackDamageMinMaxSummary(this.playerData);
+    this.playerStats[1].value.text = PlayerDataExtensions.criticalChanceSummary(this.playerData);
+    this.playerStats[2].value.text = PlayerDataExtensions.criticalMultiplierSummary(this.playerData);
+    this.playerStats[3].value.text = PlayerDataExtensions.protectSummary(this.playerData);
   }
 
   getSpritesToRender(): Sprite[] {
