@@ -151,7 +151,7 @@ export class PlanetScene extends Scene implements IRenderable {
     this.selectedCellBorder = new Sprite();
     const selectedCellRegion = GLOBAL.assets.planetAtlas.getRegion('inventory_cell_selected.png');
     this.selectedCellBorder.setTextureRegion(selectedCellRegion);
-    this.selectedCellBorder.setVerticesAlpha(1);
+    this.selectedCellBorder.setVerticesColor(0.7, 1.0, 0.7, 1.0);
     this.selectedCellBorder.position.set(-100, -100, 10);
   }
 

@@ -109,9 +109,27 @@ export class MainMenuScene extends Scene {
         },
         {
           position: new Vector2(-100, 100),
+          item: {
+            type: ItemType.Shield,
+            name: 'Какой-то щит',
+            cost: 500,
+            rarity: ItemRarity.Legendary,
+            shield: {
+              shieldMultiplier: 0.45,
+            },
+          },
         },
         {
           position: new Vector2(100, 100),
+          item: {
+            type: ItemType.Shield,
+            name: 'Какой-то щит',
+            cost: 500,
+            rarity: ItemRarity.Legendary,
+            shield: {
+              shieldMultiplier: 0.45,
+            },
+          },
         },
         {
           position: new Vector2(0, 125),
@@ -156,9 +174,27 @@ export class MainMenuScene extends Scene {
         },
         {
           position: new Vector2(-100, 100),
+          item: {
+            type: ItemType.Shield,
+            name: 'Какой-то щит',
+            cost: 500,
+            rarity: ItemRarity.Legendary,
+            shield: {
+              shieldMultiplier: 0.45,
+            },
+          },
         },
         {
           position: new Vector2(100, 100),
+          item: {
+            type: ItemType.Shield,
+            name: 'Какой-то щит',
+            cost: 500,
+            rarity: ItemRarity.Legendary,
+            shield: {
+              shieldMultiplier: 0.45,
+            },
+          },
         },
         {
           position: new Vector2(0, 125),
