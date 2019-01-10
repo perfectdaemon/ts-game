@@ -53,6 +53,7 @@ export class HealthBar {
     this.current.width = newWidth;
 
     this.text.text = current.toString();
+    this.text.visible = current > 0;
     this.text.position.x = newWidth / 2;
 
 /*
