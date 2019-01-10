@@ -2,8 +2,8 @@ textures: planet.png
 health_bar_back.png	1	1	40	357	0	0	357	40	r
 repair_button.png	43	1	56	355	0	0	355	56	r
 health_bar.png	101	1	30	348	0	0	348	30	r
-button_green.png	133	1	56	219	0	0	219	56	r
-button_red.png	191	1	56	219	0	0	219	56	r
+button_red.png	133	1	56	219	0	0	219	56	r
+button_green.png	191	1	56	219	0	0	219	56	r
 ship_cell.png	162	222	93	93	0	0	93	93	
 laser1.png	218	317	37	87	0	0	37	87	
 inventory_cell_selected.png	148	317	68	68	0	0	68	68	

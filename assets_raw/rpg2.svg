@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.50000001"
-     inkscape:cx="754.42345"
-     inkscape:cy="507.1715"
+     inkscape:zoom="2"
+     inkscape:cx="-274.07764"
+     inkscape:cy="557.05058"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1574,7 +1574,7 @@
        y="168.75"
        inkscape:label="#rect1169" />
     <rect
-       style="fill:none;fill-opacity:1;stroke:#ef2929;stroke-width:7.22034407;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:7.21889782;stroke-miterlimit:4;stroke-dasharray:21.65669346, 7.21889781999999869;stroke-opacity:1;stroke-dashoffset:16.60346498;paint-order:normal"
        id="inventory_cell_selected"
        width="60.318687"
        height="60.318695"
