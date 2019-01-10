@@ -27,16 +27,16 @@ export enum FightState {
 }
 
 export class FightScene extends Scene {
-  guiManager: GuiManager;
+  canUseConsumableItems: boolean;
+
   human: Player;
   enemy: Player;
   fightState: FightState;
   turnNumber: number;
 
   actionManager: ActionManager;
-
   dialog: DialogBox;
-
+  guiManager: GuiManager;
   renderHelper: RenderHelper;
   emitter: SpriteParticleEmitter;
   textEmitter: TextParticleEmitter;
@@ -113,7 +113,9 @@ export class FightScene extends Scene {
       }
 
       this.human.markAsProtect(cell);
+      this.canUseConsumableItems = false;
       this.setFightState(FightState.HumanTurnProtect);
+
     } else if (this.fightState === FightState.HumanTurnAttack) {
       const result = this.enemy.shipCells.filter(c => c.isMouseOver(worldPosition));
       if (result.length > 1) { throw new Error('Hit too many cells'); }
@@ -127,6 +129,7 @@ export class FightScene extends Scene {
       }
 
       this.human.markAsAttack(cell);
+      this.canUseConsumableItems = false;
       this.setFightState(FightState.HumanTurnAttack);
     }
   }
@@ -196,12 +199,16 @@ export class FightScene extends Scene {
         this.dialog.text.text = `Раунд ${this.turnNumber++}`;
         this.human.resetTurnState();
         this.enemy.resetTurnState();
+        this.canUseConsumableItems = true;
         this.actionManager.add(() => this.setFightState(FightState.HumanTurnProtect), 3.0);
         break;
 
       case FightState.HumanTurnProtect:
         if (this.human.hasProtectsLeft()) {
           this.dialog.text.text = `Выберите ${this.human.protectsLeft} своих отсека для защиты`;
+          if (this.canUseConsumableItems) {
+            this.dialog.text.text += ' или воспользуйтесь одноразовыми предметами';
+          }
         } else {
           this.setFightState(FightState.HumanTurnAttack);
           return;
@@ -211,6 +218,9 @@ export class FightScene extends Scene {
       case FightState.HumanTurnAttack:
         if (this.human.hasAttacksLeft()) {
           this.dialog.text.text = `Выберите ${this.human.attacksLeft} отсека противника для атаки`;
+          if (this.canUseConsumableItems) {
+            this.dialog.text.text += ' или воспользуйтесь одноразовыми предметами';
+          }
         } else {
           this.setFightState(FightState.AiTurn);
           return;
