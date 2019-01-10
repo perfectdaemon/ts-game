@@ -198,7 +198,7 @@ export class Player implements IRenderable {
   }
 
   getTextsToRender(): Text[] {
-    const result: Text[] = [];
+    const result: Text[] = [this.health.text];
 
     for (const stat of this.playerStats) {
       result.push(stat.caption, stat.value);

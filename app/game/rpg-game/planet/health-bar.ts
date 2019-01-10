@@ -1,10 +1,12 @@
 import { Vector2 } from '../../../engine/math/vector2';
 import { Sprite } from '../../../engine/scene/sprite';
+import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
 
 export class HealthBar {
   back: Sprite;
   current: Sprite;
+  text: Text;
 
   /*modifiedTextureRegion: TextureRegion;
   originalTextureWidth: number;*/
@@ -22,6 +24,12 @@ export class HealthBar {
     this.current.parent = this.back;
     this.current.position.set(5, 5, this.back.position.z + 1);
     this.current.setTextureRegion(currentRegion, true);
+
+    this.text = new Text();
+    this.text.position.set(0, 0, this.back.position.z + 2);
+    this.text.pivotPoint.set(0.5, 0);
+    this.text.parent = this.current;
+    this.text.color.set(1, 1, 1, 1.0);
 /*
     this.modifiedTextureRegion = {
       name: currentRegion.name,
@@ -43,7 +51,10 @@ export class HealthBar {
   updateHealth(current: number, max: number): void {
     const newWidth = this.originalWidth * (current / max);
     this.current.width = newWidth;
-    return;
+
+    this.text.text = current.toString();
+    this.text.position.x = newWidth / 2;
+
 /*
     const percentage = this.originalTextureWidth * (current / max);
 
