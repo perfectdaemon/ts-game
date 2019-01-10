@@ -107,6 +107,7 @@ export class ItemDescription implements IRenderable {
             break;
 
           default:
+            // tslint:disable-next-line:max-line-length
             this.description.text = 'Неизвестный науке расходуемый предмет. Ну, или как минимум программисту этой игры. Баг, короче.';
             break;
         }
@@ -118,6 +119,7 @@ export class ItemDescription implements IRenderable {
 
       case ItemType.Misc:
         this.type.text = 'Всячина';
+        // tslint:disable-next-line:max-line-length
         this.description.text = 'Отличная штука! Ее можно использовать чуть менее чем никак. Продайте, пока не кончился срок годности.';
         break;
 
