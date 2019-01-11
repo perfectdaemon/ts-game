@@ -63,7 +63,7 @@ export class PlayerDataExtensions {
       if (!shield.shield) {
         throw new Error(`Type is shield, but no shield data provided`);
       }
-      result.push(`${1 + (shield.shield.addProtect || 0)} x ${shield.shield.shieldMultiplier}`);
+      result.push(`${1 + (shield.shield.addProtect || 0)} x ${shield.shield.shieldMultiplier.toFixed(2)}`);
     }
 
     return result.join('\n') || '—';
