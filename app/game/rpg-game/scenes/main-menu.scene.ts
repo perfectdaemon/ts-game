@@ -385,7 +385,7 @@ export class MainMenuScene extends Scene {
 
   private testTreasure(): void {
     TREASURE_GAME_STATE.treasure = {
-      type: TreasureType.Enemy,
+      type: TreasureType.Chest,
       cost: 1.0,
     };
 

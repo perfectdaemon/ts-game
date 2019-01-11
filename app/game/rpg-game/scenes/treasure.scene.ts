@@ -18,11 +18,14 @@ import { BaseItem } from '../planet/inventory';
 import { ItemDescription } from '../planet/item-description';
 import { ItemType } from '../player-data';
 import { IRenderable, RenderHelper } from '../render-helper';
-import { TREASURE_GAME_STATE } from '../treasure/game-state';
+import { TreasureType, TREASURE_GAME_STATE } from '../treasure/game-state';
+import { CHEST_TEXTS } from '../treasure/texts';
 import { SCENES } from './scenes.const';
 
 export class TreasureScene extends Scene implements IRenderable {
   guiManager: GuiManager;
+  guiSpriteBatch: SpriteBatch;
+  guiTextBatch: TextBatch;
   renderHelper: RenderHelper;
 
   background: Sprite;
@@ -52,6 +55,14 @@ export class TreasureScene extends Scene implements IRenderable {
     this.generateItems();
 
     return super.load();
+  }
+
+  unload(): Promise<void> {
+    this.renderHelper.free();
+    this.guiManager.free();
+    this.guiSpriteBatch.free();
+    this.guiTextBatch.free();
+    return super.unload();
   }
 
   render(): void {
@@ -86,10 +97,12 @@ export class TreasureScene extends Scene implements IRenderable {
   }
 
   private initGui(): void {
+    this.guiSpriteBatch = new SpriteBatch();
+    this.guiTextBatch = new TextBatch(GLOBAL.assets.font);
     this.guiManager = new GuiManager(
       GLOBAL.assets.planetMaterial,
-      new SpriteBatch(),
-      new TextBatch(GLOBAL.assets.font),
+      this.guiSpriteBatch,
+      this.guiTextBatch,
       GLOBAL.assets.guiCamera,
     );
 
@@ -116,7 +129,7 @@ export class TreasureScene extends Scene implements IRenderable {
 
       const row = div(i, 2);
       const col = i % 2;
-      const itemDescription = new ItemDescription(30 + col * 480, 15   + row * 230, 400, 200);
+      const itemDescription = new ItemDescription(30 + col * 480, 15 + row * 230, 400, 200);
       itemDescription.back.parent = this.background;
       itemDescription.update(item, item.cost);
 
@@ -125,7 +138,18 @@ export class TreasureScene extends Scene implements IRenderable {
   }
 
   private setTitle(): void {
+    const treasureData = TREASURE_GAME_STATE.treasure;
+    switch (treasureData.type) {
+      case TreasureType.Chest:
+        this.title.text.text = CHEST_TEXTS[Math.floor(Math.random() * CHEST_TEXTS.length)];
+        break;
 
+      case TreasureType.Enemy:
+        break;
+
+      default:
+        throw new Error(`Unknown TreasureType - ${treasureData.type}`);
+    }
   }
 
   private takeAndExit(): void {
