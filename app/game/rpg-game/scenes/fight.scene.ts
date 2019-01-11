@@ -69,7 +69,7 @@ export class FightScene extends Scene {
       () => ParticleEmitterExtensions.createTextParticle(),
       8,
     );
-    this.dialog = new DialogBox();
+    this.dialog = new DialogBox(120);
     this.reset();
     return super.load();
   }
