@@ -19,11 +19,11 @@ export class ItemDescription implements IRenderable {
   description: Text;
   cost: Text;
 
-  constructor(x: number, y: number) {
+  constructor(x: number, y: number, w: number, h: number) {
     const itemBackRegion = GLOBAL.assets.planetAtlas.getRegion('ship_cell.png');
     const blankRegion = GLOBAL.assets.planetAtlas.getRegion('blank.png');
 
-    this.back = new Sprite(473, 205, new Vector2(0, 0));
+    this.back = new Sprite(w, h, new Vector2(0, 0));
     this.back.position.set(x, y, 1);
     this.back.setVerticesColor(52 / 255, 111 / 255, 149 / 255, 1.0);
     this.back.setTextureRegion(blankRegion, false);
@@ -47,9 +47,9 @@ export class ItemDescription implements IRenderable {
 
     this.name = new Text('Название');
     this.name.parent = this.back;
-    this.name.pivotPoint.set(0.5, 0);
-    this.name.position.set(this.back.width / 2, 5, 2);
-    this.name.scale = 1.3;
+    this.name.pivotPoint.set(0, 0);
+    this.name.position.set(this.itemBack.width / 2 + this.itemBack.position.x + 10, 5, 2);
+    this.name.scale = 1.2;
     this.name.color.set(25 / 255, 222 / 255, 115 / 255, 1.0);
 
     this.description = new Text();

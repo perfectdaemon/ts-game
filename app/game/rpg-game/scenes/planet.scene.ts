@@ -64,7 +64,7 @@ export class PlanetScene extends Scene implements IRenderable {
     this.shop.inventory.onClick = cell => this.onInventoryClick(cell, true);
     this.player.onShipCellClick = cell => this.onShipCellClick(cell);
 
-    this.itemDescription = new ItemDescription(480 - 59 / 2, 490);
+    this.itemDescription = new ItemDescription(480 - 59 / 2, 490, 473, 205);
     this.itemDescription.setVisible(false);
 
     this.updateRepairText();
