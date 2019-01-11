@@ -48,23 +48,38 @@ export class ItemGenerator {
       rarityMultiplier = 3;
     }
 
-    itemData.cost *= rarityMultiplier;
+    itemData.cost = Math.ceil(itemData.cost * rarityMultiplier);
   }
 
   private static generateWeaponForItem(itemData: InventoryItemData, lucky: number): void {
     let damageMultiplier = 1.0;
+    let addEffects = 0;
     if (itemData.rarity === ItemRarity.Special) {
       damageMultiplier = 1.5;
+      addEffects = 2;
     } else if (itemData.rarity === ItemRarity.Legendary) {
       damageMultiplier = 3;
+      addEffects = 3;
     }
 
     itemData.weapon = {
       damageMin: Math.ceil(4 + 2 * Math.random() * damageMultiplier),
       damageMax: Math.ceil(8 + 4 * Math.random() * damageMultiplier),
+      shieldPiercing: addEffects-- > 0 && Math.random() > 0.5
+        ? 0.05 + 0.15 * Math.random()
+        : (addEffects++ , undefined),
+      criticalChanceMultiplier: addEffects-- > 0 && Math.random() > 0.6
+        ? 0.05 + 0.25 * Math.random()
+        : (addEffects++ , undefined),
+      addAttack: addEffects-- > 0 && Math.random() > 0.7
+        ? 1
+        : undefined,
     };
 
-    itemData.cost = 100;
+    itemData.cost = 100
+      + (itemData.weapon.shieldPiercing || 0) * 50
+      + (itemData.weapon.criticalChanceMultiplier || 0) * 70
+      + (itemData.weapon.addAttack || 0) * 150;
   }
 
   private static generateShieldForItem(itemData: InventoryItemData, lucky: number): void {
