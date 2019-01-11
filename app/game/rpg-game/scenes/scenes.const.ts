@@ -6,4 +6,5 @@ export const SCENES = {
   help: 'help',
   fight: 'fight',
   planet: 'planet',
+  treasure: 'treasure',
 };

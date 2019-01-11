@@ -8,6 +8,7 @@ import { GameScene } from './scenes/game.scene';
 import { MainMenuScene } from './scenes/main-menu.scene';
 import { PlanetScene } from './scenes/planet.scene';
 import { SCENES } from './scenes/scenes.const';
+import { TreasureScene } from './scenes/treasure.scene';
 
 export class Game extends GameBase {
   sceneManager: SceneManager = new SceneManager();
@@ -21,6 +22,7 @@ export class Game extends GameBase {
     this.sceneManager.addScene(SCENES.mainMenu, new MainMenuScene());
     this.sceneManager.addScene(SCENES.fight, new FightScene());
     this.sceneManager.addScene(SCENES.planet, new PlanetScene());
+    this.sceneManager.addScene(SCENES.treasure, new TreasureScene());
 
     this.sceneManager.switchTo(SCENES.mainMenu);
   }

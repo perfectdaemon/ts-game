@@ -11,6 +11,7 @@ import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
 import { ConsumableItemType, ItemRarity, ItemType } from '../player-data';
+import { TreasureType, TREASURE_GAME_STATE } from '../treasure/game-state';
 import { SCENES } from './scenes.const';
 
 export class MainMenuScene extends Scene {
@@ -35,8 +36,8 @@ export class MainMenuScene extends Scene {
       .onClick = () => this.sceneManager.switchTo(SCENES.game);
 
     this.guiManager
-      .getElement<GuiButton>('HelpButton')
-      .onClick = () => this.sceneManager.switchTo(SCENES.help);
+      .getElement<GuiButton>('TreasureButton')
+      .onClick = () => this.testTreasure();
 
     this.guiManager
       .getElement<GuiButton>('TestFightButton')
@@ -380,5 +381,14 @@ export class MainMenuScene extends Scene {
     };
 
     this.sceneManager.switchTo(SCENES.planet);
+  }
+
+  private testTreasure(): void {
+    TREASURE_GAME_STATE.treasure = {
+      type: TreasureType.Enemy,
+      cost: 1.0,
+    };
+
+    this.sceneManager.switchTo(SCENES.treasure);
   }
 }
