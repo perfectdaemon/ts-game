@@ -61,6 +61,7 @@ export class Player implements IRenderable {
       const shipCell = new FightShipCell(shipCellData, cellStart.x, cellStart.y, gui);
       shipCell.cellSprite.sprite.parent = player.background;
       shipCell.cellSprite.updateHitBox();
+      shipCell.cellSprite.onClick = () => player.onShipCellClick(shipCell);
       player.shipCells.push(shipCell);
     }
 
@@ -99,6 +100,7 @@ export class Player implements IRenderable {
       }
 
       item.background.sprite.parent = player.background;
+      item.background.onClick = () => player.onConsumableCellClick(item);
       item.background.updateHitBox();
       player.consumableItems.push(item);
     }
@@ -131,6 +133,9 @@ export class Player implements IRenderable {
     roundLeft: number,
     other: Player,
   }[] = [];
+
+  onShipCellClick: (cell: FightShipCell) => void = () => {};
+  onConsumableCellClick: (consumableItem: ConsumableItem) => void = () => {};
 
   getSpritesToRender(): Sprite[] {
     const result: Sprite[] = [this.background, this.health.back, this.health.current];

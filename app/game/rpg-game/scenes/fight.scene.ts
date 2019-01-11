@@ -7,7 +7,9 @@ import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
 import { DialogBox } from '../dialog-box';
+import { ConsumableItem } from '../fight/consumable-item';
 import { ParticleEmitterExtensions } from '../fight/emitter-extensions';
+import { FightShipCell } from '../fight/fight-ship-cell';
 import { FIGHT_GAME_STATE } from '../fight/game-state';
 import { Player } from '../fight/player';
 import { PlayerType } from '../fight/player-type';
@@ -90,48 +92,6 @@ export class FightScene extends Scene {
   }
 
   onMouseDown(position: Vector2, button: MouseButtons): void {
-    if (button !== Keys.LeftButton) {
-      return;
-    }
-
-    const worldPosition = GLOBAL.assets.gameCamera
-      .screenToWorld(position)
-      .asVector2();
-
-    this.checkItemsClick(worldPosition);
-
-    if (this.fightState === FightState.HumanTurnProtect) {
-      const result = this.human.shipCells.filter(c => c.isMouseOver(worldPosition));
-      if (result.length > 1) { throw new Error('Hit too many cells'); }
-      if (result.length === 0) { return; }
-
-      const cell = result[0];
-
-      if (cell.markedAsProtected) {
-        console.log('Cell is already protected');
-        return;
-      }
-
-      this.human.markAsProtect(cell);
-      this.canUseConsumableItems = false;
-      this.setFightState(FightState.HumanTurnProtect);
-
-    } else if (this.fightState === FightState.HumanTurnAttack) {
-      const result = this.enemy.shipCells.filter(c => c.isMouseOver(worldPosition));
-      if (result.length > 1) { throw new Error('Hit too many cells'); }
-      if (result.length === 0) { return; }
-
-      const cell = result[0];
-
-      if (cell.markedAsAttacked) {
-        console.log('Cell is already attacked');
-        return;
-      }
-
-      this.human.markAsAttack(cell);
-      this.canUseConsumableItems = false;
-      this.setFightState(FightState.HumanTurnAttack);
-    }
   }
 
   onMouseMove(position: Vector2): void {
@@ -144,6 +104,10 @@ export class FightScene extends Scene {
     this.turnNumber = 1;
     this.human = Player.build(FIGHT_GAME_STATE.humanData, PlayerType.Human, this.guiManager);
     this.enemy = Player.build(FIGHT_GAME_STATE.enemyData, PlayerType.Ai, this.guiManager);
+
+    this.human.onConsumableCellClick = (consumable) => this.onConsumableCellClick(consumable);
+    this.human.onShipCellClick = (cell) => this.onShipCellClick(cell, this.human);
+    this.enemy.onShipCellClick = (cell) => this.onShipCellClick(cell, this.enemy);
     this.setFightState(FightState.Start);
   }
 
@@ -265,34 +229,59 @@ export class FightScene extends Scene {
     this.fightState = newState;
   }
 
-  private checkItemsClick(worldPosition: Vector2): void {
-    if (this.fightState !== FightState.HumanTurnAttack && this.fightState !== FightState.HumanTurnProtect) {
+  private onShipCellClick(shipCell: FightShipCell, player: Player): void {
+    if (this.fightState === FightState.HumanTurnProtect) {
+      if (player.type === PlayerType.Ai) {
+        return;
+      }
+
+      if (shipCell.markedAsProtected) {
+        console.log('Cell is already protected');
+        return;
+      }
+
+      this.human.markAsProtect(shipCell);
+      this.canUseConsumableItems = false;
+      this.setFightState(FightState.HumanTurnProtect);
+
+    } else if (this.fightState === FightState.HumanTurnAttack) {
+      if (player.type === PlayerType.Human) {
+        return;
+      }
+
+      if (shipCell.markedAsAttacked) {
+        console.log('Cell is already attacked');
+        return;
+      }
+
+      this.human.markAsAttack(shipCell);
+      this.canUseConsumableItems = false;
+      this.setFightState(FightState.HumanTurnAttack);
+    }
+  }
+
+  private onConsumableCellClick(consumableItem: ConsumableItem): void {
+    if (!this.canUseConsumableItems) {
       return;
     }
 
-    const result = this.human.consumableItems.filter(i => i.isMouseOver(worldPosition));
-    if (result.length > 1) { throw new Error('Hit too many items'); }
-    if (result.length === 0) { return; }
-
-    const item = result[0];
-
-    if (!item.canUse(this.human, this.enemy)) {
+    if (!consumableItem.canUse(this.human, this.enemy)) {
       const currentText = this.dialog.text.text;
       this.actionManager
-        .add(() => this.dialog.text.text = `Нельзя использовать «${item.name}»`)
+        .add(() => this.dialog.text.text = `Нельзя использовать «${consumableItem.name}»`)
         .then(() => this.dialog.text.text = currentText, 2.0);
       return;
     }
 
     this.actionManager
-      .add(() => this.dialog.text.text = `Используем «${item.name}»`)
+      .add(() => this.dialog.text.text = `Используем «${consumableItem.name}»`)
       .then(() => this.setFightState(this.fightState), 2.0);
 
-    item.use(this.human, this.enemy);
+    consumableItem.use(this.human, this.enemy);
     this.human.activeItems.push({
-      item,
+      item: consumableItem,
       other: this.enemy,
-      roundLeft: item.removeAfterNumberOfTurns,
+      roundLeft: consumableItem.removeAfterNumberOfTurns,
     });
   }
 }
