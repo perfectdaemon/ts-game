@@ -76,7 +76,7 @@ export class PlayerDataExtensions {
 
   static criticalMultiplierSummary(data: PlayerData): string {
     const multiplier = this.criticalMultiplier(data);
-    return `${multiplier * 100} %`;
+    return `${Math.floor(multiplier * 100)} %`;
   }
 
   static calculateDamages(data: PlayerData): DamageInfo[] {

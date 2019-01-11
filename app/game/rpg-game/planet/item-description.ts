@@ -171,13 +171,13 @@ export class ItemDescription implements IRenderable {
         let nextIndex = 1;
         if (weapon.criticalChanceMultiplier) {
           this.stats[nextIndex].caption.text = 'Крит. шанс';
-          this.stats[nextIndex].value.text = `+${weapon.criticalChanceMultiplier * 100} %`;
+          this.stats[nextIndex].value.text = `+${Math.ceil(weapon.criticalChanceMultiplier * 100)} %`;
           ++nextIndex;
         }
 
         if (weapon.shieldPiercing) {
           this.stats[nextIndex].caption.text = 'Пробитие щита';
-          this.stats[nextIndex].value.text = `+${weapon.shieldPiercing * 100} %`;
+          this.stats[nextIndex].value.text = `+${Math.ceil(weapon.shieldPiercing * 100)} %`;
           ++nextIndex;
         }
 
