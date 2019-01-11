@@ -19,7 +19,7 @@ import { ItemDescription } from '../planet/item-description';
 import { ItemType } from '../player-data';
 import { IRenderable, RenderHelper } from '../render-helper';
 import { TreasureType, TREASURE_GAME_STATE } from '../treasure/game-state';
-import { CHEST_TEXTS } from '../treasure/texts';
+import { CHEST_HIG_TEXTS, CHEST_LOW_TEXTS, CHEST_MID_TEXTS, ENEMY_HIG_TEXTS, ENEMY_LOW_TEXTS, ENEMY_MID_TEXTS } from '../treasure/texts';
 import { SCENES } from './scenes.const';
 
 export class TreasureScene extends Scene implements IRenderable {
@@ -141,10 +141,24 @@ export class TreasureScene extends Scene implements IRenderable {
     const treasureData = TREASURE_GAME_STATE.treasure;
     switch (treasureData.type) {
       case TreasureType.Chest:
-        this.title.text.text = CHEST_TEXTS[Math.floor(Math.random() * CHEST_TEXTS.length)];
+        if (treasureData.cost < 0.3) {
+          this.title.text.text = this.getRandomArrayElement(CHEST_LOW_TEXTS);
+        } else if (treasureData.cost < 0.7) {
+          this.title.text.text = this.getRandomArrayElement(CHEST_MID_TEXTS);
+        } else {
+          this.title.text.text = this.getRandomArrayElement(CHEST_HIG_TEXTS);
+        }
+
         break;
 
       case TreasureType.Enemy:
+        if (treasureData.cost < 0.3) {
+          this.title.text.text = this.getRandomArrayElement(ENEMY_LOW_TEXTS);
+        } else if (treasureData.cost < 0.7) {
+          this.title.text.text = this.getRandomArrayElement(ENEMY_MID_TEXTS);
+        } else {
+          this.title.text.text = this.getRandomArrayElement(ENEMY_HIG_TEXTS);
+        }
         break;
 
       default:
@@ -154,5 +168,14 @@ export class TreasureScene extends Scene implements IRenderable {
 
   private takeAndExit(): void {
     this.sceneManager.switchTo(SCENES.mainMenu);
+  }
+
+  private getRandomArrayElement(arr: any[]): any {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  private getTotalItemsCost(): number {
+    const result = this.itemDescriptions.reduce((prev, curr) => prev + curr.baseItem.cost, 0);
+    return result;
   }
 }

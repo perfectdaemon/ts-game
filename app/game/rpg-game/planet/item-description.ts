@@ -9,6 +9,8 @@ import { PlayerStatsRow } from './player-stats-row';
 
 export class ItemDescription implements IRenderable {
 
+  baseItem: BaseItem;
+
   back: Sprite;
   itemBack: Sprite;
   item: Sprite;
@@ -75,6 +77,8 @@ export class ItemDescription implements IRenderable {
   }
 
   update(baseItem: BaseItem, concreteCost: number): void {
+    this.baseItem = baseItem;
+
     // Reset
     for (const stat of this.stats) {
       stat.caption.text = stat.value.text = '';

@@ -386,7 +386,7 @@ export class MainMenuScene extends Scene {
   private testTreasure(): void {
     TREASURE_GAME_STATE.treasure = {
       type: TreasureType.Chest,
-      cost: 1.0,
+      cost: Math.random(),
     };
 
     this.sceneManager.switchTo(SCENES.treasure);
