@@ -33,4 +33,9 @@ export class RenderHelper {
     this.spriteBatch.finish();
     this.textBatch.finish();
   }
+
+  free(): void {
+    this.spriteBatch.free();
+    this.textBatch.free();
+  }
 }

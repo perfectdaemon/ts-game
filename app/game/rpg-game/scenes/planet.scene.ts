@@ -26,6 +26,8 @@ export enum ShipMode { Setup, Remove }
 
 export class PlanetScene extends Scene implements IRenderable {
   guiManager: GuiManager;
+  guiSB: SpriteBatch;
+  guiTB: TextBatch;
   renderHelper: RenderHelper;
 
   player: Player;
@@ -74,6 +76,7 @@ export class PlanetScene extends Scene implements IRenderable {
 
   unload(): Promise<void> {
     this.guiManager.free();
+    this.renderHelper.free();
 
     return super.unload();
   }
@@ -109,10 +112,12 @@ export class PlanetScene extends Scene implements IRenderable {
   }
 
   private initGui(): void {
+    this.guiSB = new SpriteBatch();
+    this.guiTB = new TextBatch(GLOBAL.assets.font);
     this.guiManager = new GuiManager(
       GLOBAL.assets.planetMaterial,
-      new SpriteBatch(),
-      new TextBatch(GLOBAL.assets.font),
+      this.guiSB,
+      this.guiTB,
       GLOBAL.assets.guiCamera,
     );
 

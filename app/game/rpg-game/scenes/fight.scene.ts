@@ -39,6 +39,8 @@ export class FightScene extends Scene {
   actionManager: ActionManager;
   dialog: DialogBox;
   guiManager: GuiManager;
+  guiSB: SpriteBatch;
+  guiTB: TextBatch;
   renderHelper: RenderHelper;
   emitter: SpriteParticleEmitter;
   textEmitter: TextParticleEmitter;
@@ -49,10 +51,12 @@ export class FightScene extends Scene {
 
   load(): Promise<void> {
     console.log('Fight scene is loaded');
+    this.guiSB = new SpriteBatch();
+    this.guiTB = new TextBatch(GLOBAL.assets.font);
     this.guiManager = new GuiManager(
       GLOBAL.assets.planetMaterial,
-      new SpriteBatch(),
-      new TextBatch(GLOBAL.assets.font),
+      this.guiSB,
+      this.guiTB,
       GLOBAL.assets.guiCamera,
     );
 
@@ -72,6 +76,15 @@ export class FightScene extends Scene {
     this.dialog = new DialogBox(120);
     this.reset();
     return super.load();
+  }
+
+  unload(): Promise<void> {
+    this.renderHelper.free();
+    this.guiManager.free();
+    this.guiSB.free();
+    this.guiTB.free();
+
+    return super.unload();
   }
 
   render(): void {
