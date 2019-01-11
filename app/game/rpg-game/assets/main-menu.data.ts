@@ -23,8 +23,8 @@ export const MAIN_MENU_DATA: MenuData = {
     },
 
     {
-      name: 'HelpButton',
-      labelText: 'Help',
+      name: 'TreasureButton',
+      labelText: 'Test Treasure',
       labelColor: new Vector4(0.3, 0.3, 0.3, 1.0),
       labelScale: 1.0,
       size: new Vector2(150, 40),
