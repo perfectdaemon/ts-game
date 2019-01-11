@@ -161,10 +161,17 @@ export class FightScene extends Scene {
     switch (newState) {
       case FightState.Start:
         this.dialog.text.text = `Раунд ${this.turnNumber++}`;
+        this.setEnableForConsumable(false);
+        this.setEnableForCells(this.human, false);
+        this.setEnableForCells(this.enemy, false);
         this.human.resetTurnState();
         this.enemy.resetTurnState();
-        this.canUseConsumableItems = true;
-        this.actionManager.add(() => this.setFightState(FightState.HumanTurnProtect), 3.0);
+        this.actionManager.add(() => {
+          this.setEnableForConsumable(true);
+          this.setEnableForCells(this.human, true);
+          this.setEnableForCells(this.enemy, false);
+          this.setFightState(FightState.HumanTurnProtect);
+        }, 3.0);
         break;
 
       case FightState.HumanTurnProtect:
@@ -180,6 +187,9 @@ export class FightScene extends Scene {
         break;
 
       case FightState.HumanTurnAttack:
+        this.setEnableForCells(this.human, false);
+        this.setEnableForCells(this.enemy, true);
+
         if (this.human.hasAttacksLeft()) {
           this.dialog.text.text = `Выберите ${this.human.attacksLeft} отсека противника для атаки`;
           if (this.canUseConsumableItems) {
@@ -192,6 +202,9 @@ export class FightScene extends Scene {
         break;
 
       case FightState.AiTurn:
+        this.setEnableForConsumable(false);
+        this.setEnableForCells(this.human, false);
+        this.setEnableForCells(this.enemy, false);
         this.dialog.text.text = `Ход противника`;
         this.actionManager
           .add(() => this.enemy.aiChooseProtectAndAttack(this.human), 2.0)
@@ -241,7 +254,7 @@ export class FightScene extends Scene {
       }
 
       this.human.markAsProtect(shipCell);
-      this.canUseConsumableItems = false;
+      this.setEnableForConsumable(false);
       this.setFightState(FightState.HumanTurnProtect);
 
     } else if (this.fightState === FightState.HumanTurnAttack) {
@@ -255,7 +268,7 @@ export class FightScene extends Scene {
       }
 
       this.human.markAsAttack(shipCell);
-      this.canUseConsumableItems = false;
+      this.setEnableForConsumable(false);
       this.setFightState(FightState.HumanTurnAttack);
     }
   }
@@ -283,5 +296,22 @@ export class FightScene extends Scene {
       other: this.enemy,
       roundLeft: consumableItem.removeAfterNumberOfTurns,
     });
+  }
+
+  private setEnableForConsumable(enable: boolean): void {
+    this.canUseConsumableItems = enable;
+
+    for (const consumable of this.human.consumableItems) {
+      consumable.background.enabled = enable;
+    }
+  }
+
+  private setEnableForCells(player: Player, enable: boolean): void {
+    for (const cell of player.shipCells) {
+      cell.cellSprite.enabled = enable;
+      // fix bug for stay hovered after disable
+      const input: any = {};
+      cell.cellSprite.onMouseOut(cell.cellSprite, input);
+    }
   }
 }
