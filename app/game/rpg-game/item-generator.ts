@@ -60,8 +60,8 @@ export class ItemGenerator {
     }
 
     itemData.weapon = {
-      damageMin: 4 + 2 * Math.random() * damageMultiplier,
-      damageMax: 8 + 4 * Math.random() * damageMultiplier,
+      damageMin: Math.ceil(4 + 2 * Math.random() * damageMultiplier),
+      damageMax: Math.ceil(8 + 4 * Math.random() * damageMultiplier),
     };
 
     itemData.cost = 100;
@@ -77,7 +77,7 @@ export class ItemGenerator {
 
     itemData.shield = {
       shieldMultiplier: shieldMultiplierBase + 0.08 * Math.random(),
-      addProtect: itemData.rarity !== ItemRarity.Usual && Math.random() + lucky > 0.9 ? 1 : undefined;
+      addProtect: itemData.rarity !== ItemRarity.Usual && Math.random() + lucky > 0.9 ? 1 : undefined,
     };
 
     itemData.cost = Math.ceil(100 + 100 * itemData.shield.shieldMultiplier + (itemData.shield.addProtect ? 200 : 0));
