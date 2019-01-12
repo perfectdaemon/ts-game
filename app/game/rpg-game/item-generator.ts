@@ -5,7 +5,7 @@ export class ItemGenerator {
     const itemData: InventoryItemData = {
       type,
       cost: 0,
-      rarity: this.getRarity(lucky),
+      rarity: this.getRarity(type, lucky),
       name: '',
     };
 
@@ -34,7 +34,10 @@ export class ItemGenerator {
     return itemData;
   }
 
-  private static getRarity(lucky: number): ItemRarity {
+  private static getRarity(type: ItemType, lucky: number): ItemRarity {
+    if (type === ItemType.Consumable) { return ItemRarity.Special; }
+    if (type === ItemType.Misc) { return ItemRarity.Usual; }
+
     if (lucky < 0.6) { return ItemRarity.Usual; }
     if (lucky < 0.9) { return ItemRarity.Special; }
     return ItemRarity.Legendary;
@@ -100,10 +103,10 @@ export class ItemGenerator {
 
   private static generateMiscForItem(itemData: InventoryItemData, lucky: number): void {
     itemData.misc = {
-      count: Math.ceil(100 * lucky + 100 * Math.random()),
+      count: Math.ceil(25 * lucky + 10 * Math.random()),
     };
 
-    itemData.cost = 5 + Math.ceil(5 * lucky) * itemData.misc.count;
+    itemData.cost = 4 * itemData.misc.count;
     itemData.name = MISC_NAMES[Math.floor(MISC_NAMES.length * Math.random())];
   }
 
@@ -123,6 +126,13 @@ const MISC_NAMES: string[] = [
   'Золото',
   'Металлолом',
   'Электроника',
+  'Энергоячейки',
+  'Туалетная бумага',
+  'Корм для животных',
+  'Диски с музыкой',
+  'Консервы',
+  'Водяные чипы',
+  'Китайские запчасти',
 ];
 
 const CONSUMABLE = [
@@ -134,7 +144,7 @@ const CONSUMABLE = [
   {
     type: ConsumableItemType.IncreaseCriticalChance,
     cost: 50,
-    name: 'Повысить шанс крит. урона',
+    name: '+ Шанс крит. урона',
   },
 
   {
