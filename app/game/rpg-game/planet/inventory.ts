@@ -5,6 +5,7 @@ import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
 import { ConsumableItemType, InventoryItemData, ItemRarity, ItemType } from '../player-data';
+import { PlayerDataExtensions } from '../player-data-extensions';
 import { IRenderable } from '../render-helper';
 
 export class Inventory implements IRenderable {
@@ -84,17 +85,7 @@ export class InventoryCell {
 
     this.item.sprite.parent = this.back.sprite;
 
-    switch (this.item.rarity) {
-      case ItemRarity.Usual:
-        this.back.sprite.setVerticesColor(1, 1, 1, 0.5);
-        break;
-      case ItemRarity.Special:
-        this.back.sprite.setVerticesColor(0.5, 0.5, 1.0, 0.5);
-        break;
-      case ItemRarity.Legendary:
-        this.back.sprite.setVerticesColor(206 / 255, 92 / 255, 0, 0.5);
-        break;
-    }
+    this.back.sprite.setVerticesColor(PlayerDataExtensions.getRarityColor(this.item.rarity, 0.5));
   }
 }
 

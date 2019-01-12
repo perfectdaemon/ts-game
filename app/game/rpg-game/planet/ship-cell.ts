@@ -3,6 +3,7 @@ import { GuiManager } from '../../../engine/gui/gui-manager';
 import { Vector2 } from '../../../engine/math/vector2';
 import { GLOBAL } from '../global';
 import { ShipCellData } from '../player-data';
+import { PlayerDataExtensions } from '../player-data-extensions';
 import { BaseItem } from './inventory';
 
 export class ShipCell {
@@ -33,10 +34,12 @@ export class ShipCell {
     this.item = item;
 
     if (!this.item) {
+      this.cellSprite.sprite.setVerticesColor(1, 1, 1, 0.3);
       return;
     }
 
     this.item.sprite.parent = this.cellSprite.sprite;
+    this.cellSprite.sprite.setVerticesColor(PlayerDataExtensions.getRarityColor(this.item.rarity, 0.3));
   }
 
   toShipCellData(): ShipCellData {

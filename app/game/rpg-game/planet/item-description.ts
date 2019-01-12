@@ -2,7 +2,8 @@ import { Vector2 } from '../../../engine/math/vector2';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
-import { ConsumableItemType, ItemRarity, ItemType } from '../player-data';
+import { ConsumableItemType, ItemType } from '../player-data';
+import { PlayerDataExtensions } from '../player-data-extensions';
 import { IRenderable } from '../render-helper';
 import { BaseItem, ConsumableItem, EngineItem, MiscItem, ShieldItem, WeaponItem } from './inventory';
 import { PlayerStatsRow } from './player-stats-row';
@@ -92,17 +93,7 @@ export class ItemDescription implements IRenderable {
     this.name.text = baseItem.name;
 
     // Rarity (color)
-    switch (baseItem.rarity) {
-      case ItemRarity.Usual:
-        this.itemBack.setVerticesColor(1, 1, 1, 1.0);
-        break;
-      case ItemRarity.Special:
-        this.itemBack.setVerticesColor(0.5, 0.5, 1.0, 1.0);
-        break;
-      case ItemRarity.Legendary:
-        this.itemBack.setVerticesColor(206 / 255, 92 / 255, 0, 1.0);
-        break;
-    }
+    this.itemBack.setVerticesColor(PlayerDataExtensions.getRarityColor(baseItem.rarity, 1.0));
 
     switch (baseItem.type) {
       case ItemType.Consumable:

@@ -1,4 +1,5 @@
-import { InventoryItemData, ItemType, PlayerData } from './player-data';
+import { Vector4 } from '../../engine/math/vector4';
+import { InventoryItemData, ItemRarity, ItemType, PlayerData } from './player-data';
 
 export class PlayerDataExtensions {
   static attackDamageMinMaxSummary(data: PlayerData): string {
@@ -140,6 +141,15 @@ export class PlayerDataExtensions {
     }
 
     return result;
+  }
+
+  static getRarityColor(itemRarity: ItemRarity, alpha: number = 1.0): Vector4 {
+    switch (itemRarity) {
+      case ItemRarity.Usual: return new Vector4(1, 1, 1, alpha);
+      case ItemRarity.Special: return new Vector4(0.5, 0.5, 1.0, alpha);
+      case ItemRarity.Legendary: return new Vector4(206 / 255, 92 / 255, 0, alpha);
+      default: throw new Error(`Unknown item rarity: ${itemRarity}`);
+    }
   }
 
   private static get(data: PlayerData, type: ItemType): InventoryItemData[] {
