@@ -53,6 +53,8 @@ export class ItemDescription implements IRenderable {
     this.name.position.set(this.itemBack.width / 2 + this.itemBack.position.x + 10, 5, 2);
     this.name.scale = 1.2;
     this.name.color.set(25 / 255, 222 / 255, 115 / 255, 1.0);
+    this.name.maxTextWidth = this.back.width - this.name.position.x - 5;
+    this.name.isWrapped = true;
 
     this.description = new Text();
     this.description.parent = this.back;
@@ -70,7 +72,7 @@ export class ItemDescription implements IRenderable {
 
     const statX = this.itemBack.width / 2 + this.itemBack.position.x + 10;
     for (let i = 0; i < 5; i++) {
-      const row = new PlayerStatsRow('', '', statX, 40 + (i * 25), 200);
+      const row = new PlayerStatsRow('', '', statX, 65 + (i * 25), 200);
       row.caption.parent = this.back;
       this.stats.push(row);
     }

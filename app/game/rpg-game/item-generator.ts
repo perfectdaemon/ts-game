@@ -97,10 +97,13 @@ export class ItemGenerator {
 
   private static generateShieldForItem(itemData: InventoryItemData, lucky: number): void {
     let shieldMultiplierBase = 0.3;
+    itemData.name = 'Генератор щита';
     if (itemData.rarity === ItemRarity.Special) {
       shieldMultiplierBase = 0.4;
+      itemData.name = 'Отличный генератор щита';
     } else if (itemData.rarity === ItemRarity.Legendary) {
       shieldMultiplierBase = 0.5;
+      itemData.name = 'Легендарный генератор щита';
     }
 
     itemData.shield = {
@@ -133,16 +136,16 @@ export class ItemGenerator {
 }
 
 const MISC_NAMES: string[] = [
-  'Золото',
+  'Что-то вроде золота',
   'Металлолом',
-  'Электроника',
-  'Энергоячейки',
-  'Туалетная бумага',
+  'Электроника от дяди Ляо',
+  'Сомнительные энергоячейки',
+  'Туалетная бумага, почти новая',
   'Корм для животных',
-  'Диски с музыкой',
-  'Консервы',
-  'Водяные чипы',
-  'Китайские запчасти',
+  'Диски с музыкой восьмидесятых',
+  'Консервы времен войны',
+  'Водяные чипы для убежищ',
+  'Китайские запчасти на корабль',
 ];
 
 const CONSUMABLE = [
