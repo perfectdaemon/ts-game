@@ -4,7 +4,7 @@ import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
 import { ConsumableItemType, ItemRarity, ItemType } from '../player-data';
 import { IRenderable } from '../render-helper';
-import { BaseItem, ConsumableItem, EngineItem, ShieldItem, WeaponItem } from './inventory';
+import { BaseItem, ConsumableItem, EngineItem, MiscItem, ShieldItem, WeaponItem } from './inventory';
 import { PlayerStatsRow } from './player-stats-row';
 
 export class ItemDescription implements IRenderable {
@@ -145,6 +145,9 @@ export class ItemDescription implements IRenderable {
 
       case ItemType.Misc:
         this.type.text = 'Всячина';
+        const misc = baseItem as MiscItem;
+        this.stats[0].caption.text = 'Количество';
+        this.stats[0].value.text = `${misc.count}`;
         // tslint:disable-next-line:max-line-length
         this.description.text = 'Отличная штука! Ее можно использовать чуть менее чем никак. Продайте, пока не кончился срок годности.';
         break;
@@ -154,7 +157,7 @@ export class ItemDescription implements IRenderable {
 
         const shield = baseItem as ShieldItem;
         this.stats[0].caption.text = 'Сила щита';
-        this.stats[0].value.text = `${shield.shieldMultiplier}`;
+        this.stats[0].value.text = `${Math.ceil(shield.shieldMultiplier * 100)} %`;
         if (shield.addProtect) {
           this.stats[1].caption.text = 'Доп. щиты';
           this.stats[1].value.text = `+${shield.addProtect}`;
