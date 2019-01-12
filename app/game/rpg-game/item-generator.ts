@@ -57,15 +57,15 @@ export class ItemGenerator {
   private static generateWeaponForItem(itemData: InventoryItemData, lucky: number): void {
     let damageMultiplier = 1.0;
     let addEffects = 0;
-    let name = 'Лазер';
+    let name = 'Ракетница';
     if (itemData.rarity === ItemRarity.Special) {
       damageMultiplier = 1.5;
       addEffects = 2;
-      name = 'Отличный лазер';
+      name = 'Отличная ракетница';
     } else if (itemData.rarity === ItemRarity.Legendary) {
       damageMultiplier = 3;
       addEffects = 3;
-      name = 'Легендарный лазер';
+      name = 'Легендарная ракетница';
     }
 
     const minDamage = Math.ceil(4 + 2 * Math.random() * damageMultiplier);

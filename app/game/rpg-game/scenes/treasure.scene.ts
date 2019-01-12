@@ -1,7 +1,7 @@
 import { GuiButton } from '../../../engine/gui/gui-button';
 import { GuiManager } from '../../../engine/gui/gui-manager';
 import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
-import { div } from '../../../engine/math/math-base';
+import { clamp, div } from '../../../engine/math/math-base';
 import { Vector2 } from '../../../engine/math/vector2';
 import { renderer } from '../../../engine/render/webgl';
 import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
@@ -16,7 +16,7 @@ import { ItemGenerator } from '../item-generator';
 import { MenuHelper } from '../menu/menu-helper';
 import { BaseItem } from '../planet/inventory';
 import { ItemDescription } from '../planet/item-description';
-import { ItemType } from '../player-data';
+import { ItemRarity, ItemType } from '../player-data';
 import { IRenderable, RenderHelper } from '../render-helper';
 import { TreasureType, TREASURE_GAME_STATE } from '../treasure/game-state';
 import { CHEST_HIG_TEXTS, CHEST_LOW_TEXTS, CHEST_MID_TEXTS, ENEMY_HIG_TEXTS, ENEMY_LOW_TEXTS, ENEMY_MID_TEXTS } from '../treasure/texts';
@@ -51,8 +51,8 @@ export class TreasureScene extends Scene implements IRenderable {
 
     this.title = new DialogBox(150);
 
-    this.setTitle();
     this.generateItems();
+    this.setTitle();
 
     return super.load();
   }
@@ -114,7 +114,13 @@ export class TreasureScene extends Scene implements IRenderable {
 
     this.guiManager
       .getElement<GuiButton>('RegenerateButton')
-      .onClick = () => this.generateItems();
+      .onClick = () => {
+        const types = [TreasureType.Enemy, TreasureType.Chest];
+        TREASURE_GAME_STATE.treasure.cost = Math.random();
+        TREASURE_GAME_STATE.treasure.type = this.getRandomArrayElement(types);
+        this.generateItems();
+        this.setTitle();
+      };
   }
 
   private generateItems(): void {
@@ -123,8 +129,13 @@ export class TreasureScene extends Scene implements IRenderable {
     const treasureData = TREASURE_GAME_STATE.treasure;
     const count = Math.ceil(4 * treasureData.cost);
 
+    const itemTypes = [ItemType.Weapon, ItemType.Shield, ItemType.Misc, ItemType.Consumable];
+
+    let luckyAdd = treasureData.cost / 3;
+
     for (let i = 0; i < count; ++i) {
-      const itemData = ItemGenerator.generate(ItemType.Weapon, Math.random());
+      const itemType = this.getRandomArrayElement(itemTypes);
+      const itemData = ItemGenerator.generate(itemType, clamp(luckyAdd + Math.random(), 0.1, 1.0));
       const item = BaseItem.build(itemData);
 
       const row = div(i, 2);
@@ -134,30 +145,40 @@ export class TreasureScene extends Scene implements IRenderable {
       itemDescription.update(item, item.cost);
 
       this.itemDescriptions.push(itemDescription);
+
+      if (itemData.rarity === ItemRarity.Legendary) {
+        luckyAdd -= 0.2;
+      } else if (itemData.rarity === ItemRarity.Special) {
+        luckyAdd -= 0.1;
+      }
     }
   }
 
   private setTitle(): void {
     const treasureData = TREASURE_GAME_STATE.treasure;
+    const totalCost = this.getTotalItemsCost();
+
+    this.title.text.text = `$${totalCost}\n`;
+
     switch (treasureData.type) {
       case TreasureType.Chest:
-        if (treasureData.cost < 0.3) {
-          this.title.text.text = this.getRandomArrayElement(CHEST_LOW_TEXTS);
-        } else if (treasureData.cost < 0.7) {
-          this.title.text.text = this.getRandomArrayElement(CHEST_MID_TEXTS);
+        if (totalCost < 300) {
+          this.title.text.text += this.getRandomArrayElement(CHEST_LOW_TEXTS);
+        } else if (totalCost < 700) {
+          this.title.text.text += this.getRandomArrayElement(CHEST_MID_TEXTS);
         } else {
-          this.title.text.text = this.getRandomArrayElement(CHEST_HIG_TEXTS);
+          this.title.text.text += this.getRandomArrayElement(CHEST_HIG_TEXTS);
         }
 
         break;
 
       case TreasureType.Enemy:
         if (treasureData.cost < 0.3) {
-          this.title.text.text = this.getRandomArrayElement(ENEMY_LOW_TEXTS);
+          this.title.text.text += this.getRandomArrayElement(ENEMY_LOW_TEXTS);
         } else if (treasureData.cost < 0.7) {
-          this.title.text.text = this.getRandomArrayElement(ENEMY_MID_TEXTS);
+          this.title.text.text += this.getRandomArrayElement(ENEMY_MID_TEXTS);
         } else {
-          this.title.text.text = this.getRandomArrayElement(ENEMY_HIG_TEXTS);
+          this.title.text.text += this.getRandomArrayElement(ENEMY_HIG_TEXTS);
         }
         break;
 
