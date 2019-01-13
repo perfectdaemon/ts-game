@@ -10,6 +10,7 @@ import { Text } from '../../../engine/scene/text';
 import { Scene } from '../../../engine/scenes/scene';
 import { PLANET_MENU_DATA } from '../assets/planet-menu.data';
 import { GLOBAL } from '../global';
+import { GlobalEvents } from '../global.events';
 import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
 import { BaseItem, InventoryCell } from '../planet/inventory';
@@ -19,7 +20,6 @@ import { ShipCell } from '../planet/ship-cell';
 import { Shop } from '../planet/shop';
 import { ItemType } from '../player-data';
 import { IRenderable, RenderHelper } from '../render-helper';
-import { SCENES } from './scenes.const';
 
 export enum ShopMode { Buy, Sell }
 export enum ShipMode { Setup, Remove }
@@ -130,6 +130,7 @@ export class PlanetScene extends Scene implements IRenderable {
     this.takeOffButton.onClick = () => {
       this.updatePlayerData();
       this.sceneManager.closeModal();
+      GlobalEvents.takeOffFromPlanet.next();
     };
 
     this.repairButton = this.guiManager.getElement<GuiButton>('RepairButton');

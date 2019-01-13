@@ -1,6 +1,7 @@
 import { GuiButton } from '../../../engine/gui/gui-button';
 import { GuiManager } from '../../../engine/gui/gui-manager';
 import { Action } from '../../../engine/helpers/action-manager/action';
+import { Subscription } from '../../../engine/helpers/event/subscription';
 import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
 import { Vector2 } from '../../../engine/math/vector2';
 import { renderer } from '../../../engine/render/webgl';
@@ -9,6 +10,7 @@ import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
 import { SOLAR_MENU_DATA } from '../assets/solar-menu.data';
 import { GLOBAL } from '../global';
+import { GlobalEvents } from '../global.events';
 import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
 import { IRenderable, RenderHelper } from '../render-helper';
@@ -34,6 +36,8 @@ export class GameScene extends Scene {
   lastPlayerMoveAction: Action;
 
   cameraController: CameraController;
+
+  $takeOffPlanet: Subscription<void>;
 
   constructor() {
     super();
@@ -76,6 +80,8 @@ export class GameScene extends Scene {
 
     this.nebulaPool.initialize();
 
+    this.$takeOffPlanet = GlobalEvents.takeOffFromPlanet.subscribe(() => this.onTakeOffFromPlanet());
+
     return super.load();
   }
 
@@ -84,6 +90,7 @@ export class GameScene extends Scene {
     this.guiTextBatch.free();
     this.guiSpriteBatch.free();
     this.renderHelper.free();
+    this.$takeOffPlanet.unsubscribe();
     return super.unload();
   }
 
@@ -104,9 +111,6 @@ export class GameScene extends Scene {
     this.cameraController.update(deltaTime);
   }
 
-  onKeyDown(key: Keys): void {
-  }
-
   onMouseDown(position: Vector2, button: MouseButtons): void {
     if (button === Keys.LeftButton) {
       const worldPosition = GLOBAL.assets.gameCamera.screenToWorld(position);
@@ -117,6 +121,12 @@ export class GameScene extends Scene {
   onPause(pause: boolean): void {
     super.onPause(pause);
     this.guiManager.enabled = !pause;
+  }
+
+  onTakeOffFromPlanet(): void {
+    if (!GAME_STATE.planetToLand) { return; }
+
+    GAME_STATE.planetToLand.inventory = PLANET_GAME_STATE.planet.shopItems;
   }
 
   private movePlayerToPosition(position: Vector2): void {
@@ -134,7 +144,7 @@ export class GameScene extends Scene {
           .subtract(GAME_STATE.player.sprite.position);
 
         if (moveVector.length() < 1) {
-          GAME_STATE.targetCursor.sprite.visible = false;
+          this.stopMoving()
           return true;
         }
 
@@ -147,6 +157,11 @@ export class GameScene extends Scene {
         this.checkLanding();
         return false;
       });
+  }
+
+  private stopMoving(): void {
+    this.lastPlayerMoveAction.onDeactivate();
+    GAME_STATE.targetCursor.sprite.visible = false;
   }
 
   private checkLanding(): void {
