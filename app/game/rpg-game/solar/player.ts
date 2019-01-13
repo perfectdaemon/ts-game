@@ -7,7 +7,7 @@ export class Player extends SolarBase {
   static buildPlayer(): Player {
     const player = new Player();
     player.initialize();
-    player.sprite.position.set(renderer.width / 2.0, renderer.height / 2.0, 5);
+    player.sprite.position.set(renderer.width / 2.0, renderer.height / 2.0, 15);
     player.speed = 50;
     return player;
   }
@@ -21,9 +21,5 @@ export class Player extends SolarBase {
     this.sprite = new Sprite();
     this.sprite.setTextureRegion(playerTextureRegion, false);
     this.sprite.setSize(16, 16);
-  }
-
-  update(): void {
-
   }
 }

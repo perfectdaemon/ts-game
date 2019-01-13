@@ -2,11 +2,13 @@ import { Vector4 } from '../../../engine/math/vector4';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
+import { GAME_STATE } from './game-state';
 import { SolarBase } from './solar.base';
 
 export class Planet extends SolarBase {
   static buildPlanet1(): Planet {
-    const planet = new Planet();
+    const planet = new Planet(64);
+
     planet.initialize();
     planet.sprite.position.set(500, 500, 5);
     planet.sprite.setVerticesColor(new Vector4(29 / 255.0, 172 / 255.0, 109 / 255.0, 1.0));
@@ -16,6 +18,12 @@ export class Planet extends SolarBase {
 
   text: Text;
 
+  constructor(public radius: number) {
+    super();
+  }
+
+
+
   initialize(): void {
     super.initialize();
 
@@ -23,7 +31,7 @@ export class Planet extends SolarBase {
 
     this.sprite = new Sprite();
     this.sprite.setTextureRegion(planetTextureRegion, false);
-    this.sprite.setSize(128, 128);
+    this.sprite.setSize(this.radius * 2, this.radius * 2);
 
     this.text = new Text();
     this.text.pivotPoint.set(0.5, 0.0);

@@ -6,6 +6,7 @@ import { SolarManager } from '../solar/solar.manager';
 
 export class GameScene extends Scene {
   solarManager: SolarManager;
+
   constructor() {
     super();
   }
@@ -17,9 +18,14 @@ export class GameScene extends Scene {
     return super.load();
   }
 
+  unload(): Promise<void> {
+    this.solarManager.free();
+    return super.unload();
+  }
+
   render(): void {
     GLOBAL.assets.gameCamera.update();
-    this.solarManager.draw();
+    this.solarManager.render();
   }
 
   update(deltaTime: number): void {

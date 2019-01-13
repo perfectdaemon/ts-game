@@ -9,21 +9,20 @@ export class GameState {
 
   planets: Planet[];
 
-  actionManager: ActionManager;
+  planetToLand: Planet | undefined;
 
-  deltaTime: number;
+  actionManager: ActionManager;
 
   reset(): void {
     this.player = Player.buildPlayer();
     this.targetCursor = TargetCursor.build();
+    this.planetToLand = undefined;
 
     this.planets = [
       Planet.buildPlanet1(),
     ];
 
     this.actionManager = new ActionManager();
-
-    this.deltaTime = 0;
   }
 }
 

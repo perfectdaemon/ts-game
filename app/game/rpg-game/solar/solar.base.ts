@@ -1,7 +1,8 @@
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
+import { IRenderable } from '../render-helper';
 
-export abstract class SolarBase {
+export abstract class SolarBase implements IRenderable {
   sprite: Sprite;
 
   initialize(): void { }
@@ -14,7 +15,7 @@ export abstract class SolarBase {
     return [];
   }
 
-  update(): void {
+  update(deltaTime: number): void {
 
   }
 }

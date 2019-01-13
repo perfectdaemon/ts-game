@@ -3,9 +3,10 @@ import { Pool } from '../../../engine/helpers/pool/pool';
 import { Vector2 } from '../../../engine/math/vector2';
 import { Vector4 } from '../../../engine/math/vector4';
 import { renderer } from '../../../engine/render/webgl';
-import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { Sprite } from '../../../engine/scene/sprite';
+import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
+import { IRenderable } from '../render-helper';
 import { SolarBase } from './solar.base';
 
 export class Nebula extends SolarBase implements IPoolItem {
@@ -38,7 +39,7 @@ export class Nebula extends SolarBase implements IPoolItem {
   }
 }
 
-export class NebulaPool extends Pool<Nebula> {
+export class NebulaPool extends Pool<Nebula> implements IRenderable {
   initialize(): void {
     for (let i = 0; i < 10; ++i) {
       this.get();
@@ -49,13 +50,20 @@ export class NebulaPool extends Pool<Nebula> {
 
   }
 
-  render(spriteBatch: SpriteBatch): void {
+  getSpritesToRender(): Sprite[] {
+    const result: Sprite[] = [];
     let count = 0;
     for (const nebula of this.poolObjects) {
       if (!nebula.active) { continue; }
 
       nebula.sprite.position.z = 1 + 0.1 * count++;
-      spriteBatch.drawSingle(nebula.sprite);
+      result.push(nebula.sprite);
     }
+
+    return result;
+  }
+
+  getTextsToRender(): Text[] {
+    return [];
   }
 }
