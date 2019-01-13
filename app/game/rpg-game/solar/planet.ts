@@ -2,7 +2,8 @@ import { Vector4 } from '../../../engine/math/vector4';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
-import { GAME_STATE } from './game-state';
+import { ItemGenerator } from '../item-generator';
+import { ConsumableItemType, InventoryItemData, ItemType } from '../player-data';
 import { SolarBase } from './solar.base';
 
 export class Planet extends SolarBase {
@@ -12,10 +13,15 @@ export class Planet extends SolarBase {
     planet.initialize();
     planet.sprite.position.set(500, 500, 5);
     planet.sprite.setVerticesColor(new Vector4(29 / 255.0, 172 / 255.0, 109 / 255.0, 1.0));
+
+    planet.updateInventory();
+
     return planet;
   }
 
   text: Text;
+
+  inventory: InventoryItemData[];
 
   constructor(public name: string, public radius: number) {
     super();
@@ -39,5 +45,23 @@ export class Planet extends SolarBase {
 
   getTextsToRender(): Text[] {
     return [this.text];
+  }
+
+  updateInventory(): void {
+
+    this.inventory = [
+      ItemGenerator.generateConsumable(ConsumableItemType.Heal, Math.ceil(3 * Math.random())),
+      ItemGenerator.generateConsumable(ConsumableItemType.IncreaseCriticalChance, Math.ceil(3 * Math.random())),
+      ItemGenerator.generateConsumable(ConsumableItemType.MoreAttackCount, Math.ceil(3 * Math.random())),
+      ItemGenerator.generateConsumable(ConsumableItemType.MoreProtectCount, Math.ceil(3 * Math.random())),
+    ];
+
+    for (let i = 0; i < 2; ++i) {
+      ItemGenerator.generate(ItemType.Weapon, 0.5 * Math.random());
+    }
+
+    for (let i = 0; i < 2; ++i) {
+      ItemGenerator.generate(ItemType.Shield, 0.4 * Math.random());
+    }
   }
 }
