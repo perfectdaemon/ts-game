@@ -1,6 +1,8 @@
 import { ActionManager } from '../../../engine/helpers/action-manager/action-manager';
+import { Vector2 } from '../../../engine/math/vector2';
 import { PLAYER_DATA_START } from '../assets/player-data.const';
 import { PlayerData } from '../player-data';
+import { Enemy } from './enemy';
 import { Planet } from './planet';
 import { Player } from './player';
 import { TargetCursor } from './target-cursor';
@@ -12,6 +14,8 @@ export class GameState {
   targetCursor: TargetCursor;
 
   planets: Planet[];
+
+  enemies: Enemy[];
 
   planetToLand: Planet | undefined;
 
@@ -28,7 +32,24 @@ export class GameState {
       Planet.buildPlanet1(),
     ];
 
+    this.enemies = [];
+
     this.actionManager = new ActionManager();
+
+    this.createEnemies();
+  }
+
+  private createEnemies(): void {
+    for (let i = 0; i < 10; ++i) {
+      const angle = 360 * Math.random();
+      const length = 300 + 300 * Math.random();
+
+      const position = Vector2.fromAngle(angle).multiplyNumSelf(length).addToSelf(GAME_STATE.player.sprite.position);
+
+      const enemy = Enemy.buildEnemy(position);
+
+      this.enemies.push(enemy);
+    }
   }
 }
 

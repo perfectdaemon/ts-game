@@ -20,6 +20,7 @@ import { Nebula, NebulaPool } from '../solar/nebula';
 import { Planet } from '../solar/planet';
 import { SolarBase } from '../solar/solar.base';
 import { SCENES } from './scenes.const';
+import { Enemy } from '../solar/enemy';
 
 export class GameScene extends Scene {
   guiManager: GuiManager;
@@ -71,7 +72,9 @@ export class GameScene extends Scene {
 
     GAME_STATE.reset();
 
-    this.solarObjects = this.solarObjects.concat(GAME_STATE.planets);
+    this.solarObjects = this.solarObjects
+      .concat(GAME_STATE.planets)
+      .concat(GAME_STATE.enemies);
 
     this.solarObjects.push(
       GAME_STATE.player,
@@ -109,6 +112,8 @@ export class GameScene extends Scene {
     }
 
     this.cameraController.update(deltaTime);
+
+    this.checkFight();
   }
 
   onMouseDown(position: Vector2, button: MouseButtons): void {
@@ -123,7 +128,7 @@ export class GameScene extends Scene {
     this.guiManager.enabled = !pause;
   }
 
-  onTakeOffFromPlanet(): void {
+  private onTakeOffFromPlanet(): void {
     if (!GAME_STATE.planetToLand) { return; }
 
     GAME_STATE.planetToLand.inventory = PLANET_GAME_STATE.planet.shopItems;
@@ -144,7 +149,7 @@ export class GameScene extends Scene {
           .subtract(GAME_STATE.player.sprite.position);
 
         if (moveVector.length() < 1) {
-          this.stopMoving()
+          this.stopMoving();
           return true;
         }
 
@@ -177,6 +182,16 @@ export class GameScene extends Scene {
     this.setLanding(undefined);
   }
 
+  private checkFight(): void {
+    for (const enemy of GAME_STATE.enemies) {
+      const distanceToPlayer = enemy.sprite.position.subtract(GAME_STATE.player.sprite.position).lengthQ();
+      if (distanceToPlayer > 16 * 16) { continue; }
+
+      this.fight(enemy);
+      return;
+    }
+  }
+
   private setLanding(planet: Planet | undefined): void {
     if (!planet) {
       GAME_STATE.planetToLand = undefined;
@@ -203,5 +218,9 @@ export class GameScene extends Scene {
     };
 
     this.sceneManager.showModal(SCENES.planet, true);
+  }
+
+  private fight(enemy: Enemy): void {
+    alert('fight!');
   }
 }
