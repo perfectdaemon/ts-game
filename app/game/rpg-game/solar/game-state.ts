@@ -1,9 +1,13 @@
 import { ActionManager } from '../../../engine/helpers/action-manager/action-manager';
+import { PLAYER_DATA_START } from '../assets/player-data.const';
+import { PlayerData } from '../player-data';
 import { Planet } from './planet';
 import { Player } from './player';
 import { TargetCursor } from './target-cursor';
 
 export class GameState {
+  playerData: PlayerData;
+
   player: Player;
   targetCursor: TargetCursor;
 
@@ -14,6 +18,8 @@ export class GameState {
   actionManager: ActionManager;
 
   reset(): void {
+    this.playerData = PLAYER_DATA_START;
+
     this.player = Player.buildPlayer();
     this.targetCursor = TargetCursor.build();
     this.planetToLand = undefined;
