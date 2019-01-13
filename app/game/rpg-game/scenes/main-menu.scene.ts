@@ -6,6 +6,7 @@ import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
 import { MAIN_MENU_DATA } from '../assets/main-menu.data';
+import { PLAYER_DATA_START } from '../assets/player-data.const';
 import { FIGHT_GAME_STATE } from '../fight/game-state';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
@@ -384,6 +385,8 @@ export class MainMenuScene extends Scene {
   }
 
   private testTreasure(): void {
+    TREASURE_GAME_STATE.player = PLAYER_DATA_START;
+
     TREASURE_GAME_STATE.treasure = {
       type: TreasureType.Chest,
       cost: Math.random(),
