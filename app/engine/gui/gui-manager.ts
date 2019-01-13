@@ -85,7 +85,7 @@ export class GuiManager {
 
     for (const elementName in this.elements) {
       const element = this.elements[elementName];
-      if (!element.enabled) { continue; }
+      if (!element.enabled || !element.visible) { continue; }
 
       const isEventsForFocusedOnly = [InputType.KeyDown, InputType.KeyUp, InputType.Wheel]
         .indexOf(inputEvent.inputType) !== -1;
