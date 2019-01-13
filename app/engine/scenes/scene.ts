@@ -2,22 +2,27 @@ import { Keys, MouseButtons } from '../input/keys.enum';
 import { Vector2 } from '../math/vector2';
 import { SceneManager } from './scene-manager';
 
-export enum SceneState { Hidden, Active, Paused }
+export enum SceneState { Active, Paused }
+
+export enum SceneRenderState { Hidden, Visible }
 
 export abstract class Scene {
   sceneManager: SceneManager;
-  state: SceneState = SceneState.Hidden;
+  state: SceneState = SceneState.Paused;
+  renderState: SceneRenderState = SceneRenderState.Hidden;
 
   load(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.state = SceneState.Active;
+      this.renderState = SceneRenderState.Visible;
       resolve();
     });
   }
 
   unload(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      this.state = SceneState.Hidden;
+      this.state = SceneState.Paused;
+      this.renderState = SceneRenderState.Hidden;
       resolve();
     });
   }
@@ -27,12 +32,15 @@ export abstract class Scene {
   abstract render(): void;
 
   setPause(pause: boolean): void {
-    if (this.state === SceneState.Hidden) {
-      return;
-    }
-
     this.state = pause ? SceneState.Paused : SceneState.Active;
+    this.onPause(pause);
   }
+
+  setHide(hide: boolean): void {
+    this.renderState = hide ? SceneRenderState.Hidden : SceneRenderState.Visible;
+  }
+
+  onPause(pause: boolean): void { }
 
   onMouseMove(position: Vector2): void { }
 

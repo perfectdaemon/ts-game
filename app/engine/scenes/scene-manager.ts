@@ -1,6 +1,6 @@
 import { Keys, MouseButtons } from '../input/keys.enum';
 import { Vector2 } from '../math/vector2';
-import { Scene, SceneState } from './scene';
+import { Scene, SceneRenderState, SceneState } from './scene';
 
 export class SceneManager {
   current: Scene | null = null;
@@ -31,9 +31,12 @@ export class SceneManager {
     this.current.load();
   }
 
-  showModal(sceneName: string): void {
+  showModal(sceneName: string, hideCurrent?: boolean): void {
     if (this.current) {
       this.current.setPause(true);
+      if (!!hideCurrent) {
+        this.current.setHide(true);
+      }
     }
 
     this.modal = this.scenes[sceneName];
@@ -50,6 +53,7 @@ export class SceneManager {
         this.modal = null;
         if (this.current) {
           this.current.setPause(false);
+          this.current.setHide(false);
         }
       });
 
@@ -68,7 +72,7 @@ export class SceneManager {
 
   render(): void {
     for (const sceneName in this.scenes) {
-      if (this.scenes[sceneName].state === SceneState.Hidden) {
+      if (this.scenes[sceneName].renderState === SceneRenderState.Hidden) {
         continue;
       }
 
