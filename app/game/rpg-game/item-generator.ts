@@ -34,6 +34,22 @@ export class ItemGenerator {
     return itemData;
   }
 
+  static generateConsumable(consType: ConsumableItemType, count: number): InventoryItemData {
+    const consumableInfo = CONSUMABLE.filter(it => it.type === consType)[0];
+    const result: InventoryItemData = {
+      consumable: {
+        type: consumableInfo.type,
+        count,
+      },
+      cost: count * consumableInfo.cost,
+      rarity: ItemRarity.Special,
+      type: ItemType.Consumable,
+      name: consumableInfo.name,
+    };
+
+    return result;
+  }
+
   private static getRarity(type: ItemType, lucky: number): ItemRarity {
     if (type === ItemType.Consumable) { return ItemRarity.Special; }
     if (type === ItemType.Misc) { return ItemRarity.Usual; }
