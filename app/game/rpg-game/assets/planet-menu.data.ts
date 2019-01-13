@@ -6,7 +6,7 @@ import { MenuData } from '../menu/menu-data';
 const WIDTH = 960;
 const HEIGHT = 768;
 
-export const PLANET_DATA: MenuData = {
+export const PLANET_MENU_DATA: MenuData = {
   background: {},
   buttons: [
     {

@@ -8,7 +8,7 @@ import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { Scene } from '../../../engine/scenes/scene';
-import { PLANET_DATA } from '../assets/planet.data';
+import { PLANET_MENU_DATA } from '../assets/planet-menu.data';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
@@ -121,7 +121,7 @@ export class PlanetScene extends Scene implements IRenderable {
       GLOBAL.assets.guiCamera,
     );
 
-    MenuHelper.loadMenu(this.guiManager, PLANET_DATA);
+    MenuHelper.loadMenu(this.guiManager, PLANET_MENU_DATA);
 
     this.takeOffButton = this.guiManager.getElement<GuiButton>('TakeOffButton');
     this.takeOffButton.onClick = () => {
