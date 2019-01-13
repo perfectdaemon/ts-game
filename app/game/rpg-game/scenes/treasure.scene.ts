@@ -14,9 +14,9 @@ import { DialogBox } from '../dialog-box';
 import { GLOBAL } from '../global';
 import { ItemGenerator } from '../item-generator';
 import { MenuHelper } from '../menu/menu-helper';
-import { BaseItem } from '../planet/inventory';
+import { BaseItem, ConsumableItem, Inventory } from '../planet/inventory';
 import { ItemDescription } from '../planet/item-description';
-import { ItemRarity, ItemType } from '../player-data';
+import { ItemRarity, ItemType, PlayerData } from '../player-data';
 import { IRenderable, RenderHelper } from '../render-helper';
 import { TreasureType, TREASURE_GAME_STATE } from '../treasure/game-state';
 import { CHEST_HIG_TEXTS, CHEST_LOW_TEXTS, CHEST_MID_TEXTS, ENEMY_HIG_TEXTS, ENEMY_LOW_TEXTS, ENEMY_MID_TEXTS } from '../treasure/texts';
@@ -32,6 +32,8 @@ export class TreasureScene extends Scene implements IRenderable {
   title: DialogBox;
   itemDescriptions: ItemDescription[] = [];
 
+  inventory: Inventory;
+
   constructor() {
     super();
   }
@@ -45,11 +47,20 @@ export class TreasureScene extends Scene implements IRenderable {
     const blankRegion = GLOBAL.assets.planetAtlas.getRegion('blank.png');
 
     this.background = new Sprite(renderer.width - 20, renderer.height - 300, new Vector2(0, 0));
-    this.background.position.set(10, 170, 1);
+    this.background.position.set(10, 140, 1);
     this.background.setVerticesColor(1, 1, 1, 0.3);
     this.background.setTextureRegion(blankRegion, false);
 
-    this.title = new DialogBox(150);
+    this.title = new DialogBox(120);
+
+    const playerData = TREASURE_GAME_STATE.player;
+
+    this.inventory = new Inventory(
+      playerData.inventorySize,
+      playerData.inventory,
+      40, renderer.height - 120,
+      this.guiManager,
+    );
 
     this.generateItems();
     this.setTitle();
@@ -67,7 +78,7 @@ export class TreasureScene extends Scene implements IRenderable {
 
   render(): void {
     GLOBAL.assets.gameCamera.update();
-    this.renderHelper.render([this as IRenderable, this.title].concat(this.itemDescriptions));
+    this.renderHelper.render([this as IRenderable, this.title, this.inventory].concat(this.itemDescriptions));
     GLOBAL.assets.guiCamera.update();
     this.guiManager.render();
   }
@@ -188,6 +199,14 @@ export class TreasureScene extends Scene implements IRenderable {
   }
 
   private takeAndExit(): void {
+    for (const itemDescription of this.itemDescriptions) {
+      const result = this.addItemToInventory(TREASURE_GAME_STATE.player, itemDescription.baseItem);
+      if (result) {
+        itemDescription.setVisible(false);
+      } else {
+
+      }
+    }
     this.sceneManager.switchTo(SCENES.mainMenu);
   }
 
@@ -198,5 +217,29 @@ export class TreasureScene extends Scene implements IRenderable {
   private getTotalItemsCost(): number {
     const result = this.itemDescriptions.reduce((prev, curr) => prev + curr.baseItem.cost, 0);
     return result;
+  }
+
+  private addItemToInventory(playerData: PlayerData, item: BaseItem): boolean {
+    if (item.type === ItemType.Consumable) {
+      const consItem = item as ConsumableItem;
+      const itemToStack = playerData.inventory
+        .filter(it =>
+          it.type === ItemType.Consumable &&
+          it.consumable &&
+          it.consumable.type === consItem.consType);
+
+      if (itemToStack.length === 1 && itemToStack[0].consumable) {
+        itemToStack[0].consumable.count += consItem.count;
+        itemToStack[0].cost += consItem.cost;
+        return true;
+      }
+    }
+
+    if (playerData.inventory.length >= playerData.inventorySize) {
+      return false;
+    }
+
+    playerData.inventory.push(item.toItemData());
+    return true;
   }
 }

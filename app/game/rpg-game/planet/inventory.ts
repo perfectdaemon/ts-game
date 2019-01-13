@@ -28,7 +28,7 @@ export class Inventory implements IRenderable {
     }
   }
 
-  onClick: (cell: InventoryCell) => void = (cell) => {};
+  onClick: (cell: InventoryCell) => void = (cell) => { };
 
   getSpritesToRender(): Sprite[] {
     const result: Sprite[] = [];
@@ -44,6 +44,30 @@ export class Inventory implements IRenderable {
 
   getTextsToRender(): Text[] {
     return [];
+  }
+
+  addItemToInventory(item: BaseItem): boolean {
+    if (item.type === ItemType.Consumable) {
+      const consItem = item as ConsumableItem;
+      const itemToStack = this.cells
+        .filter(it => it.item && it.item.type === ItemType.Consumable)
+        .map(it => it.item as ConsumableItem)
+        .filter(it => it.consType === consItem.consType);
+
+      if (itemToStack.length === 1) {
+        itemToStack[0].count += consItem.count;
+        return true;
+      }
+    }
+
+    const emptyCells = this.cells.filter(it => !it.item);
+
+    if (emptyCells.length === 0) {
+      return false;
+    }
+
+    emptyCells[0].setItem(item);
+    return true;
   }
 }
 
