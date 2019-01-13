@@ -69,6 +69,9 @@ export class PlanetScene extends Scene implements IRenderable {
     this.itemDescription = new ItemDescription(480 - 59 / 2, 490, 473, 205);
     this.itemDescription.setVisible(false);
 
+    this.selectedShipCell = undefined;
+    this.selectedInventoryCell = undefined;
+
     this.updateRepairText();
     this.player.updateStats();
     return super.load();
@@ -126,7 +129,7 @@ export class PlanetScene extends Scene implements IRenderable {
     this.takeOffButton = this.guiManager.getElement<GuiButton>('TakeOffButton');
     this.takeOffButton.onClick = () => {
       this.updatePlayerData();
-      this.sceneManager.switchTo(SCENES.game);
+      this.sceneManager.closeModal();
     };
 
     this.repairButton = this.guiManager.getElement<GuiButton>('RepairButton');
@@ -326,11 +329,6 @@ export class PlanetScene extends Scene implements IRenderable {
 
   private onBuySellButtonClick(): void {
     if (this.shopMode === ShopMode.Buy) {
-      const emptyInventoryCells = this.player.inventory.cells.filter(it => !it.item);
-      if (emptyInventoryCells.length === 0) {
-        throw new Error('Can not buy item - no emptyCells in inventory');
-      }
-
       if (!this.selectedInventoryCell) {
         throw new Error('Can not buy item - no selected inventory cell');
       }
@@ -343,8 +341,11 @@ export class PlanetScene extends Scene implements IRenderable {
         throw new Error('Can not buy item - not enough money');
       }
 
-      const emptyCell = emptyInventoryCells[0];
-      emptyCell.setItem(this.selectedInventoryCell.item);
+      const result = this.player.inventory.addItemToInventory(this.selectedInventoryCell.item);
+      if (!result) {
+        return;
+      }
+
       this.player.playerData.credits -= this.getItemBuyPrice(this.selectedInventoryCell.item);
       this.selectedInventoryCell.setItem();
       this.player.updateCreditsText();
@@ -361,13 +362,11 @@ export class PlanetScene extends Scene implements IRenderable {
         throw new Error('Can not sell item - selected inventory cell has no item');
       }
 
-      const emptyInventoryCells = this.shop.inventory.cells.filter(it => !it.item);
+      const result = this.shop.inventory.addItemToInventory(this.selectedInventoryCell.item);
+      if (!result) {
+        return;
+      }
 
-      const emptyCell = emptyInventoryCells.length > 0
-        ? emptyInventoryCells[0]
-        : this.shop.inventory.cells[this.shop.inventory.cells.length - 1];
-
-      emptyCell.setItem(this.selectedInventoryCell.item);
       this.player.playerData.credits += this.getItemSellPrice(this.selectedInventoryCell.item);
       this.selectedInventoryCell.setItem();
       this.player.updateCreditsText();
@@ -392,6 +391,11 @@ export class PlanetScene extends Scene implements IRenderable {
     data.cells = this.player.shipCells.map(it => it.toShipCellData());
 
     data.inventory = this.player.inventory.cells
+      .filter(it => it.item)
+      .map(it => it.item as BaseItem)
+      .map(it => it.toItemData());
+
+    PLANET_GAME_STATE.planet.shopItems = this.shop.inventory.cells
       .filter(it => it.item)
       .map(it => it.item as BaseItem)
       .map(it => it.toItemData());

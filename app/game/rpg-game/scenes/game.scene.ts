@@ -17,6 +17,7 @@ import { GAME_STATE } from '../solar/game-state';
 import { Nebula, NebulaPool } from '../solar/nebula';
 import { Planet } from '../solar/planet';
 import { SolarBase } from '../solar/solar.base';
+import { SCENES } from './scenes.const';
 
 export class GameScene extends Scene {
   guiManager: GuiManager;
@@ -113,10 +114,9 @@ export class GameScene extends Scene {
     }
   }
 
-  onMouseMove(position: Vector2): void {
-  }
-
-  onMouseUp(position: Vector2, button: MouseButtons): void {
+  onPause(pause: boolean): void {
+    super.onPause(pause);
+    this.guiManager.enabled = !pause;
   }
 
   private movePlayerToPosition(position: Vector2): void {
@@ -174,6 +174,8 @@ export class GameScene extends Scene {
   }
 
   private land(): void {
+    this.lastPlayerMoveAction.onDeactivate();
+
     if (!GAME_STATE.planetToLand) {
       return;
     }
@@ -182,7 +184,9 @@ export class GameScene extends Scene {
     PLANET_GAME_STATE.planet = {
       shopSize: 24,
       name: GAME_STATE.planetToLand.name,
-      // shopItems
+      shopItems: GAME_STATE.planetToLand.inventory,
     };
+
+    this.sceneManager.showModal(SCENES.planet, true);
   }
 }
