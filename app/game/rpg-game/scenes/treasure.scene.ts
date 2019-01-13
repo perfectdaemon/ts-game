@@ -1,9 +1,8 @@
 import { GuiButton } from '../../../engine/gui/gui-button';
 import { GuiManager } from '../../../engine/gui/gui-manager';
 import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
-import { clamp, div } from '../../../engine/math/math-base';
+import { clamp } from '../../../engine/math/math-base';
 import { Vector2 } from '../../../engine/math/vector2';
-import { renderer } from '../../../engine/render/webgl';
 import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Sprite } from '../../../engine/scene/sprite';
@@ -14,9 +13,9 @@ import { DialogBox } from '../dialog-box';
 import { GLOBAL } from '../global';
 import { ItemGenerator } from '../item-generator';
 import { MenuHelper } from '../menu/menu-helper';
-import { BaseItem, ConsumableItem, Inventory } from '../planet/inventory';
+import { BaseItem, Inventory, InventoryCell } from '../planet/inventory';
 import { ItemDescription } from '../planet/item-description';
-import { ItemRarity, ItemType, PlayerData } from '../player-data';
+import { ItemRarity, ItemType } from '../player-data';
 import { IRenderable, RenderHelper } from '../render-helper';
 import { TreasureType, TREASURE_GAME_STATE } from '../treasure/game-state';
 import { CHEST_HIG_TEXTS, CHEST_LOW_TEXTS, CHEST_MID_TEXTS, ENEMY_HIG_TEXTS, ENEMY_LOW_TEXTS, ENEMY_MID_TEXTS } from '../treasure/texts';
@@ -28,11 +27,20 @@ export class TreasureScene extends Scene implements IRenderable {
   guiTextBatch: TextBatch;
   renderHelper: RenderHelper;
 
-  background: Sprite;
   title: DialogBox;
-  itemDescriptions: ItemDescription[] = [];
+  items: Inventory;
+  itemDescription: ItemDescription;
 
-  inventory: Inventory;
+  playerInventoryText: Text;
+  treasureInventoryText: Text;
+  selectedCellBorder: Sprite;
+  selectedInventoryCell: InventoryCell | undefined;
+
+  playerInventory: Inventory;
+  treasureInventory: Inventory;
+
+  dropButton: GuiButton;
+  takeButton: GuiButton;
 
   constructor() {
     super();
@@ -43,27 +51,37 @@ export class TreasureScene extends Scene implements IRenderable {
     this.initGui();
     this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
 
-    this.background = new Sprite();
-    const blankRegion = GLOBAL.assets.planetAtlas.getRegion('blank.png');
-
-    this.background = new Sprite(renderer.width - 20, renderer.height - 300, new Vector2(0, 0));
-    this.background.position.set(10, 140, 1);
-    this.background.setVerticesColor(1, 1, 1, 0.3);
-    this.background.setTextureRegion(blankRegion, false);
-
     this.title = new DialogBox(120);
+
+    this.itemDescription = new ItemDescription(520, 190, 425, 235);
+    this.itemDescription.setVisible(false);
 
     const playerData = TREASURE_GAME_STATE.player;
 
-    this.inventory = new Inventory(
+    this.treasureInventory = new Inventory(
+      8, [], 50, 220, this.guiManager,
+    );
+
+    this.playerInventory = new Inventory(
       playerData.inventorySize,
       playerData.inventory,
-      40, renderer.height - 120,
+      50, 340,
       this.guiManager,
     );
 
+    this.treasureInventory.onClick = (cell) => this.onTreasureCellClick(cell);
+    this.playerInventory.onClick = (cell) => this.onInventoryCellClick(cell);
+
+    this.selectedCellBorder = new Sprite();
+    const selectedCellRegion = GLOBAL.assets.planetAtlas.getRegion('inventory_cell_selected.png');
+    this.selectedCellBorder.setTextureRegion(selectedCellRegion);
+    this.selectedCellBorder.setVerticesColor(0.7, 1.0, 0.7, 1.0);
+    this.selectedCellBorder.position.set(-100, -100, 10);
+
     this.generateItems();
     this.setTitle();
+
+    this.onTreasureCellClick(this.treasureInventory.cells[0]);
 
     return super.load();
   }
@@ -78,7 +96,13 @@ export class TreasureScene extends Scene implements IRenderable {
 
   render(): void {
     GLOBAL.assets.gameCamera.update();
-    this.renderHelper.render([this as IRenderable, this.title, this.inventory].concat(this.itemDescriptions));
+    this.renderHelper.render([
+      this as IRenderable,
+      this.title,
+      this.playerInventory,
+      this.treasureInventory,
+      this.itemDescription,
+    ]);
     GLOBAL.assets.guiCamera.update();
     this.guiManager.render();
   }
@@ -100,11 +124,11 @@ export class TreasureScene extends Scene implements IRenderable {
   }
 
   getSpritesToRender(): Sprite[] {
-    return [this.background];
+    return [this.selectedCellBorder];
   }
 
   getTextsToRender(): Text[] {
-    return [];
+    return [this.playerInventoryText, this.treasureInventoryText];
   }
 
   private initGui(): void {
@@ -121,7 +145,11 @@ export class TreasureScene extends Scene implements IRenderable {
 
     this.guiManager
       .getElement<GuiButton>('ExitButton')
-      .onClick = () => this.takeAndExit();
+      .onClick = () => this.exit();
+
+    this.guiManager
+      .getElement<GuiButton>('TakeAllButton')
+      .onClick = () => this.takeAll();
 
     this.guiManager
       .getElement<GuiButton>('RegenerateButton')
@@ -132,11 +160,27 @@ export class TreasureScene extends Scene implements IRenderable {
         this.generateItems();
         this.setTitle();
       };
+
+    this.dropButton = this.guiManager.getElement<GuiButton>('DropButton');
+    this.dropButton.onClick = () => this.onDropClick();
+    this.dropButton.visible = false;
+
+    this.takeButton = this.guiManager.getElement<GuiButton>('TakeButton');
+    this.takeButton.onClick = () => this.onTakeClick();
+    this.takeButton.visible = false;
+
+    this.treasureInventoryText = new Text('Трофеи');
+    this.treasureInventoryText.pivotPoint.set(0, 1);
+    this.treasureInventoryText.position.set(20, 185, 10);
+    this.treasureInventoryText.scale = 1.3;
+
+    this.playerInventoryText = new Text('Инвентарь');
+    this.playerInventoryText.pivotPoint.set(0, 1);
+    this.playerInventoryText.position.set(20, 300, 10);
+    this.playerInventoryText.scale = 1.3;
   }
 
   private generateItems(): void {
-    this.itemDescriptions = [];
-
     const treasureData = TREASURE_GAME_STATE.treasure;
     const count = Math.ceil(4 * treasureData.cost);
 
@@ -149,14 +193,7 @@ export class TreasureScene extends Scene implements IRenderable {
       const itemData = ItemGenerator.generate(itemType, clamp(luckyAdd + Math.random(), 0.1, 1.0));
       const item = BaseItem.build(itemData);
 
-      const row = div(i, 2);
-      const col = i % 2;
-      const itemDescription = new ItemDescription(30 + col * 480, 15 + row * 230, 400, 200);
-      itemDescription.back.parent = this.background;
-      itemDescription.update(item, item.cost);
-
-      this.itemDescriptions.push(itemDescription);
-
+      this.treasureInventory.addItemToInventory(item);
       if (itemData.rarity === ItemRarity.Legendary) {
         luckyAdd -= 0.2;
       } else if (itemData.rarity === ItemRarity.Special) {
@@ -198,16 +235,22 @@ export class TreasureScene extends Scene implements IRenderable {
     }
   }
 
-  private takeAndExit(): void {
-    for (const itemDescription of this.itemDescriptions) {
-      const result = this.addItemToInventory(TREASURE_GAME_STATE.player, itemDescription.baseItem);
-      if (result) {
-        itemDescription.setVisible(false);
-      } else {
+  private takeAll(): void {
+    for (const cell of this.treasureInventory.cells) {
+      if (!cell.item) { continue; }
 
+      const result = this.playerInventory.addItemToInventory(cell.item);
+      if (result) {
+        cell.setItem(undefined);
+      } else {
+        continue;
       }
     }
-    this.sceneManager.switchTo(SCENES.mainMenu);
+  }
+
+  private exit(): void {
+    this.updatePlayerData();
+    this.sceneManager.switchTo(SCENES.game);
   }
 
   private getRandomArrayElement(arr: any[]): any {
@@ -215,31 +258,78 @@ export class TreasureScene extends Scene implements IRenderable {
   }
 
   private getTotalItemsCost(): number {
-    const result = this.itemDescriptions.reduce((prev, curr) => prev + curr.baseItem.cost, 0);
+    const result = this.treasureInventory.cells
+      .filter(it => !!it.item)
+      .map(it => it.item as BaseItem)
+      .reduce((prev, curr) => prev + curr.cost, 0);
     return result;
   }
 
-  private addItemToInventory(playerData: PlayerData, item: BaseItem): boolean {
-    if (item.type === ItemType.Consumable) {
-      const consItem = item as ConsumableItem;
-      const itemToStack = playerData.inventory
-        .filter(it =>
-          it.type === ItemType.Consumable &&
-          it.consumable &&
-          it.consumable.type === consItem.consType);
+  private updatePlayerData(): void {
+    const data = TREASURE_GAME_STATE.player;
 
-      if (itemToStack.length === 1 && itemToStack[0].consumable) {
-        itemToStack[0].consumable.count += consItem.count;
-        itemToStack[0].cost += consItem.cost;
-        return true;
-      }
+    data.inventory = this.playerInventory.cells
+      .filter(it => it.item)
+      .map(it => it.item as BaseItem)
+      .map(it => it.toItemData());
+  }
+
+  private onTreasureCellClick(cell: InventoryCell): void {
+    this.onBaseClick(cell);
+    this.dropButton.visible = false;
+
+    if (!cell.item) {
+      this.takeButton.visible = false;
+      return;
     }
 
-    if (playerData.inventory.length >= playerData.inventorySize) {
-      return false;
+    this.takeButton.visible = true;
+  }
+
+  private onInventoryCellClick(cell: InventoryCell): void {
+    this.onBaseClick(cell);
+    this.takeButton.visible = false;
+
+    if (!cell.item) {
+      this.dropButton.visible = false;
+      return;
     }
 
-    playerData.inventory.push(item.toItemData());
-    return true;
+    this.dropButton.visible = true;
+  }
+
+  private onBaseClick(cell: InventoryCell): void {
+    this.selectedInventoryCell = cell.item ? cell : undefined;
+
+    this.selectedCellBorder.position.set(cell.back.sprite.absoluteMatrix.position.asVector2());
+
+    if (!cell.item) {
+      this.itemDescription.setVisible(false);
+      return;
+    }
+
+    this.itemDescription.setVisible(true);
+    this.itemDescription.update(cell.item, cell.item.cost);
+  }
+
+  private onDropClick(): void {
+    if (!this.selectedInventoryCell || !this.selectedInventoryCell.item) {
+      return;
+    }
+
+    this.selectedInventoryCell.setItem(undefined);
+    this.onInventoryCellClick(this.selectedInventoryCell);
+  }
+
+  private onTakeClick(): void {
+    if (!this.selectedInventoryCell || !this.selectedInventoryCell.item) {
+      return;
+    }
+
+    const result = this.playerInventory.addItemToInventory(this.selectedInventoryCell.item);
+    if (result) {
+      this.selectedInventoryCell.setItem(undefined);
+      this.onInventoryCellClick(this.selectedInventoryCell);
+    }
   }
 }
