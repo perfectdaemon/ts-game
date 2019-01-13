@@ -56,6 +56,7 @@ export class Inventory implements IRenderable {
 
       if (itemToStack.length === 1) {
         itemToStack[0].count += consItem.count;
+        itemToStack[0].cost += consItem.cost;
         return true;
       }
     }
