@@ -16,9 +16,9 @@ import { PlayerType } from '../fight/player-type';
 import { GLOBAL } from '../global';
 import { GlobalEvents } from '../global.events';
 import { SpriteParticleEmitter, TextParticleEmitter } from '../particles';
+import { InventoryItemData, ItemType } from '../player-data';
 import { DamageInfo, PlayerDataExtensions, ProtectionInfo } from '../player-data-extensions';
 import { RenderHelper } from '../render-helper';
-import { ItemType, InventoryItemData } from '../player-data';
 
 export enum FightState {
   Start,
@@ -246,6 +246,7 @@ export class FightScene extends Scene {
         break;
 
       case FightState.Victory:
+        this.human.resetTurnState();
         this.dialog.text.text = `Вы победили!`;
         this.actionManager.add(() => {
           this.updatePlayerData();
@@ -254,6 +255,7 @@ export class FightScene extends Scene {
         break;
 
       case FightState.Defeat:
+        this.human.resetTurnState();
         this.dialog.text.text = `Вы проиграли!`;
         this.actionManager.add(() => {
           this.updatePlayerData();
