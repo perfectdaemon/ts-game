@@ -145,8 +145,14 @@ export class GameScene extends Scene {
       return;
     }
 
+    // open treasures
+    // TODO INPUT STATE
+    this.sceneManager.showModal(SCENES.treasure, true);
+
+    // remove enemy
     const index = GAME_STATE.enemies.indexOf(GAME_STATE.enemyToFight);
     GAME_STATE.enemies.splice(index);
+    GAME_STATE.enemyToFight = undefined;
   }
 
   private movePlayerToPosition(position: Vector2): void {

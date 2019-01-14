@@ -14,6 +14,7 @@ import { FIGHT_GAME_STATE } from '../fight/game-state';
 import { Player } from '../fight/player';
 import { PlayerType } from '../fight/player-type';
 import { GLOBAL } from '../global';
+import { GlobalEvents } from '../global.events';
 import { SpriteParticleEmitter, TextParticleEmitter } from '../particles';
 import { DamageInfo, PlayerDataExtensions, ProtectionInfo } from '../player-data-extensions';
 import { RenderHelper } from '../render-helper';
@@ -245,6 +246,10 @@ export class FightScene extends Scene {
 
       case FightState.Victory:
         this.dialog.text.text = `Вы победили!`;
+        this.actionManager.add(() => {
+          this.sceneManager.closeModal();
+          GlobalEvents.enemyDefeated.next();
+        });
         break;
 
       case FightState.Defeat:
