@@ -85,6 +85,8 @@ export class GameScene extends Scene {
 
     this.$takeOffPlanet = GlobalEvents.takeOffFromPlanet.subscribe(() => this.onTakeOffFromPlanet());
 
+    GLOBAL.actionManager.add(() => this.sceneManager.showModal(SCENES.start), 0.5);
+
     return super.load();
   }
 
