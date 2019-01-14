@@ -255,6 +255,10 @@ export class FightScene extends Scene {
 
       case FightState.Defeat:
         this.dialog.text.text = `Вы проиграли!`;
+        this.actionManager.add(() => {
+          this.updatePlayerData();
+          this.sceneManager.closeModal().then(() => GlobalEvents.playerDied.next());
+        }, 1.0);
         break;
     }
 
@@ -348,8 +352,8 @@ export class FightScene extends Scene {
         continue;
       }
 
+      item.cost -= (item.consumable.count - used[0].count) * 50;
       item.consumable.count = used[0].count;
-      item.cost -= used[0].count * 50;
 
       if (item.consumable.count === 0) {
         toDelete.push(item);

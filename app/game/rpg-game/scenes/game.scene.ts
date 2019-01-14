@@ -40,8 +40,9 @@ export class GameScene extends Scene {
 
   cameraController: CameraController;
 
-  $takeOffPlanet: Subscription<void>;
+  $takeOffFromPlanet: Subscription<void>;
   $enemyDefeated: Subscription<void>;
+  $playedDied: Subscription<void>;
 
   constructor() {
     super();
@@ -86,8 +87,9 @@ export class GameScene extends Scene {
 
     this.nebulaPool.initialize();
 
-    this.$takeOffPlanet = GlobalEvents.takeOffFromPlanet.subscribe(() => this.onTakeOffFromPlanet());
-    this.$enemyDefeated = GlobalEvents.enemyDefeated.subscribe(() => this.onFightEnded());
+    this.$takeOffFromPlanet = GlobalEvents.takeOffFromPlanet.subscribe(() => this.onTakeOffFromPlanet());
+    this.$enemyDefeated = GlobalEvents.enemyDefeated.subscribe(() => this.onEnemyDefeated());
+    this.$playedDied = GlobalEvents.playerDied.subscribe(() => this.onPlayerDied());
 
     GLOBAL.actionManager.add(() => this.sceneManager.showModal(SCENES.start), 0.5);
 
@@ -99,8 +101,9 @@ export class GameScene extends Scene {
     this.guiTextBatch.free();
     this.guiSpriteBatch.free();
     this.renderHelper.free();
-    this.$takeOffPlanet.unsubscribe();
+    this.$takeOffFromPlanet.unsubscribe();
     this.$enemyDefeated.unsubscribe();
+    this.$playedDied.unsubscribe();
     return super.unload();
   }
 
@@ -141,7 +144,7 @@ export class GameScene extends Scene {
     GAME_STATE.planetToLand.inventory = PLANET_GAME_STATE.planet.shopItems;
   }
 
-  private onFightEnded(): void {
+  private onEnemyDefeated(): void {
     if (!GAME_STATE.enemyToFight) {
       return;
     }
@@ -161,6 +164,20 @@ export class GameScene extends Scene {
     this.solarObjects.splice(solarIndex, 1);
 
     GAME_STATE.enemyToFight = undefined;
+  }
+
+  private onPlayerDied(): void {
+    GAME_STATE.enemyToFight = undefined;
+    GAME_STATE.playerData.credits = Math.floor(GAME_STATE.playerData.credits * 0.7);
+    GAME_STATE.playerData.shipHealth = GAME_STATE.playerData.shipMaxHealth;
+
+    // go to planet
+    GAME_STATE.player.sprite.position.set(GAME_STATE.planets[0].sprite.position.asVector2());
+    this.cameraController.camera.position.set(GAME_STATE.planets[0].sprite.position
+      .asVector2()
+      .subtractFromSelf(renderer.width / 2, renderer.height / 2));
+
+    this.sceneManager.showModal(SCENES.defeated, true);
   }
 
   private movePlayerToPosition(position: Vector2): void {
@@ -250,6 +267,8 @@ export class GameScene extends Scene {
   }
 
   private fight(enemy: Enemy): void {
+    this.stopMoving();
+
     GAME_STATE.enemyToFight = enemy;
     FIGHT_GAME_STATE.enemyData = enemy.enemyData;
     FIGHT_GAME_STATE.humanData = GAME_STATE.playerData;
