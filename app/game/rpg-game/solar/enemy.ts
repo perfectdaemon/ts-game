@@ -11,6 +11,7 @@ import { SolarBase } from './solar.base';
 export class Enemy extends SolarBase {
   static buildEnemy(position: Vector2, power: number): Enemy {
     const enemy = new Enemy();
+    enemy.power = power;
     enemy.initialize();
     enemy.sprite.position.set(0, 0, 5);
     enemy.sprite.position.set(position);
@@ -23,6 +24,7 @@ export class Enemy extends SolarBase {
 
   lastMoveAction: Action | undefined;
   speed: number;
+  power: number;
 
   enemyData: PlayerData;
 
@@ -34,7 +36,7 @@ export class Enemy extends SolarBase {
     this.sprite = new Sprite();
     this.sprite.setTextureRegion(enemyTextureRegion, false);
     this.sprite.setVerticesColor(new Vector4(1, 0.5, 0.5, 1.0));
-    this.sprite.setSize(16, 16);
+    this.sprite.setSize(16 * (1 + this.power), 16 * (1 + this.power));
   }
 
   update(deltaTime: number): void {

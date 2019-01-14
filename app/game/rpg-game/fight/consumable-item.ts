@@ -3,7 +3,7 @@ import { GuiManager } from '../../../engine/gui/gui-manager';
 import { Vector2 } from '../../../engine/math/vector2';
 import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
-import { InventoryItemData } from '../player-data';
+import { ConsumableItemType, InventoryItemData } from '../player-data';
 import { Player } from './player';
 
 export abstract class ConsumableItem {
@@ -12,6 +12,8 @@ export abstract class ConsumableItem {
   abstract name: string;
 
   count: number;
+
+  type: ConsumableItemType;
 
   background: GuiButton;
   effectText: Text;
@@ -22,6 +24,7 @@ export abstract class ConsumableItem {
       throw new Error('Item type is consumable but no consumable data found');
     }
 
+    this.type = itemData.consumable.type;
     this.count = itemData.consumable.count;
     const consRegion = GLOBAL.assets.planetAtlas.getRegion('blank.png');
     this.background = new GuiButton();

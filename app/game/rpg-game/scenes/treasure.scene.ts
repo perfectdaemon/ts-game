@@ -95,7 +95,7 @@ export class TreasureScene extends Scene implements IRenderable {
   }
 
   render(): void {
-    GLOBAL.assets.gameCamera.update();
+    GLOBAL.assets.guiCamera.update();
     this.renderHelper.render([
       this as IRenderable,
       this.title,
@@ -103,24 +103,11 @@ export class TreasureScene extends Scene implements IRenderable {
       this.treasureInventory,
       this.itemDescription,
     ]);
-    GLOBAL.assets.guiCamera.update();
     this.guiManager.render();
   }
 
   update(deltaTime: number): void {
     this.guiManager.update(deltaTime);
-  }
-
-  onKeyDown(key: Keys): void {
-  }
-
-  onMouseDown(position: Vector2, button: MouseButtons): void {
-  }
-
-  onMouseMove(position: Vector2): void {
-  }
-
-  onMouseUp(position: Vector2, button: MouseButtons): void {
   }
 
   getSpritesToRender(): Sprite[] {
@@ -150,16 +137,6 @@ export class TreasureScene extends Scene implements IRenderable {
     this.guiManager
       .getElement<GuiButton>('TakeAllButton')
       .onClick = () => this.takeAll();
-
-    this.guiManager
-      .getElement<GuiButton>('RegenerateButton')
-      .onClick = () => {
-        const types = [TreasureType.Enemy, TreasureType.Chest];
-        TREASURE_GAME_STATE.treasure.cost = Math.random();
-        TREASURE_GAME_STATE.treasure.type = this.getRandomArrayElement(types);
-        this.generateItems();
-        this.setTitle();
-      };
 
     this.dropButton = this.guiManager.getElement<GuiButton>('DropButton');
     this.dropButton.onClick = () => this.onDropClick();
@@ -250,7 +227,7 @@ export class TreasureScene extends Scene implements IRenderable {
 
   private exit(): void {
     this.updatePlayerData();
-    this.sceneManager.switchTo(SCENES.game);
+    this.sceneManager.closeModal();
   }
 
   private getRandomArrayElement(arr: any[]): any {

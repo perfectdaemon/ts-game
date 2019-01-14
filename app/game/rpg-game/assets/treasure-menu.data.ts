@@ -40,21 +40,6 @@ export const TREASURE_MENU_DATA: MenuData = {
       },
     },
     {
-      name: 'RegenerateButton',
-      labelText: 'Еще раз',
-      labelColor: new Vector4(1, 1, 1, 1.0),
-      labelScale: 1.0,
-      size: new Vector2(150, 40),
-      position: new Vector3(WIDTH - 150, HEIGHT - 115, 1),
-      pivotPoint: new Vector2(0.5, 0.5),
-      verticesColor: new Vector4(0.8, 0.8, 0.8, 1.0),
-      hoverVerticesColor: new Vector4(1.0, 1.0, 1.0, 1.0),
-      textureRegion: {
-        name: 'button_green.png',
-        adjustSize: true,
-      },
-    },
-    {
       name: 'DropButton',
       labelText: 'Выбросить',
       labelColor: new Vector4(1, 1, 1, 1.0),

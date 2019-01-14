@@ -21,6 +21,7 @@ import { GAME_STATE } from '../solar/game-state';
 import { Nebula, NebulaPool } from '../solar/nebula';
 import { Planet } from '../solar/planet';
 import { SolarBase } from '../solar/solar.base';
+import { TreasureType, TREASURE_GAME_STATE } from '../treasure/game-state';
 import { SCENES } from './scenes.const';
 
 export class GameScene extends Scene {
@@ -146,12 +147,19 @@ export class GameScene extends Scene {
     }
 
     // open treasures
-    // TODO INPUT STATE
+    TREASURE_GAME_STATE.player = GAME_STATE.playerData;
+    TREASURE_GAME_STATE.treasure = {
+      type: TreasureType.Enemy,
+      cost: GAME_STATE.enemyToFight.power + 0.1,
+    };
     this.sceneManager.showModal(SCENES.treasure, true);
 
     // remove enemy
     const index = GAME_STATE.enemies.indexOf(GAME_STATE.enemyToFight);
-    GAME_STATE.enemies.splice(index);
+    const solarIndex = this.solarObjects.indexOf(GAME_STATE.enemyToFight);
+    GAME_STATE.enemies.splice(index, 1);
+    this.solarObjects.splice(solarIndex, 1);
+
     GAME_STATE.enemyToFight = undefined;
   }
 

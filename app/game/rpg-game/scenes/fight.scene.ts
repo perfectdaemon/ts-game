@@ -18,6 +18,7 @@ import { GlobalEvents } from '../global.events';
 import { SpriteParticleEmitter, TextParticleEmitter } from '../particles';
 import { DamageInfo, PlayerDataExtensions, ProtectionInfo } from '../player-data-extensions';
 import { RenderHelper } from '../render-helper';
+import { ItemType, InventoryItemData } from '../player-data';
 
 export enum FightState {
   Start,
@@ -89,7 +90,7 @@ export class FightScene extends Scene {
   }
 
   render(): void {
-    GLOBAL.assets.gameCamera.update();
+    GLOBAL.assets.guiCamera.update();
     this.renderHelper.render([this.human, this.enemy, this.dialog]);
     this.emitter.render();
     this.textEmitter.render();
@@ -247,9 +248,9 @@ export class FightScene extends Scene {
       case FightState.Victory:
         this.dialog.text.text = `Вы победили!`;
         this.actionManager.add(() => {
-          this.sceneManager.closeModal();
-          GlobalEvents.enemyDefeated.next();
-        });
+          this.updatePlayerData();
+          this.sceneManager.closeModal().then(() => GlobalEvents.enemyDefeated.next());
+        }, 1.0);
         break;
 
       case FightState.Defeat:
@@ -330,6 +331,34 @@ export class FightScene extends Scene {
       // fix bug for stay hovered after disable
       const input: any = {};
       cell.cellSprite.onMouseOut(cell.cellSprite, input);
+    }
+  }
+
+  private updatePlayerData(): void {
+    const toDelete: InventoryItemData[] = [];
+
+    for (const item of this.human.playerData.inventory) {
+      if (item.type !== ItemType.Consumable || !item.consumable) { continue; }
+
+      const consItem = item.consumable;
+      const used = this.human.consumableItems.filter(it => it.type === consItem.type);
+
+      if (used.length === 0) {
+        console.error('No such used found. Strange.');
+        continue;
+      }
+
+      item.consumable.count = used[0].count;
+      item.cost -= used[0].count * 50;
+
+      if (item.consumable.count === 0) {
+        toDelete.push(item);
+      }
+    }
+
+    for (const del of toDelete) {
+      const index = this.human.playerData.inventory.indexOf(del);
+      this.human.playerData.inventory.splice(index, 1);
     }
   }
 }
