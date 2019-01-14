@@ -9,7 +9,7 @@ export class EnemyGenerator {
 
     const data: PlayerData = {
       cells: cellVariant,
-      credits: power * Math.random() * 150,
+      credits: Math.ceil(30 + power * 300),
       criticalChance: 0.3 * power,
       criticalMultiplier: 2.0,
       shipMaxHealth: Math.ceil(125 * power),
@@ -20,13 +20,16 @@ export class EnemyGenerator {
 
     let maxWeapons = power;
     let maxShields = power;
+    let isWeapon = true;
     for (const cell of data.cells) {
-      if (maxWeapons > 0) {
+      if (maxWeapons > 0 && isWeapon) {
         maxWeapons -= 0.15;
         cell.item = ItemGenerator.generate(ItemType.Weapon, power);
+        isWeapon = false;
       } else if (maxShields > 0) {
         maxShields -= 0.15;
         cell.item = ItemGenerator.generate(ItemType.Shield, power);
+        isWeapon = true;
       }
     }
 

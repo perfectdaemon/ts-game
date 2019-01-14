@@ -154,6 +154,7 @@ export class GameScene extends Scene {
     TREASURE_GAME_STATE.treasure = {
       type: TreasureType.Enemy,
       cost: GAME_STATE.enemyToFight.power + 0.1,
+      credits: GAME_STATE.enemyToFight.enemyData.credits,
     };
     this.sceneManager.showModal(SCENES.treasure, true);
 

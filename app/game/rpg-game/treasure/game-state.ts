@@ -8,6 +8,7 @@ export class InputTreasureGameState {
 export class TreasureData {
   type: TreasureType;
   cost: number;
+  credits: number;
 }
 
 export enum TreasureType { Enemy, Chest }

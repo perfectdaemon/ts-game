@@ -1,8 +1,6 @@
 import { GuiButton } from '../../../engine/gui/gui-button';
 import { GuiManager } from '../../../engine/gui/gui-manager';
-import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
 import { clamp } from '../../../engine/math/math-base';
-import { Vector2 } from '../../../engine/math/vector2';
 import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Sprite } from '../../../engine/scene/sprite';
@@ -19,7 +17,6 @@ import { ItemRarity, ItemType } from '../player-data';
 import { IRenderable, RenderHelper } from '../render-helper';
 import { TreasureType, TREASURE_GAME_STATE } from '../treasure/game-state';
 import { CHEST_HIG_TEXTS, CHEST_LOW_TEXTS, CHEST_MID_TEXTS, ENEMY_HIG_TEXTS, ENEMY_LOW_TEXTS, ENEMY_MID_TEXTS } from '../treasure/texts';
-import { SCENES } from './scenes.const';
 
 export class TreasureScene extends Scene implements IRenderable {
   guiManager: GuiManager;
@@ -183,28 +180,28 @@ export class TreasureScene extends Scene implements IRenderable {
     const treasureData = TREASURE_GAME_STATE.treasure;
     const totalCost = this.getTotalItemsCost();
 
-    this.title.text.text = `$${totalCost}\n`;
-
     switch (treasureData.type) {
       case TreasureType.Chest:
         if (totalCost < 300) {
-          this.title.text.text += this.getRandomArrayElement(CHEST_LOW_TEXTS);
+          this.title.text.text = this.getRandomArrayElement(CHEST_LOW_TEXTS);
         } else if (totalCost < 700) {
-          this.title.text.text += this.getRandomArrayElement(CHEST_MID_TEXTS);
+          this.title.text.text = this.getRandomArrayElement(CHEST_MID_TEXTS);
         } else {
-          this.title.text.text += this.getRandomArrayElement(CHEST_HIG_TEXTS);
+          this.title.text.text = this.getRandomArrayElement(CHEST_HIG_TEXTS);
         }
 
         break;
 
       case TreasureType.Enemy:
         if (treasureData.cost < 0.3) {
-          this.title.text.text += this.getRandomArrayElement(ENEMY_LOW_TEXTS);
+          this.title.text.text = this.getRandomArrayElement(ENEMY_LOW_TEXTS);
         } else if (treasureData.cost < 0.7) {
-          this.title.text.text += this.getRandomArrayElement(ENEMY_MID_TEXTS);
+          this.title.text.text = this.getRandomArrayElement(ENEMY_MID_TEXTS);
         } else {
-          this.title.text.text += this.getRandomArrayElement(ENEMY_HIG_TEXTS);
+          this.title.text.text = this.getRandomArrayElement(ENEMY_HIG_TEXTS);
         }
+
+        this.title.text.text += `\nТакже за победу над противником вы получаете $${treasureData.credits}`;
         break;
 
       default:
@@ -249,6 +246,8 @@ export class TreasureScene extends Scene implements IRenderable {
       .filter(it => it.item)
       .map(it => it.item as BaseItem)
       .map(it => it.toItemData());
+
+    data.credits += TREASURE_GAME_STATE.treasure.credits;
   }
 
   private onTreasureCellClick(cell: InventoryCell): void {
