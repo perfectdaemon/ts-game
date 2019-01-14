@@ -3,22 +3,28 @@ import { Vector2 } from '../../../engine/math/vector2';
 import { Vector4 } from '../../../engine/math/vector4';
 import { Sprite } from '../../../engine/scene/sprite';
 import { GLOBAL } from '../global';
+import { PlayerData } from '../player-data';
+import { EnemyGenerator } from './enemy-generator';
 import { GAME_STATE } from './game-state';
 import { SolarBase } from './solar.base';
 
 export class Enemy extends SolarBase {
-  static buildEnemy(position: Vector2): Enemy {
+  static buildEnemy(position: Vector2, power: number): Enemy {
     const enemy = new Enemy();
     enemy.initialize();
     enemy.sprite.position.set(0, 0, 5);
     enemy.sprite.position.set(position);
     enemy.speed = 15 + 15 * Math.random();
 
+    enemy.enemyData = EnemyGenerator.generate(power);
+
     return enemy;
   }
 
   lastMoveAction: Action | undefined;
   speed: number;
+
+  enemyData: PlayerData;
 
   initialize(): void {
     super.initialize();

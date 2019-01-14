@@ -19,6 +19,8 @@ export class GameState {
 
   planetToLand: Planet | undefined;
 
+  enemyToFight: Enemy | undefined;
+
   actionManager: ActionManager;
 
   reset(): void {
@@ -27,6 +29,7 @@ export class GameState {
     this.player = Player.buildPlayer();
     this.targetCursor = TargetCursor.build();
     this.planetToLand = undefined;
+    this.enemyToFight = undefined;
 
     this.planets = [
       Planet.buildPlanet1(),
@@ -36,17 +39,17 @@ export class GameState {
 
     this.actionManager = new ActionManager();
 
-    this.createEnemies();
+    this.createStartEnemies();
   }
 
-  private createEnemies(): void {
+  private createStartEnemies(): void {
     for (let i = 0; i < 10; ++i) {
       const angle = 360 * Math.random();
       const length = 300 + 300 * Math.random();
 
       const position = Vector2.fromAngle(angle).multiplyNumSelf(length).addToSelf(GAME_STATE.player.sprite.position);
 
-      const enemy = Enemy.buildEnemy(position);
+      const enemy = Enemy.buildEnemy(position, 0.3 * Math.random());
 
       this.enemies.push(enemy);
     }

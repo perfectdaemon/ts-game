@@ -9,18 +9,19 @@ import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
 import { SOLAR_MENU_DATA } from '../assets/solar-menu.data';
+import { FIGHT_GAME_STATE } from '../fight/game-state';
 import { GLOBAL } from '../global';
 import { GlobalEvents } from '../global.events';
 import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
 import { IRenderable, RenderHelper } from '../render-helper';
 import { CameraController } from '../solar/camera.controller';
+import { Enemy } from '../solar/enemy';
 import { GAME_STATE } from '../solar/game-state';
 import { Nebula, NebulaPool } from '../solar/nebula';
 import { Planet } from '../solar/planet';
 import { SolarBase } from '../solar/solar.base';
 import { SCENES } from './scenes.const';
-import { Enemy } from '../solar/enemy';
 
 export class GameScene extends Scene {
   guiManager: GuiManager;
@@ -39,6 +40,7 @@ export class GameScene extends Scene {
   cameraController: CameraController;
 
   $takeOffPlanet: Subscription<void>;
+  $enemyDefeated: Subscription<void>;
 
   constructor() {
     super();
@@ -84,6 +86,7 @@ export class GameScene extends Scene {
     this.nebulaPool.initialize();
 
     this.$takeOffPlanet = GlobalEvents.takeOffFromPlanet.subscribe(() => this.onTakeOffFromPlanet());
+    this.$enemyDefeated = GlobalEvents.enemyDefeated.subscribe(() => this.onFightEnded());
 
     GLOBAL.actionManager.add(() => this.sceneManager.showModal(SCENES.start), 0.5);
 
@@ -96,6 +99,7 @@ export class GameScene extends Scene {
     this.guiSpriteBatch.free();
     this.renderHelper.free();
     this.$takeOffPlanet.unsubscribe();
+    this.$enemyDefeated.unsubscribe();
     return super.unload();
   }
 
@@ -134,6 +138,15 @@ export class GameScene extends Scene {
     if (!GAME_STATE.planetToLand) { return; }
 
     GAME_STATE.planetToLand.inventory = PLANET_GAME_STATE.planet.shopItems;
+  }
+
+  private onFightEnded(): void {
+    if (!GAME_STATE.enemyToFight) {
+      return;
+    }
+
+    const index = GAME_STATE.enemies.indexOf(GAME_STATE.enemyToFight);
+    GAME_STATE.enemies.splice(index);
   }
 
   private movePlayerToPosition(position: Vector2): void {
@@ -223,6 +236,9 @@ export class GameScene extends Scene {
   }
 
   private fight(enemy: Enemy): void {
-    alert('fight!');
+    GAME_STATE.enemyToFight = enemy;
+    FIGHT_GAME_STATE.enemyData = enemy.enemyData;
+    FIGHT_GAME_STATE.humanData = GAME_STATE.playerData;
+    this.sceneManager.showModal(SCENES.fight, true);
   }
 }
