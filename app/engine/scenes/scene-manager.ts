@@ -31,7 +31,7 @@ export class SceneManager {
     this.current.load();
   }
 
-  showModal(sceneName: string, hideCurrent?: boolean): void {
+  showModal(sceneName: string, hideCurrent?: boolean): Promise<void> {
     if (this.current) {
       this.current.setPause(true);
       if (!!hideCurrent) {
@@ -40,15 +40,15 @@ export class SceneManager {
     }
 
     this.modal = this.scenes[sceneName];
-    this.modal.load();
+    return this.modal.load();
   }
 
-  closeModal(): void {
+  closeModal(): Promise<void> {
     if (!this.modal) {
       throw new Error('Try to close modal but no modal found');
     }
 
-    this.modal.unload()
+    return this.modal.unload()
       .then(() => {
         this.modal = null;
         if (this.current) {
@@ -56,8 +56,6 @@ export class SceneManager {
           this.current.setHide(false);
         }
       });
-
-    return;
   }
 
   update(deltaTime: number): void {
