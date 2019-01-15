@@ -11,7 +11,7 @@ export class Planet extends SolarBase {
     const planet = new Planet('Земля', 64);
 
     planet.initialize();
-    planet.sprite.position.set(500, 500, 5);
+    planet.sprite.position.set(500, 500, 20);
     planet.sprite.setVerticesColor(new Vector4(29 / 255.0, 172 / 255.0, 109 / 255.0, 1.0));
 
     planet.updateInventory();
@@ -23,7 +23,7 @@ export class Planet extends SolarBase {
     const planet = new Planet('Марс', 64);
 
     planet.initialize();
-    planet.sprite.position.set(-300, 450, 5);
+    planet.sprite.position.set(-300, 450, 20);
     planet.sprite.setVerticesColor(new Vector4(172 / 255.0, 29 / 255.0, 59 / 255.0, 1.0));
 
     planet.updateInventory();

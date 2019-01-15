@@ -85,7 +85,7 @@ export class GameScene extends Scene {
     this.toPlayerButton.onClick = () => this.toPlayer();
 
     this.solarObjects = [];
-    this.nebulaPool = new NebulaPool(() => Nebula.build(), 16);
+    this.nebulaPool = new NebulaPool(() => Nebula.build(), 64);
     this.cameraController = new CameraController(GLOBAL.assets.gameCamera, 800);
 
     GAME_STATE.reset();
@@ -246,6 +246,10 @@ export class GameScene extends Scene {
   }
 
   private stopMoving(): void {
+    if (!this.lastPlayerMoveAction) {
+      return;
+    }
+
     this.lastPlayerMoveAction.onDeactivate();
     GAME_STATE.targetCursor.sprite.visible = false;
   }

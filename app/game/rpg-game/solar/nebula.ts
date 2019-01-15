@@ -28,7 +28,9 @@ export class Nebula extends SolarBase implements IPoolItem {
 
   onActivate(): void {
     this.sprite.visible = true;
-    const position = new Vector2(renderer.width * Math.random(), renderer.height * Math.random());
+    const position = new Vector2(
+      -1.5 * renderer.width + 3 * renderer.width * Math.random(),
+      -1.5 * renderer.height + 3 * renderer.height * Math.random());
     this.sprite.position.set(position);
     this.sprite.rotation = 360 * Math.random();
     this.sprite.setVerticesColor(new Vector4(0.2 * Math.random(), 0.4 * Math.random(), Math.random(), 0.2));
@@ -41,7 +43,7 @@ export class Nebula extends SolarBase implements IPoolItem {
 
 export class NebulaPool extends Pool<Nebula> implements IRenderable {
   initialize(): void {
-    for (let i = 0; i < 10; ++i) {
+    for (let i = 0; i < 64; ++i) {
       this.get();
     }
   }

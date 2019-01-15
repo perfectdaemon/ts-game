@@ -13,7 +13,7 @@ export class Enemy extends SolarBase {
     const enemy = new Enemy();
     enemy.power = power;
     enemy.initialize();
-    enemy.sprite.position.set(0, 0, 5);
+    enemy.sprite.position.set(0, 0, 25);
     enemy.sprite.position.set(position);
     enemy.speed = 15 + 15 * Math.random();
 
@@ -78,7 +78,7 @@ export class Enemy extends SolarBase {
         this.sprite.position.addToSelf(moveVector);
 
         return false;
-      })
+      }, 0.2 * Math.random())
       .then(() => this.lastMoveAction = undefined);
   }
 }

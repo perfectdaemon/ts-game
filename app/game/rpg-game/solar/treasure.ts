@@ -22,7 +22,7 @@ export class Treasure extends SolarBase {
     this.sprite.setVerticesColor(new Vector4(0.5, 0.5, 0.5, 1.0));
     this.sprite.setSize(32 * (1 + this.cost * 2), 32 * (1 + this.cost * 2));
     this.sprite.rotation = 360 * Math.random();
-    this.sprite.position.set(0, 0, 5);
+    this.sprite.position.set(0, 0, 25);
   }
 
   initialize(): void {
