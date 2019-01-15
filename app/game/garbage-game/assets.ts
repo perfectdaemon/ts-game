@@ -26,7 +26,7 @@ export class Assets {
 
       for (const soundData of SOUNDS_DATA) {
         soundPromises.push(loaderFactory.loadSound(soundData)
-          .then(data => this.sounds[soundData.soundName] = data));
+          .then(data => this.sounds[data.soundName] = data.audioBuffer));
       }
 
       Promise.all<ShaderProgram, TextureAtlas, Texture>([
