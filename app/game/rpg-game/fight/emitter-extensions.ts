@@ -7,7 +7,7 @@ export class ParticleEmitterExtensions {
   static createSmallParticle(): SpriteParticle {
     const particle = new SpriteParticle();
     particle.sprite.position.set(0, 0, 50);
-    const textureRegion = GLOBAL.assets.solarAtlas.getRegion('circle.png');
+    const textureRegion = GLOBAL.assets.solarAtlas.getRegion('circle_bordered.png');
     particle.sprite.setTextureRegion(textureRegion, false);
     return particle;
   }

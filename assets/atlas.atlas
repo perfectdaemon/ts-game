@@ -1,14 +1,15 @@
 textures: atlas.png
-health_bar_back.png	1	1	40	357	0	0	357	40	r
-repair_button.png	43	1	56	355	0	0	355	56	r
-health_bar.png	101	1	30	348	0	0	348	30	r
-button_green.png	133	1	56	219	0	0	219	56	r
-button_red.png	191	1	56	219	0	0	219	56	r
-circle_bordered.png	249	1	128	128	0	0	128	128	
-ship_cell.png	379	1	93	93	0	0	93	93	
-laser1.png	474	1	37	87	0	0	37	87	
-inventory_cell_selected.png	444	96	67	67	0	0	67	67	
-shield1.png	249	131	64	64	0	0	64	64	
-triangle.png	315	131	64	64	0	0	64	64	
-inventory_cell.png	381	96	59	59	0	0	59	59	
-blank.png	474	90	2	2	0	0	2	2	
+smoke.png	1	1	338	297	0	0	338	297	
+circle_bordered.png	341	1	128	128	0	0	128	128	
+ship_cell.png	341	131	93	93	0	0	93	93	
+laser1.png	471	1	37	87	0	0	37	87	
+inventory_cell_selected.png	436	131	67	67	0	0	67	67	
+triangle.png	447	200	64	64	0	0	64	64	
+shield1.png	381	226	64	64	0	0	64	64	
+inventory_cell.png	452	266	59	59	0	0	59	59	
+repair_button.png	1	300	355	56	0	0	355	56	
+button_red.png	1	358	219	56	0	0	219	56	
+button_green.png	222	358	219	56	0	0	219	56	
+health_bar_back.png	1	416	357	40	0	0	357	40	
+health_bar.png	1	458	348	30	0	0	348	30	
+blank.png	471	90	2	2	0	0	2	2	

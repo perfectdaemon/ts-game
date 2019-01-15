@@ -14,7 +14,7 @@ export class TargetCursor extends SolarBase {
   initialize(): void {
     super.initialize();
 
-    const cursorTextureRegion = GLOBAL.assets.solarAtlas.getRegion('circle.png');
+    const cursorTextureRegion = GLOBAL.assets.solarAtlas.getRegion('circle_bordered.png');
 
     this.sprite = new Sprite();
     this.sprite.setTextureRegion(cursorTextureRegion, false);

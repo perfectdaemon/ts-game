@@ -15,7 +15,7 @@ export class Treasure extends SolarBase {
   constructor(public cost: number) {
     super();
 
-    const enemyTextureRegion = GLOBAL.assets.solarAtlas.getRegion('circle.png');
+    const enemyTextureRegion = GLOBAL.assets.solarAtlas.getRegion('circle_bordered.png');
 
     this.sprite = new Sprite();
     this.sprite.setTextureRegion(enemyTextureRegion, false);
