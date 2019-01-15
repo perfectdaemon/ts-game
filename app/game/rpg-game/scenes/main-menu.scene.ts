@@ -12,6 +12,8 @@ import { SCENES } from './scenes.const';
 export class MainMenuScene extends Scene {
   guiManager: GuiManager;
 
+  musicEnabled: boolean = true;
+
   constructor() {
     super();
   }
@@ -31,6 +33,21 @@ export class MainMenuScene extends Scene {
       .onClick = () => {
         GLOBAL.assets.audioManager.playSound(SOUNDS.select);
         this.sceneManager.switchTo(SCENES.game);
+      };
+
+    this.guiManager
+      .getElement<GuiButton>('MusicButton')
+      .onClick = (el) => {
+        GLOBAL.assets.audioManager.playSound(SOUNDS.select);
+        if (!this.musicEnabled) {
+          GLOBAL.assets.audioManager.playMusic(SOUNDS.music);
+          this.musicEnabled = true;
+          (el as GuiButton).label.text = 'Музыка вкл.';
+        } else {
+          GLOBAL.assets.audioManager.stopMusic();
+          this.musicEnabled = false;
+          (el as GuiButton).label.text = 'Музыка выкл.';
+        }
       };
 
     GLOBAL.assets.audioManager.playMusic(SOUNDS.music);

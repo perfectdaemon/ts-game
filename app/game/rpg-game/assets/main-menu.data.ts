@@ -11,11 +11,23 @@ export const MAIN_MENU_DATA: MenuData = {
   buttons: [
     {
       name: 'StartButton',
-      labelText: 'Start',
+      labelText: 'Начать игру',
       labelColor: new Vector4(0.3, 0.3, 0.3, 1.0),
       labelScale: 1.0,
-      size: new Vector2(150, 40),
+      size: new Vector2(250, 40),
       position: new Vector3(SCREEN_CENTER_X, BUTTON_START_Y, 1),
+      pivotPoint: new Vector2(0.5, 0.5),
+      verticesColor: new Vector4(0.9, 0.8, 0.8, 1.0),
+      hoverVerticesColor: new Vector4(1.0, 1.0, 1.0, 1.0),
+    },
+
+    {
+      name: 'MusicButton',
+      labelText: 'Музыка вкл.',
+      labelColor: new Vector4(0.3, 0.3, 0.3, 1.0),
+      labelScale: 1.0,
+      size: new Vector2(250, 40),
+      position: new Vector3(SCREEN_CENTER_X, BUTTON_START_Y + 60, 1),
       pivotPoint: new Vector2(0.5, 0.5),
       verticesColor: new Vector4(0.9, 0.8, 0.8, 1.0),
       hoverVerticesColor: new Vector4(1.0, 1.0, 1.0, 1.0),
