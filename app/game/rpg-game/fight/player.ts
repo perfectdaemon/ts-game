@@ -297,4 +297,12 @@ export class Player implements IRenderable {
   isAlive(): boolean {
     return this.playerData.shipHealth > 0;
   }
+
+  hasUnprotectedCells(): boolean {
+    return this.shipCells.some(it => !it.markedAsProtected);
+  }
+
+  hasNotAttackedCells(): boolean {
+    return this.shipCells.some(it => !it.markedAsAttacked);
+  }
 }

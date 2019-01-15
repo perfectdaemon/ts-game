@@ -191,7 +191,7 @@ export class FightScene extends Scene {
         this.setEnableForCells(this.human, true);
         this.setEnableForCells(this.enemy, false);
 
-        if (this.human.hasProtectsLeft()) {
+        if (this.human.hasProtectsLeft() && this.human.hasUnprotectedCells()) {
           this.dialog.text.text = `Выберите ${this.human.protectsLeft} своих отсека для защиты`;
           if (this.canUseConsumableItems) {
             this.dialog.text.text += ' или воспользуйтесь одноразовыми предметами';
@@ -206,7 +206,7 @@ export class FightScene extends Scene {
         this.setEnableForCells(this.human, false);
         this.setEnableForCells(this.enemy, true);
 
-        if (this.human.hasAttacksLeft()) {
+        if (this.human.hasAttacksLeft() && this.enemy.hasNotAttackedCells()) {
           this.dialog.text.text = `Выберите ${this.human.attacksLeft} отсека противника для атаки`;
           if (this.canUseConsumableItems) {
             this.dialog.text.text += ' или воспользуйтесь одноразовыми предметами';
