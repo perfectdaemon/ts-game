@@ -50,6 +50,7 @@ export class MainMenuScene extends Scene {
         }
       };
 
+    GLOBAL.assets.audioManager.stopMusic();
     GLOBAL.assets.audioManager.playMusic(SOUNDS.music);
 
     return super.load();

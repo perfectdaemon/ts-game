@@ -8,6 +8,7 @@ import { renderer } from '../../../engine/render/webgl';
 import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
+import { CREDITS_GOAL } from '../assets/player-data.const';
 import { SOLAR_MENU_DATA } from '../assets/solar-menu.data';
 import { SOUNDS } from '../assets/sound.data';
 import { FIGHT_GAME_STATE } from '../fight/game-state';
@@ -125,6 +126,8 @@ export class GameScene extends Scene {
     this.cameraController.update(deltaTime);
 
     this.checkFight();
+
+    this.checkMoney();
   }
 
   onMouseDown(position: Vector2, button: MouseButtons): void {
@@ -237,6 +240,12 @@ export class GameScene extends Scene {
 
       this.fight(enemy);
       return;
+    }
+  }
+
+  private checkMoney(): void {
+    if (GAME_STATE.playerData.credits >= CREDITS_GOAL) {
+      this.sceneManager.showModal(SCENES.endgame);
     }
   }
 

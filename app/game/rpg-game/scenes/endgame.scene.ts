@@ -11,6 +11,7 @@ import { DialogBox } from '../dialog-box';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { IRenderable, RenderHelper } from '../render-helper';
+import { SCENES } from './scenes.const';
 
 export class EndgameScene extends Scene implements IRenderable {
   guiManager: GuiManager;
@@ -37,7 +38,10 @@ export class EndgameScene extends Scene implements IRenderable {
 
     this.guiManager
       .getElement<GuiButton>('ContinueButton')
-      .onClick = () => this.sceneManager.closeModal();
+      .onClick = () => {
+        this.sceneManager.closeModal()
+        .then(() => this.sceneManager.switchTo(SCENES.mainMenu));
+      };
 
     this.dialogBox = new DialogBox(550);
     this.dialogBox.text.text =
@@ -45,7 +49,7 @@ export class EndgameScene extends Scene implements IRenderable {
 
 Так или иначе, но заветные $${CREDITS_GOAL} удалось собрать.
 
-Глядя на такую кучу денег, вы начинаете задумываться, а стоит ли отдавать их?
+Глядя на такую кучу денег, вы начинаете задумываться — а стоит ли отдавать их?
 Не проще ли махнуть куда-нибудь подальше из этой звездной системы?
 
 ...
