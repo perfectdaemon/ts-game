@@ -108,6 +108,9 @@ export class Player implements IRenderable {
         player.onConsumableCellClick(item);
         GLOBAL.assets.audioManager.playSound(SOUNDS.select);
       };
+
+      item.background.onMouseOver = () => player.onConsumableMouseOver(item);
+      item.background.onMouseOut = () => player.onConsumableMouseOut(item);
       item.background.updateHitBox();
       player.consumableItems.push(item);
     }
@@ -143,6 +146,8 @@ export class Player implements IRenderable {
 
   onShipCellClick: (cell: FightShipCell) => void = () => {};
   onConsumableCellClick: (consumableItem: ConsumableItem) => void = () => {};
+  onConsumableMouseOver: (consumableItem: ConsumableItem) => void = () => {};
+  onConsumableMouseOut: (consumableItem: ConsumableItem) => void = () => {};
 
   getSpritesToRender(): Sprite[] {
     const result: Sprite[] = [this.background, this.health.back, this.health.current];

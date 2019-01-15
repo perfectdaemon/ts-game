@@ -32,8 +32,6 @@ export abstract class ConsumableItem {
     this.background.sprite.position.set(x, y, 2);
     this.background.sprite.setVerticesColor(1, 1, 1, 0.3);
     this.background.sprite.setTextureRegion(consRegion, false);
-    this.background.onMouseOver = () => this.background.sprite.setVerticesAlpha(0.7);
-    this.background.onMouseOut = () => this.background.sprite.setVerticesAlpha(0.3);
 
     this.countText = new Text();
     this.countText.pivotPoint.set(1, 1);

@@ -49,6 +49,8 @@ export class FightScene extends Scene {
   emitter: SpriteParticleEmitter;
   textEmitter: TextParticleEmitter;
 
+  dialogText: string;
+
   constructor() {
     super();
   }
@@ -105,24 +107,14 @@ export class FightScene extends Scene {
     this.textEmitter.update(deltaTime);
   }
 
-  onKeyDown(key: Keys): void {
-  }
-
-  onMouseDown(position: Vector2, button: MouseButtons): void {
-  }
-
-  onMouseMove(position: Vector2): void {
-  }
-
-  onMouseUp(position: Vector2, button: MouseButtons): void {
-  }
-
   private reset(): void {
     this.turnNumber = 1;
     this.human = Player.build(FIGHT_GAME_STATE.humanData, PlayerType.Human, this.guiManager);
     this.enemy = Player.build(FIGHT_GAME_STATE.enemyData, PlayerType.Ai, this.guiManager);
 
     this.human.onConsumableCellClick = (consumable) => this.onConsumableCellClick(consumable);
+    this.human.onConsumableMouseOver = (consumable) => this.onConsumableOver(consumable);
+    this.human.onConsumableMouseOut = (consumable) => this.onConsumableOut(consumable);
     this.human.onShipCellClick = (cell) => this.onShipCellClick(cell, this.human);
     this.enemy.onShipCellClick = (cell) => this.onShipCellClick(cell, this.enemy);
     this.setFightState(FightState.Start);
@@ -191,13 +183,14 @@ export class FightScene extends Scene {
         this.enemy.resetTurnState();
         this.actionManager.add(() => {
           this.setEnableForConsumable(true);
-          this.setEnableForCells(this.human, true);
-          this.setEnableForCells(this.enemy, false);
           this.setFightState(FightState.HumanTurnProtect);
         }, 2.0);
         break;
 
       case FightState.HumanTurnProtect:
+        this.setEnableForCells(this.human, true);
+        this.setEnableForCells(this.enemy, false);
+
         if (this.human.hasProtectsLeft()) {
           this.dialog.text.text = `Выберите ${this.human.protectsLeft} своих отсека для защиты`;
           if (this.canUseConsumableItems) {
@@ -280,6 +273,7 @@ export class FightScene extends Scene {
     }
 
     this.fightState = newState;
+    this.dialogText = this.dialog.text.text;
   }
 
   private onShipCellClick(shipCell: FightShipCell, player: Player): void {
@@ -336,6 +330,16 @@ export class FightScene extends Scene {
       other: this.enemy,
       roundLeft: consumableItem.removeAfterNumberOfTurns,
     });
+  }
+
+  private onConsumableOver(consumableItem: ConsumableItem): void {
+    consumableItem.background.sprite.setVerticesAlpha(0.7);
+    this.dialog.text.text = consumableItem.name;
+  }
+
+  private onConsumableOut(consumableItem: ConsumableItem): void {
+    consumableItem.background.sprite.setVerticesAlpha(0.3);
+    this.dialog.text.text = this.dialogText;
   }
 
   private setEnableForConsumable(enable: boolean): void {
