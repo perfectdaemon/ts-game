@@ -86,7 +86,7 @@ export class GameScene extends Scene {
 
     this.solarObjects = [];
     this.nebulaPool = new NebulaPool(() => Nebula.build(), 16);
-    this.cameraController = new CameraController(GLOBAL.assets.gameCamera, 400);
+    this.cameraController = new CameraController(GLOBAL.assets.gameCamera, 800);
 
     GAME_STATE.reset();
 
@@ -108,6 +108,8 @@ export class GameScene extends Scene {
     this.$treasureGot = GlobalEvents.treasureGot.subscribe(() => this.onTreasureGot());
 
     GLOBAL.actionManager.add(() => this.sceneManager.showModal(SCENES.start), 0.5);
+
+    this.updateShops();
 
     return super.load();
   }
@@ -358,5 +360,13 @@ export class GameScene extends Scene {
   private toPlayer(): void {
     this.stopMoving();
     this.cameraController.moveToObject(GAME_STATE.player, 800);
+  }
+
+  private updateShops(): void {
+    for (const planet of GAME_STATE.planets) {
+      planet.updateInventory();
+    }
+
+    GAME_STATE.actionManager.add(() => this.updateShops(), 180);
   }
 }

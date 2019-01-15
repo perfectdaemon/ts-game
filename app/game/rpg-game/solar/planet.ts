@@ -19,6 +19,18 @@ export class Planet extends SolarBase {
     return planet;
   }
 
+  static buildPlanet2(): Planet {
+    const planet = new Planet('Марс', 64);
+
+    planet.initialize();
+    planet.sprite.position.set(-300, 450, 5);
+    planet.sprite.setVerticesColor(new Vector4(172 / 255.0, 29 / 255.0, 59 / 255.0, 1.0));
+
+    planet.updateInventory();
+
+    return planet;
+  }
+
   text: Text;
 
   inventory: InventoryItemData[];
@@ -48,7 +60,6 @@ export class Planet extends SolarBase {
   }
 
   updateInventory(): void {
-
     this.inventory = [
       ItemGenerator.generateConsumable(ConsumableItemType.Heal, Math.ceil(3 * Math.random())),
       ItemGenerator.generateConsumable(ConsumableItemType.IncreaseCriticalChance, Math.ceil(3 * Math.random())),
@@ -57,11 +68,11 @@ export class Planet extends SolarBase {
     ];
 
     for (let i = 0; i < 2; ++i) {
-      ItemGenerator.generate(ItemType.Weapon, 0.5 * Math.random());
+      this.inventory.push(ItemGenerator.generate(ItemType.Weapon, 0.5 * Math.random()));
     }
 
     for (let i = 0; i < 2; ++i) {
-      ItemGenerator.generate(ItemType.Shield, 0.4 * Math.random());
+      this.inventory.push(ItemGenerator.generate(ItemType.Shield, 0.4 * Math.random()));
     }
   }
 }

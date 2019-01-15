@@ -38,6 +38,7 @@ export class GameState {
 
     this.planets = [
       Planet.buildPlanet1(),
+      Planet.buildPlanet2(),
     ];
 
     this.enemies = [];
