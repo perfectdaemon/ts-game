@@ -14,6 +14,10 @@ export class ProtectCountItem extends ConsumableItem {
     this.effectText.text = '+Щ';
   }
 
+  canUse(self: Player, other: Player): boolean {
+    return super.canUse(self, other) && self.protectsLeft < self.shipCells.length;
+  }
+
   internalUse(self: Player, other: Player): void {
     ++self.protectsLeft;
   }

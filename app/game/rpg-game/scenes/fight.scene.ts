@@ -1,5 +1,6 @@
 import { GuiManager } from '../../../engine/gui/gui-manager';
 import { ActionManager } from '../../../engine/helpers/action-manager/action-manager';
+import { SimpleAction } from '../../../engine/helpers/action-manager/actions.func';
 import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
 import { Vector2 } from '../../../engine/math/vector2';
 import { Vector4 } from '../../../engine/math/vector4';
@@ -127,10 +128,11 @@ export class FightScene extends Scene {
     this.setFightState(FightState.Start);
   }
 
-  private calculateTurn(attacking: Player, defending: Player): void {
-    let pauseOnStart = 0;
+  private calculateTurn(attacking: Player, defending: Player): SimpleAction[] {
     let damages = PlayerDataExtensions.calculateDamages(attacking.playerData);
     let protections = PlayerDataExtensions.calculateProtections(defending.playerData);
+
+    const result: SimpleAction[] = [];
 
     for (const attackedCell of defending.shipCells.filter(cell => cell.markedAsAttacked)) {
       // Generate new damages and protections if no left
@@ -153,7 +155,7 @@ export class FightScene extends Scene {
 
       damage.damage = Math.floor(damage.damage);
 
-      this.actionManager.add(() => {
+      const action = () => {
         defending.hit(damage.damage);
         GLOBAL.assets.audioManager.playSound(SOUNDS.explosion);
 
@@ -170,8 +172,12 @@ export class FightScene extends Scene {
         } else {
           ParticleEmitterExtensions.emitHit(this.emitter, cellAbsolutePosition);
         }
-      }, pauseOnStart += 2);
+      };
+
+      result.push(action);
     }
+
+    return result;
   }
 
   private setFightState(newState: FightState): void {
@@ -188,7 +194,7 @@ export class FightScene extends Scene {
           this.setEnableForCells(this.human, true);
           this.setEnableForCells(this.enemy, false);
           this.setFightState(FightState.HumanTurnProtect);
-        }, 3.0);
+        }, 2.0);
         break;
 
       case FightState.HumanTurnProtect:
@@ -224,27 +230,34 @@ export class FightScene extends Scene {
         this.setEnableForCells(this.enemy, false);
         this.dialog.text.text = `Ход противника`;
         this.actionManager
-          .add(() => this.enemy.aiChooseProtectAndAttack(this.human), 2.0)
-          .then(() => this.setFightState(FightState.Animation), 2.0);
+          .add(() => this.enemy.aiChooseProtectAndAttack(this.human), 1.0)
+          .then(() => this.setFightState(FightState.Animation), 1.0);
         break;
 
       case FightState.Animation:
         this.dialog.text.text = `Рассчитываем бой...`;
-        this.actionManager
-          .add(() => this.calculateTurn(this.human, this.enemy), 0.5)
-          .then(() => this.calculateTurn(this.enemy, this.human), 4.0) // TODO not 4, calculate it!!!
-          .then(() => {
-            const isHumanVictory = !this.enemy.isAlive();
-            const isEnemyVictory = !this.human.isAlive();
+        const humanActions = this.calculateTurn(this.human, this.enemy);
+        const enemyActions = this.calculateTurn(this.enemy, this.human);
+        const actions = humanActions.concat(enemyActions);
 
-            if (isEnemyVictory) {
-              this.setFightState(FightState.Defeat);
-            } else if (isHumanVictory) {
-              this.setFightState(FightState.Victory);
-            } else {
-              this.setFightState(FightState.Start);
-            }
-          }, 5); // TODO not 5, calculate it!
+        actions.push(() => {
+          const isHumanVictory = !this.enemy.isAlive();
+          const isEnemyVictory = !this.human.isAlive();
+
+          if (isEnemyVictory) {
+            this.setFightState(FightState.Defeat);
+          } else if (isHumanVictory) {
+            this.setFightState(FightState.Victory);
+          } else {
+            this.setFightState(FightState.Start);
+          }
+        });
+
+        let pause = 0.0;
+        for (const action of actions) {
+          this.actionManager.add(action, pause += 0.8);
+        }
+
         break;
 
       case FightState.Victory:

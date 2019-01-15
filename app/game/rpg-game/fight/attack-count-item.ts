@@ -13,6 +13,10 @@ export class AttackCountItem extends ConsumableItem {
     this.effectText.text = '+А';
   }
 
+  canUse(self: Player, other: Player): boolean {
+    return super.canUse(self, other) && self.attacksLeft < other.shipCells.length;
+  }
+
   internalUse(self: Player, other: Player): void {
     ++self.attacksLeft;
   }
