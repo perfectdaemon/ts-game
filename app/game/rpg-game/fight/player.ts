@@ -29,7 +29,7 @@ export class Player implements IRenderable {
 
     player.background = new Sprite(playerW, renderer.height - 150, new Vector2(0, 0));
     player.background.setVerticesColor(52 / 255, 111 / 255, 149 / 255, 1.0);
-    const region = GLOBAL.assets.planetAtlas.getRegion('blank.png');
+    const region = GLOBAL.assets.solarAtlas.getRegion('blank.png');
     player.background.setTextureRegion(region, false);
 
     switch (player.type) {

@@ -60,14 +60,14 @@ export class FightScene extends Scene {
     this.guiSB = new SpriteBatch();
     this.guiTB = new TextBatch(GLOBAL.assets.font);
     this.guiManager = new GuiManager(
-      GLOBAL.assets.planetMaterial,
+      GLOBAL.assets.solarMaterial,
       this.guiSB,
       this.guiTB,
       GLOBAL.assets.guiCamera,
     );
 
     this.actionManager = new ActionManager();
-    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
+    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.solarMaterial);
     this.emitter = new SpriteParticleEmitter(
       this.renderHelper,
       () => ParticleEmitterExtensions.createSmallParticle(),

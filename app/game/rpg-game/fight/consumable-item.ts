@@ -26,7 +26,7 @@ export abstract class ConsumableItem {
 
     this.type = itemData.consumable.type;
     this.count = itemData.consumable.count;
-    const consRegion = GLOBAL.assets.planetAtlas.getRegion('blank.png');
+    const consRegion = GLOBAL.assets.solarAtlas.getRegion('blank.png');
     this.background = new GuiButton();
     this.background.sprite.setSize(70, 70);
     this.background.sprite.position.set(x, y, 2);

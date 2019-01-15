@@ -20,7 +20,7 @@ export class MainMenuScene extends Scene {
 
   load(): Promise<void> {
     this.guiManager = new GuiManager(
-      GLOBAL.assets.blankMaterial,
+      GLOBAL.assets.solarMaterial,
       new SpriteBatch(),
       new TextBatch(GLOBAL.assets.font),
       GLOBAL.assets.guiCamera,

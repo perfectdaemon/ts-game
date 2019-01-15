@@ -13,7 +13,7 @@ export class ShipCell {
   private _originalPosition: Vector2;
 
   constructor(shipCellData: ShipCellData, x: number, y: number, gui: GuiManager) {
-    const region = GLOBAL.assets.planetAtlas.getRegion('ship_cell.png');
+    const region = GLOBAL.assets.solarAtlas.getRegion('ship_cell.png');
 
     this.cellSprite = new GuiButton();
     this.cellSprite.label.visible = false;

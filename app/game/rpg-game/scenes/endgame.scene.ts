@@ -25,10 +25,10 @@ export class EndgameScene extends Scene implements IRenderable {
   }
 
   load(): Promise<void> {
-    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
+    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.solarMaterial);
 
     this.guiManager = new GuiManager(
-      GLOBAL.assets.planetMaterial,
+      GLOBAL.assets.solarMaterial,
       this.renderHelper.spriteBatch,
       this.renderHelper.textBatch,
       GLOBAL.assets.guiCamera,
@@ -61,7 +61,7 @@ export class EndgameScene extends Scene implements IRenderable {
     this.background = new Sprite(renderer.width - 10, renderer.height - 10, new Vector2(0, 0));
     this.background.position.set(5, 5, 30);
     this.background.setVerticesColor(0, 0, 0, 0.8);
-    this.background.setTextureRegion(GLOBAL.assets.planetAtlas.getRegion('blank.png'), false);
+    this.background.setTextureRegion(GLOBAL.assets.solarAtlas.getRegion('blank.png'), false);
 
     return super.load();
   }

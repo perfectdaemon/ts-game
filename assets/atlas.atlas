@@ -1,6 +1,14 @@
-textures: assets.png
-smoke.png	0	0	338	297	1	2	299	340	r
-circle_bordered.png	339	0	128	128	0	0	128	128	
-circle_gradient.png	339	129	128	126	0	2	128	128	
-triangle.png	447	256	64	64	0	0	64	64	
-circle.png	468	0	32	32	0	0	32	32	
+textures: atlas.png
+health_bar_back.png	1	1	40	357	0	0	357	40	r
+repair_button.png	43	1	56	355	0	0	355	56	r
+health_bar.png	101	1	30	348	0	0	348	30	r
+button_green.png	133	1	56	219	0	0	219	56	r
+button_red.png	191	1	56	219	0	0	219	56	r
+circle_bordered.png	249	1	128	128	0	0	128	128	
+ship_cell.png	379	1	93	93	0	0	93	93	
+laser1.png	474	1	37	87	0	0	37	87	
+inventory_cell_selected.png	444	96	67	67	0	0	67	67	
+shield1.png	249	131	64	64	0	0	64	64	
+triangle.png	315	131	64	64	0	0	64	64	
+inventory_cell.png	381	96	59	59	0	0	59	59	
+blank.png	474	90	2	2	0	0	2	2	

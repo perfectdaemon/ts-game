@@ -1,5 +1,4 @@
 import { LoaderFactory } from '../../engine/loaders/loader-factory';
-import { Font } from '../../engine/render/font';
 import { Material } from '../../engine/render/material';
 import { ShaderProgram } from '../../engine/render/shader-program';
 import { Texture } from '../../engine/render/texture';

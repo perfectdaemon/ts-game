@@ -23,8 +23,8 @@ export class ItemDescription implements IRenderable {
   cost: Text;
 
   constructor(x: number, y: number, w: number, h: number) {
-    const itemBackRegion = GLOBAL.assets.planetAtlas.getRegion('ship_cell.png');
-    const blankRegion = GLOBAL.assets.planetAtlas.getRegion('blank.png');
+    const itemBackRegion = GLOBAL.assets.solarAtlas.getRegion('ship_cell.png');
+    const blankRegion = GLOBAL.assets.solarAtlas.getRegion('blank.png');
 
     this.back = new Sprite(w, h, new Vector2(0, 0));
     this.back.position.set(x, y, 1);

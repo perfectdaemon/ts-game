@@ -63,7 +63,7 @@ export class GameScene extends Scene {
     this.guiSpriteBatch = new SpriteBatch();
     this.guiTextBatch = new TextBatch(GLOBAL.assets.font);
     this.guiManager = new GuiManager(
-      GLOBAL.assets.planetMaterial,
+      GLOBAL.assets.solarMaterial,
       this.guiSpriteBatch,
       this.guiTextBatch,
       GLOBAL.assets.guiCamera,

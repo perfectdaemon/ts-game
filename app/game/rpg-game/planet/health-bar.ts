@@ -13,8 +13,8 @@ export class HealthBar {
   originalWidth: number;
 
   constructor(x: number, y: number) {
-    const backRegion = GLOBAL.assets.planetAtlas.getRegion('health_bar_back.png');
-    const currentRegion = GLOBAL.assets.planetAtlas.getRegion('health_bar.png');
+    const backRegion = GLOBAL.assets.solarAtlas.getRegion('health_bar_back.png');
+    const currentRegion = GLOBAL.assets.solarAtlas.getRegion('health_bar.png');
 
     this.back = new Sprite(1, 1, new Vector2(0, 0));
     this.back.position.set(x, y, 2);

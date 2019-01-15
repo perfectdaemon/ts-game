@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="-274.07764"
-     inkscape:cy="557.05058"
+     inkscape:zoom="1"
+     inkscape:cx="-383.37932"
+     inkscape:cy="691.76693"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1574,7 +1574,7 @@
        y="168.75"
        inkscape:label="#rect1169" />
     <rect
-       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:7.21889782;stroke-miterlimit:4;stroke-dasharray:21.65669346, 7.21889781999999869;stroke-opacity:1;stroke-dashoffset:16.60346498;paint-order:normal"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:7.21889782;stroke-miterlimit:4;stroke-dasharray:21.65669346, 7.21889782;stroke-dashoffset:16.60346413;stroke-opacity:1;paint-order:normal"
        id="inventory_cell_selected"
        width="60.318687"
        height="60.318695"
@@ -1583,5 +1583,19 @@
        rx="6.7556944"
        ry="6.7556944"
        inkscape:label="#rect1419" />
+    <circle
+       id="circle_bordered"
+       cx="-609.52606"
+       cy="183.41513"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.23254442;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:label="#path3849"
+       r="64" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.51312411;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -484.96626,223.51345 32.00001,64 h -64 z"
+       id="triangle"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc"
+       inkscape:label="#rect4659" />
   </g>
 </svg>

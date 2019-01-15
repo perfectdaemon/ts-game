@@ -9,7 +9,7 @@ import { Camera } from '../../../engine/scene/camera';
 import { AudioManager } from '../../../engine/sound/audio-manager';
 import { DEFAULT_FONT, DEFAULT_MATERIAL, DEFAULT_SHADER } from './default';
 import { MUSIC_DATA, SOUNDS_DATA } from './sound.data';
-import { DEFAULT_ATLAS_DATA, PLANET_ATLAS_DATA } from './textures';
+import { DEFAULT_ATLAS_DATA } from './textures';
 
 export class Assets {
   shader: ShaderProgram;
@@ -17,9 +17,6 @@ export class Assets {
 
   solarAtlas: TextureAtlas;
   solarMaterial: Material;
-
-  planetAtlas: TextureAtlas;
-  planetMaterial: Material;
 
   font: Font;
 
@@ -49,10 +46,6 @@ export class Assets {
     DEFAULT_MATERIAL.textures[0].texture = undefined;
     DEFAULT_MATERIAL.textures[0].textureAtlas = this.solarAtlas;
     this.solarMaterial = await this.loaders.loadMaterial(DEFAULT_MATERIAL);
-
-    this.planetAtlas = await this.loaders.loadTextureAtlas(PLANET_ATLAS_DATA);
-    DEFAULT_MATERIAL.textures[0].textureAtlas = this.planetAtlas;
-    this.planetMaterial = await this.loaders.loadMaterial(DEFAULT_MATERIAL);
 
     await soundLoading;
 

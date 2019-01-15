@@ -57,7 +57,7 @@ export class PlanetScene extends Scene implements IRenderable {
   load(): Promise<void> {
     this.initGui();
 
-    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
+    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.solarMaterial);
 
     this.player = Player.build(PLANET_GAME_STATE.player, this.guiManager);
     this.shop = new Shop(PLANET_GAME_STATE.planet, 480, 260, this.guiManager);
@@ -118,7 +118,7 @@ export class PlanetScene extends Scene implements IRenderable {
     this.guiSB = new SpriteBatch();
     this.guiTB = new TextBatch(GLOBAL.assets.font);
     this.guiManager = new GuiManager(
-      GLOBAL.assets.planetMaterial,
+      GLOBAL.assets.solarMaterial,
       this.guiSB,
       this.guiTB,
       GLOBAL.assets.guiCamera,
@@ -158,7 +158,7 @@ export class PlanetScene extends Scene implements IRenderable {
     this.noMoneyText.visible = false;
 
     this.selectedCellBorder = new Sprite();
-    const selectedCellRegion = GLOBAL.assets.planetAtlas.getRegion('inventory_cell_selected.png');
+    const selectedCellRegion = GLOBAL.assets.solarAtlas.getRegion('inventory_cell_selected.png');
     this.selectedCellBorder.setTextureRegion(selectedCellRegion);
     this.selectedCellBorder.setVerticesColor(0.7, 1.0, 0.7, 1.0);
     this.selectedCellBorder.position.set(-100, -100, 10);

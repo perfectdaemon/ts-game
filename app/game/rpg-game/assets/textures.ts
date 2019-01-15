@@ -7,10 +7,3 @@ export const DEFAULT_ATLAS_DATA: TextureAtlasData = {
   filter: TextureFilter.Nearest,
   anisotropic: 0,
 };
-
-export const PLANET_ATLAS_DATA: TextureAtlasData = {
-  imageFileSrc: 'assets/planet.png',
-  atlasFileSrc: 'assets/planet.atlas',
-  filter: TextureFilter.Nearest,
-  anisotropic: 0,
-};

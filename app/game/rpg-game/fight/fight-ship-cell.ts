@@ -15,7 +15,7 @@ export class FightShipCell extends ShipCell {
   constructor(shipCellData: ShipCellData, x: number, y: number, gui: GuiManager) {
     super(shipCellData, x, y, gui);
 
-    const region = GLOBAL.assets.planetAtlas.getRegion('inventory_cell_selected.png');
+    const region = GLOBAL.assets.solarAtlas.getRegion('inventory_cell_selected.png');
 
     this.protectMark = new Sprite(70, 70);
     this.protectMark.position.set(0, 0, 15);

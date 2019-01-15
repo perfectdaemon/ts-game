@@ -47,7 +47,7 @@ export class TreasureScene extends Scene implements IRenderable {
   load(): Promise<void> {
     console.log('Treasure scene is loaded');
     this.initGui();
-    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.planetMaterial);
+    this.renderHelper = new RenderHelper(GLOBAL.assets.font, GLOBAL.assets.solarMaterial);
 
     this.title = new DialogBox(120);
 
@@ -71,7 +71,7 @@ export class TreasureScene extends Scene implements IRenderable {
     this.playerInventory.onClick = (cell) => this.onInventoryCellClick(cell);
 
     this.selectedCellBorder = new Sprite();
-    const selectedCellRegion = GLOBAL.assets.planetAtlas.getRegion('inventory_cell_selected.png');
+    const selectedCellRegion = GLOBAL.assets.solarAtlas.getRegion('inventory_cell_selected.png');
     this.selectedCellBorder.setTextureRegion(selectedCellRegion);
     this.selectedCellBorder.setVerticesColor(0.7, 1.0, 0.7, 1.0);
     this.selectedCellBorder.position.set(-100, -100, 10);
@@ -120,7 +120,7 @@ export class TreasureScene extends Scene implements IRenderable {
     this.guiSpriteBatch = new SpriteBatch();
     this.guiTextBatch = new TextBatch(GLOBAL.assets.font);
     this.guiManager = new GuiManager(
-      GLOBAL.assets.planetMaterial,
+      GLOBAL.assets.solarMaterial,
       this.guiSpriteBatch,
       this.guiTextBatch,
       GLOBAL.assets.guiCamera,

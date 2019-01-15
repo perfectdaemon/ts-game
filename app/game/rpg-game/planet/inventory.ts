@@ -81,7 +81,7 @@ export class InventoryCell {
   item?: BaseItem;
 
   constructor(x: number, y: number, gui: GuiManager, itemData?: InventoryItemData) {
-    const region = GLOBAL.assets.planetAtlas.getRegion('inventory_cell.png');
+    const region = GLOBAL.assets.solarAtlas.getRegion('inventory_cell.png');
 
     this.back = new GuiButton();
     this.back.sprite.position.set(x, y, 5);
@@ -202,7 +202,7 @@ export class BaseItem {
     item.rarity = itemData.rarity;
     item.type = itemData.type;
 
-    const itemRegion = GLOBAL.assets.planetAtlas.getRegion(itemRegionName || 'blank.png');
+    const itemRegion = GLOBAL.assets.solarAtlas.getRegion(itemRegionName || 'blank.png');
     item.sprite = new Sprite(40, 40);
     item.sprite.setTextureRegion(itemRegion, !!itemRegionName);
     item.sprite.position.set(0, 0, 6);
