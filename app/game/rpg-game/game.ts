@@ -4,6 +4,7 @@ import { Vector2 } from '../../engine/math/vector2';
 import { SceneManager } from '../../engine/scenes/scene-manager';
 import { GLOBAL } from './global';
 import { DefeatedMenuScene } from './scenes/defeated.scene';
+import { EndgameScene } from './scenes/endgame.scene';
 import { FightScene } from './scenes/fight.scene';
 import { GameScene } from './scenes/game.scene';
 import { MainMenuScene } from './scenes/main-menu.scene';
@@ -27,6 +28,7 @@ export class Game extends GameBase {
     this.sceneManager.addScene(SCENES.treasure, new TreasureScene());
     this.sceneManager.addScene(SCENES.start, new StartMenuScene());
     this.sceneManager.addScene(SCENES.defeated, new DefeatedMenuScene());
+    this.sceneManager.addScene(SCENES.endgame, new EndgameScene());
 
     this.sceneManager.switchTo(SCENES.mainMenu);
   }
