@@ -8,7 +8,7 @@ import { TextureAtlas } from '../../../engine/render/texture-atlas';
 import { Camera } from '../../../engine/scene/camera';
 import { AudioManager } from '../../../engine/sound/audio-manager';
 import { DEFAULT_FONT, DEFAULT_MATERIAL, DEFAULT_SHADER } from './default';
-import { SOUNDS_DATA } from './sound.data';
+import { MUSIC_DATA, SOUNDS_DATA } from './sound.data';
 import { DEFAULT_ATLAS_DATA, PLANET_ATLAS_DATA } from './textures';
 
 export class Assets {
@@ -65,6 +65,12 @@ export class Assets {
     const loadedSounds = await this.loaders.loadSounds(SOUNDS_DATA);
     for (const sound of loadedSounds) {
       this.audioManager.addSound(sound.audioBuffer, sound.soundName);
+    }
+
+    const loadedMusic = await this.loaders.loadSounds(MUSIC_DATA);
+
+    for (const music of loadedMusic) {
+      this.audioManager.addMusic(music.audioBuffer, music.soundName);
     }
 
     return Promise.resolve();
