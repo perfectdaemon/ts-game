@@ -5,6 +5,7 @@ export class AudioManager {
   private _masterVolume: GainNode = this._context.createGain();
   private _soundVolume: GainNode = this._context.createGain();
   private _musicVolume: GainNode = this._context.createGain();
+  private _musicPlaying: AudioBufferSourceNode | undefined;
 
   constructor() {
     this._masterVolume.gain.value = 0.3;
@@ -54,10 +55,18 @@ export class AudioManager {
   }
 
   playMusic(musicName: string): void {
-    const source = this._context.createBufferSource();
-    source.buffer = this._music[musicName];
-    source.connect(this._musicVolume);
-    source.loop = true;
-    source.start();
+    this._musicPlaying = this._context.createBufferSource();
+    this._musicPlaying.buffer = this._music[musicName];
+    this._musicPlaying.connect(this._musicVolume);
+    this._musicPlaying.loop = true;
+    this._musicPlaying.start();
+  }
+
+  stopMusic(): void {
+    if (!this._musicPlaying) {
+      return;
+    }
+
+    this._musicPlaying.stop();
   }
 }
