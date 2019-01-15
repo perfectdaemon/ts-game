@@ -3,6 +3,7 @@ import { Vector2 } from '../../../engine/math/vector2';
 import { renderer } from '../../../engine/render/webgl';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
+import { SOUNDS } from '../assets/sound.data';
 import { GLOBAL } from '../global';
 import { HealthBar } from '../planet/health-bar';
 import { PlayerStatsRow } from '../planet/player-stats-row';
@@ -61,7 +62,10 @@ export class Player implements IRenderable {
       const shipCell = new FightShipCell(shipCellData, cellStart.x, cellStart.y, gui);
       shipCell.cellSprite.sprite.parent = player.background;
       shipCell.cellSprite.updateHitBox();
-      shipCell.cellSprite.onClick = () => player.onShipCellClick(shipCell);
+      shipCell.cellSprite.onClick = () => {
+        player.onShipCellClick(shipCell);
+        GLOBAL.assets.audioManager.playSound(SOUNDS.select);
+      };
       player.shipCells.push(shipCell);
     }
 
@@ -100,7 +104,10 @@ export class Player implements IRenderable {
       }
 
       item.background.sprite.parent = player.background;
-      item.background.onClick = () => player.onConsumableCellClick(item);
+      item.background.onClick = () => {
+        player.onConsumableCellClick(item);
+        GLOBAL.assets.audioManager.playSound(SOUNDS.select);
+      };
       item.background.updateHitBox();
       player.consumableItems.push(item);
     }

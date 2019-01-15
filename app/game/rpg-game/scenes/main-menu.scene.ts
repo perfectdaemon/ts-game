@@ -33,6 +33,8 @@ export class MainMenuScene extends Scene {
         this.sceneManager.switchTo(SCENES.game);
       };
 
+    GLOBAL.assets.audioManager.playMusic(SOUNDS.music);
+
     return super.load();
   }
 

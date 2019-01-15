@@ -3,6 +3,7 @@ import { Vector2 } from '../../../engine/math/vector2';
 import { renderer } from '../../../engine/render/webgl';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
+import { SOUNDS } from '../assets/sound.data';
 import { GLOBAL } from '../global';
 import { PlayerData } from '../player-data';
 import { PlayerDataExtensions } from '../player-data-extensions';
@@ -66,7 +67,10 @@ export class Player implements IRenderable {
     player.updateCreditsText();
 
     for (const shipCell of player.shipCells) {
-      shipCell.cellSprite.onClick = () => player.onShipCellClick(shipCell);
+      shipCell.cellSprite.onClick = () => {
+        GLOBAL.assets.audioManager.playSound(SOUNDS.select);
+        player.onShipCellClick(shipCell);
+      };
     }
 
     return player;
