@@ -6,6 +6,7 @@ import { Enemy } from './enemy';
 import { Planet } from './planet';
 import { Player } from './player';
 import { TargetCursor } from './target-cursor';
+import { Treasure } from './treasure';
 
 export class GameState {
   playerData: PlayerData;
@@ -17,9 +18,13 @@ export class GameState {
 
   enemies: Enemy[];
 
+  treasures: Treasure[];
+
   planetToLand: Planet | undefined;
 
   enemyToFight: Enemy | undefined;
+
+  treasureToGet: Treasure | undefined;
 
   actionManager: ActionManager;
 
@@ -36,10 +41,12 @@ export class GameState {
     ];
 
     this.enemies = [];
+    this.treasures = [];
 
     this.actionManager = new ActionManager();
 
     this.createStartEnemies();
+    this.createStartTreasures();
   }
 
   private createStartEnemies(): void {
@@ -52,6 +59,19 @@ export class GameState {
       const enemy = Enemy.buildEnemy(position, 0.3 * Math.random());
 
       this.enemies.push(enemy);
+    }
+  }
+
+  private createStartTreasures(): void {
+    for (let i = 0; i < 5; ++i) {
+      const angle = 360 * Math.random();
+      const length = 500 + 300 * Math.random();
+
+      const position = Vector2.fromAngle(angle).multiplyNumSelf(length).addToSelf(GAME_STATE.player.sprite.position);
+
+      const treasure = Treasure.buildTreasure(position, 0.3 * Math.random());
+
+      this.treasures.push(treasure);
     }
   }
 }

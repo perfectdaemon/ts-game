@@ -6,4 +6,6 @@ export class GlobalEvents {
   static enemyDefeated: Observable<void> = new Observable<void>();
 
   static playerDied: Observable<void> = new Observable<void>();
+
+  static treasureGot: Observable<void> = new Observable<void>();
 }

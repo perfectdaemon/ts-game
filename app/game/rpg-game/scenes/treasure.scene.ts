@@ -9,6 +9,7 @@ import { Scene } from '../../../engine/scenes/scene';
 import { TREASURE_MENU_DATA } from '../assets/treasure-menu.data';
 import { DialogBox } from '../dialog-box';
 import { GLOBAL } from '../global';
+import { GlobalEvents } from '../global.events';
 import { ItemGenerator } from '../item-generator';
 import { MenuHelper } from '../menu/menu-helper';
 import { BaseItem, Inventory, InventoryCell } from '../planet/inventory';
@@ -224,6 +225,7 @@ export class TreasureScene extends Scene implements IRenderable {
 
   private exit(): void {
     this.updatePlayerData();
+    GlobalEvents.treasureGot.next();
     this.sceneManager.closeModal();
   }
 

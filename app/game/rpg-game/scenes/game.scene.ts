@@ -23,6 +23,7 @@ import { GAME_STATE } from '../solar/game-state';
 import { Nebula, NebulaPool } from '../solar/nebula';
 import { Planet } from '../solar/planet';
 import { SolarBase } from '../solar/solar.base';
+import { Treasure } from '../solar/treasure';
 import { TreasureType, TREASURE_GAME_STATE } from '../treasure/game-state';
 import { SCENES } from './scenes.const';
 
@@ -33,6 +34,7 @@ export class GameScene extends Scene {
   renderHelper: RenderHelper;
 
   landingButton: GuiButton;
+  getTreasureButton: GuiButton;
 
   solarObjects: SolarBase[];
 
@@ -45,6 +47,7 @@ export class GameScene extends Scene {
   $takeOffFromPlanet: Subscription<void>;
   $enemyDefeated: Subscription<void>;
   $playedDied: Subscription<void>;
+  $treasureGot: Subscription<void>;
 
   constructor() {
     super();
@@ -72,6 +75,10 @@ export class GameScene extends Scene {
     this.landingButton.visible = false;
     this.landingButton.onClick = () => this.land();
 
+    this.getTreasureButton = this.guiManager.getElement<GuiButton>('TreasureButton');
+    this.getTreasureButton.visible = false;
+    this.getTreasureButton.onClick = () => this.getTreasure();
+
     this.solarObjects = [];
     this.nebulaPool = new NebulaPool(() => Nebula.build(), 16);
     this.cameraController = new CameraController(GLOBAL.assets.gameCamera, 400);
@@ -80,7 +87,8 @@ export class GameScene extends Scene {
 
     this.solarObjects = this.solarObjects
       .concat(GAME_STATE.planets)
-      .concat(GAME_STATE.enemies);
+      .concat(GAME_STATE.enemies)
+      .concat(GAME_STATE.treasures);
 
     this.solarObjects.push(
       GAME_STATE.player,
@@ -92,6 +100,7 @@ export class GameScene extends Scene {
     this.$takeOffFromPlanet = GlobalEvents.takeOffFromPlanet.subscribe(() => this.onTakeOffFromPlanet());
     this.$enemyDefeated = GlobalEvents.enemyDefeated.subscribe(() => this.onEnemyDefeated());
     this.$playedDied = GlobalEvents.playerDied.subscribe(() => this.onPlayerDied());
+    this.$treasureGot = GlobalEvents.treasureGot.subscribe(() => this.onTreasureGot());
 
     GLOBAL.actionManager.add(() => this.sceneManager.showModal(SCENES.start), 0.5);
 
@@ -185,6 +194,19 @@ export class GameScene extends Scene {
     this.sceneManager.showModal(SCENES.defeated, true);
   }
 
+  private onTreasureGot(): void {
+    if (!GAME_STATE.treasureToGet) {
+      return;
+    }
+
+    const index = GAME_STATE.treasures.indexOf(GAME_STATE.treasureToGet);
+    const solarIndex = this.solarObjects.indexOf(GAME_STATE.treasureToGet);
+    GAME_STATE.treasures.splice(index, 1);
+    this.solarObjects.splice(solarIndex, 1);
+
+    GAME_STATE.treasureToGet = undefined;
+  }
+
   private movePlayerToPosition(position: Vector2): void {
     GAME_STATE.targetCursor.sprite.visible = true;
     GAME_STATE.targetCursor.sprite.position.set(position);
@@ -211,6 +233,7 @@ export class GameScene extends Scene {
         GAME_STATE.player.sprite.position.addToSelf(moveVector);
 
         this.checkLanding();
+        this.checkTreasure();
         return false;
       });
   }
@@ -249,6 +272,18 @@ export class GameScene extends Scene {
     }
   }
 
+  private checkTreasure(): void {
+    for (const treasure of GAME_STATE.treasures) {
+      const distanceToPlayer = treasure.sprite.position.subtract(GAME_STATE.player.sprite.position).lengthQ();
+      if (distanceToPlayer > 400) { continue; }
+
+      this.setTreasure(treasure);
+      return;
+    }
+
+    this.setTreasure(undefined);
+  }
+
   private setLanding(planet: Planet | undefined): void {
     if (!planet) {
       GAME_STATE.planetToLand = undefined;
@@ -258,6 +293,17 @@ export class GameScene extends Scene {
 
     GAME_STATE.planetToLand = planet;
     this.landingButton.visible = true;
+  }
+
+  private setTreasure(treasure: Treasure | undefined): void {
+    if (!treasure) {
+      GAME_STATE.treasureToGet = undefined;
+      this.getTreasureButton.visible = false;
+      return;
+    }
+
+    GAME_STATE.treasureToGet = treasure;
+    this.getTreasureButton.visible = true;
   }
 
   private land(): void {
@@ -286,5 +332,21 @@ export class GameScene extends Scene {
     FIGHT_GAME_STATE.enemyData = enemy.enemyData;
     FIGHT_GAME_STATE.humanData = GAME_STATE.playerData;
     this.sceneManager.showModal(SCENES.fight, true);
+  }
+
+  private getTreasure(): void {
+    if (!GAME_STATE.treasureToGet) {
+      return;
+    }
+
+    this.stopMoving();
+
+    TREASURE_GAME_STATE.player = GAME_STATE.playerData;
+    TREASURE_GAME_STATE.treasure = {
+      credits: 0,
+      type: TreasureType.Chest,
+      cost: GAME_STATE.treasureToGet.cost,
+    };
+    this.sceneManager.showModal(SCENES.treasure, true);
   }
 }
