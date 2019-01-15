@@ -4,6 +4,7 @@ import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
 import { MAIN_MENU_DATA } from '../assets/main-menu.data';
+import { SOUNDS } from '../assets/sound.data';
 import { GLOBAL } from '../global';
 import { MenuHelper } from '../menu/menu-helper';
 import { SCENES } from './scenes.const';
@@ -27,7 +28,10 @@ export class MainMenuScene extends Scene {
 
     this.guiManager
       .getElement<GuiButton>('StartButton')
-      .onClick = () => this.sceneManager.switchTo(SCENES.game);
+      .onClick = () => {
+        GLOBAL.assets.audioManager.playSound(SOUNDS.select);
+        this.sceneManager.switchTo(SCENES.game);
+      };
 
     return super.load();
   }
