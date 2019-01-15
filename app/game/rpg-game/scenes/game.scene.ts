@@ -9,6 +9,7 @@ import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
 import { SOLAR_MENU_DATA } from '../assets/solar-menu.data';
+import { SOUNDS } from '../assets/sound.data';
 import { FIGHT_GAME_STATE } from '../fight/game-state';
 import { GLOBAL } from '../global';
 import { GlobalEvents } from '../global.events';
@@ -252,6 +253,8 @@ export class GameScene extends Scene {
 
   private land(): void {
     this.lastPlayerMoveAction.onDeactivate();
+
+    GLOBAL.assets.audioManager.playSound(SOUNDS.pickup);
 
     if (!GAME_STATE.planetToLand) {
       return;

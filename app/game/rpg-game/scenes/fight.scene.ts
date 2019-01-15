@@ -6,6 +6,7 @@ import { Vector4 } from '../../../engine/math/vector4';
 import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
+import { SOUNDS } from '../assets/sound.data';
 import { DialogBox } from '../dialog-box';
 import { ConsumableItem } from '../fight/consumable-item';
 import { ParticleEmitterExtensions } from '../fight/emitter-extensions';
@@ -154,6 +155,7 @@ export class FightScene extends Scene {
 
       this.actionManager.add(() => {
         defending.hit(damage.damage);
+        GLOBAL.assets.audioManager.playSound(SOUNDS.explosion);
 
         const cellAbsolutePosition = attackedCell.cellSprite.sprite.absoluteMatrix.position.asVector2();
         const damageColor = damage.isCritical

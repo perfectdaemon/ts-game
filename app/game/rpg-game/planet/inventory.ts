@@ -3,6 +3,7 @@ import { GuiManager } from '../../../engine/gui/gui-manager';
 import { div } from '../../../engine/math/math-base';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
+import { SOUNDS } from '../assets/sound.data';
 import { GLOBAL } from '../global';
 import { ConsumableItemType, InventoryItemData, ItemRarity, ItemType } from '../player-data';
 import { PlayerDataExtensions } from '../player-data-extensions';
@@ -23,7 +24,10 @@ export class Inventory implements IRenderable {
         : undefined;
 
       const cell = new InventoryCell(cellX, cellY, gui, itemData);
-      cell.back.onClick = () => this.onClick(cell);
+      cell.back.onClick = () => {
+        GLOBAL.assets.audioManager.playSound(SOUNDS.select);
+        this.onClick(cell);
+      };
       this.cells.push(cell);
     }
   }
