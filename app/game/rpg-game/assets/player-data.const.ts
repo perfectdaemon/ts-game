@@ -1,7 +1,7 @@
 import { Vector2 } from '../../../engine/math/vector2';
 import { ConsumableItemType, ItemRarity, ItemType, PlayerData } from '../player-data';
 
-export const CREDITS_GOAL: number = 10000;
+export const CREDITS_GOAL: number = 4000;
 
 export const PLAYER_DATA_START: PlayerData = {
   cells: [
