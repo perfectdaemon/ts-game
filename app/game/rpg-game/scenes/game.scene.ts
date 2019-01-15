@@ -35,6 +35,7 @@ export class GameScene extends Scene {
 
   landingButton: GuiButton;
   getTreasureButton: GuiButton;
+  toPlayerButton: GuiButton;
 
   solarObjects: SolarBase[];
 
@@ -78,6 +79,10 @@ export class GameScene extends Scene {
     this.getTreasureButton = this.guiManager.getElement<GuiButton>('TreasureButton');
     this.getTreasureButton.visible = false;
     this.getTreasureButton.onClick = () => this.getTreasure();
+
+    this.toPlayerButton = this.guiManager.getElement<GuiButton>('ToPlayerButton');
+    this.toPlayerButton.visible = true;
+    this.toPlayerButton.onClick = () => this.toPlayer();
 
     this.solarObjects = [];
     this.nebulaPool = new NebulaPool(() => Nebula.build(), 16);
@@ -348,5 +353,10 @@ export class GameScene extends Scene {
       cost: GAME_STATE.treasureToGet.cost,
     };
     this.sceneManager.showModal(SCENES.treasure, true);
+  }
+
+  private toPlayer(): void {
+    this.stopMoving();
+    this.cameraController.moveToObject(GAME_STATE.player, 800);
   }
 }

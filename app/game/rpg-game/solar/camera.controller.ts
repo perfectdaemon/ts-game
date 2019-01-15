@@ -2,6 +2,8 @@ import { INPUT } from '../../../engine/input/input';
 import { Keys } from '../../../engine/input/keys.enum';
 import { Vector2 } from '../../../engine/math/vector2';
 import { Camera } from '../../../engine/scene/camera';
+import { GLOBAL } from '../global';
+import { SolarBase } from './solar.base';
 
 export class CameraController {
   private movement: Vector2 = new Vector2();
@@ -28,5 +30,20 @@ export class CameraController {
       .multiplyNumSelf(deltaTime * this.speed);
 
     this.camera.position.addToSelf(this.movement);
+  }
+
+  moveToObject(object: SolarBase, speed: number): void {
+    const direction = object.sprite.position
+      .asVector2()
+      .subtractFromSelf(this.camera.position)
+      .normalize()
+      .multiplyNumSelf(speed);
+
+    GLOBAL.actionManager.add(dt => {
+      this.camera.position.addToSelf(direction.multiplyNum(dt));
+
+      const distance = object.sprite.position.asVector2().subtractFromSelf(this.camera.position).lengthQ();
+      return distance < 50 * 50;
+    });
   }
 }

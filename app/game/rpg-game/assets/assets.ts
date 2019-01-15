@@ -1,11 +1,13 @@
 import { LoaderFactory } from '../../../engine/loaders/loader-factory';
 import { MaterialData } from '../../../engine/loaders/material.data';
+import { Vector3 } from '../../../engine/math/vector3';
 import { Font } from '../../../engine/render/font';
 import { Material } from '../../../engine/render/material';
 import { ShaderProgram } from '../../../engine/render/shader-program';
 import { Texture } from '../../../engine/render/texture';
 import { TextureAtlas } from '../../../engine/render/texture-atlas';
-import { Camera } from '../../../engine/scene/camera';
+import { renderer } from '../../../engine/render/webgl';
+import { Camera, CameraPivot, CameraProjectionMode } from '../../../engine/scene/camera';
 import { AudioManager } from '../../../engine/sound/audio-manager';
 import { DEFAULT_FONT, DEFAULT_MATERIAL, DEFAULT_SHADER } from './default';
 import { MUSIC_DATA, SOUNDS_DATA } from './sound.data';
@@ -29,6 +31,14 @@ export class Assets {
 
   async loadAll(): Promise<void> {
     this.gameCamera = new Camera();
+    this.gameCamera.setProjectionParamsFull(0, 0, renderer.width, renderer.height,
+      45, 0.01, 100,
+      CameraProjectionMode.Ortho, CameraPivot.Center);
+    this.gameCamera.setViewParams(
+      new Vector3(renderer.width / 2, renderer.height / 2, 100),
+      new Vector3(renderer.width / 2, renderer.height / 2, 0),
+      new Vector3(0, 1, 0),
+    );
     this.guiCamera = new Camera();
 
     const soundLoading = this.loadSounds();
