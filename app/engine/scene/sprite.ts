@@ -5,6 +5,19 @@ import { Vector4 } from '../math/vector4';
 import { TextureRegion } from '../render/texture-atlas';
 import { Node } from './node';
 
+export class SpriteOptions {
+  size?: Vector2 | number[];
+  rotation?: number;
+  pivotPoint?: Vector2 | number[];
+  position?: Vector3 | number[];
+  textureRegion?: {
+    region: TextureRegion;
+    adjustSize?: boolean;
+  };
+  color?: Vector4 | number[];
+  alpha?: number;
+}
+
 export class Sprite extends Node {
 
   public static getVerticesSize(): number {
@@ -19,15 +32,21 @@ export class Sprite extends Node {
   protected _pivotPoint: Vector2;
   protected _textureRegion: TextureRegion | null = null;
 
-  constructor(width?: number, height?: number, pivotPoint?: Vector2) {
+  constructor(options: SpriteOptions);
+  constructor(width?: number, height?: number, pivotPoint?: Vector2);
+  constructor(widthOrOptions?: number | SpriteOptions, height?: number, pivotPoint?: Vector2) {
     super();
-    this._width = width || 1.0;
-    this._height = height || 1.0;
-    this._pivotPoint = pivotPoint || new Vector2(0.5, 0.5);
+    if (!widthOrOptions || typeof widthOrOptions === 'number') {
+      this._width = widthOrOptions || 1.0;
+      this._height = height || 1.0;
+      this._pivotPoint = pivotPoint || new Vector2(0.5, 0.5);
 
-    this.setDefaultVertices();
-    this.setDefaultTexCoords();
-    this.setVerticesColor(new Vector4(1, 1, 1, 1));
+      this.setDefaultVertices();
+      this.setDefaultTexCoords();
+      this.setVerticesColor(new Vector4(1, 1, 1, 1));
+    } else {
+      this.initializeFromOptions(widthOrOptions);
+    }
   }
 
   public free(): void {
@@ -286,6 +305,65 @@ export class Sprite extends Node {
 
   public renderSelf(): void {
     // nothing
+  }
+
+  private initializeFromOptions(options: SpriteOptions): void {
+    this._width = 1.0;
+    this._height = 1.0;
+    this._pivotPoint = new Vector2(0.5, 0.5);
+    const color = new Vector4(1, 1, 1, 1);
+
+    if (options.size) {
+      const size = this.getArray(options.size);
+      this._width = size[0];
+      this._height = size[1];
+    }
+
+    if (options.rotation) {
+      this.rotation = options.rotation;
+    }
+
+    if (options.pivotPoint) {
+      const pivotPoint = this.getArray(options.pivotPoint);
+      this.pivotPoint.set(pivotPoint[0], pivotPoint[1]);
+    }
+
+    if (options.color) {
+      const optColor = this.getArray(options.color);
+      color.set(optColor[0], optColor[1], optColor[2], optColor[3]);
+    }
+
+    if (options.alpha) {
+      color.w = options.alpha;
+    }
+
+    if (options.textureRegion) {
+      this.setTextureRegion(options.textureRegion.region, options.textureRegion.adjustSize);
+    } else {
+      this.setDefaultTexCoords();
+    }
+
+    if (options.position) {
+      const position = this.getArray(options.position);
+      this.position.set(position[0], position[1], position[2]);
+    }
+
+    this.setDefaultVertices();
+    this.setVerticesColor(color);
+  }
+
+  private getArray(some: Vector2 | Vector3 | Vector4 | number[]): number[] {
+    if (some instanceof Vector2) {
+      return [some.x, some.y];
+    }
+    if (some instanceof Vector3) {
+      return [some.x, some.y, some.z];
+    }
+    if (some instanceof Vector4) {
+      return [some.x, some.y, some.z, some.w];
+    }
+
+    return some;
   }
 
 }

@@ -1,4 +1,3 @@
-import { Vector2 } from '../../engine/math/vector2';
 import { renderer } from '../../engine/render/webgl';
 import { Sprite } from '../../engine/scene/sprite';
 import { Text } from '../../engine/scene/text';
@@ -11,12 +10,16 @@ export class DialogBox implements IRenderable {
   text: Text;
 
   constructor(height: number) {
-    const region = GLOBAL.assets.solarAtlas.getRegion('blank.png');
-
-    this.background = new Sprite(renderer.width - 20, height, new Vector2(0.5, 0.5));
-    this.background.position.set(renderer.width / 2, this.background.height / 2 + 10, 40);
-    this.background.setVerticesColor(1, 1, 1, 0.3);
-    this.background.setTextureRegion(region, false);
+    this.background = new Sprite({
+      size: [renderer.width - 20, height],
+      position: [renderer.width / 2, height / 2 + 10, 40],
+      color: [1, 1, 1, 0.3],
+      textureRegion: {
+        region: GLOBAL.assets.solarAtlas.getRegion('blank.png'),
+        adjustSize: false,
+      },
+      pivotPoint: [0.5, 0.5],
+    });
 
     this.text = new Text();
     this.text.pivotPoint.set(0.5, 0.5);
