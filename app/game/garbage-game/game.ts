@@ -43,10 +43,6 @@ export class Game extends GameBase {
 
   private gameOver: boolean = false;
 
-  constructor(protected canvasElement: HTMLCanvasElement) {
-    super(canvasElement);
-  }
-
   protected async onInit(): Promise<void> {
     this.player.body.position.set(this.renderer.width / 2, this.renderer.height / 2, 1);
     this.assets.loadAll()

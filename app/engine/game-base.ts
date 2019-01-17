@@ -14,7 +14,7 @@ export abstract class GameBase {
   protected currentTime: number = 0.0;
   protected pauseAll: boolean = false;
 
-  constructor(canvasElement: HTMLCanvasElement) {
+  constructor(canvasElement: HTMLCanvasElement, private _loader: HTMLElement) {
     this.renderer = new WebGLRenderer(canvasElement);
     this.renderer.onMouseMove = (position) => this.onMouseMove(position);
     this.renderer.onMouseDown = (position, button) => this.onMouseDown(position, button);
@@ -28,7 +28,7 @@ export abstract class GameBase {
    * Game loop
    */
   public run(): void {
-    this.onInit();
+    this.onInit().then(() => this.removeLoader());
 
     const gameLoop = (timestamp: number) => {
       this.lastTime = this.currentTime;
@@ -81,4 +81,8 @@ export abstract class GameBase {
   protected abstract onKeyDown(key: Keys): void;
 
   protected abstract onKeyUp(key: Keys): void;
+
+  protected removeLoader(): void {
+    this._loader.remove();
+  }
 }
