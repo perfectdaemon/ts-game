@@ -5,24 +5,38 @@ In fact it is just a beginning of that.
 
 ## Quick demo
 * [Simple shooter game](https://perfectdaemon.github.io/151/index.html) — for [IGDC-151 contest](http://igdc.ru/igdc_top.php?konkurs=151), February, 2018
+* [Space RPG game](https://perfectdaemon.github.io/159/index.html) — for [IGDC-159 contest](http://igdc.ru/igdc_top.php?konkurs=159), January, 2019
 
-## What have we got?
-* WebGL rendering
-* Scene management: camera, node
-* 2D graphics: sprite, text
-* Texture atlases
-* Audio
-* Bitmap font generator
-* Math classes
-* Async asset loading
-* ActionManager (do actions with timeout, continuos and so on, no more timers at your Game class)
-* Menu framework (Main Menu, Settings and so on)
+## Features
+In alphabetical order:
+* GUI
+  * Button
+* Helpers
+  * Action manager — perform actions (simple or continuos) with pause, chain them and so on. No more timers and flags in `update()` method
+  * Event — simple observable with subscribe functionality
+  * Pool — do not create/delete items with short time to life. Reuse them.
+  * Tween — perform curve based animations
+* Input — keyboard, mouse, touches
+* Asset loading — async with promises
+* Math — vectors, matrices
+* Physics — simple collision detection
+* Render
+  * WebGL renderer
+  * Texture atlases
+  * Font rendering
+* Render 2D
+  * Sprite
+  * Text
+* Scene
+  * Node
+  * Camera
+* Scenes — game, menu, options, pause management routines
+* Sound — play sounds and music
 
-## What is in progress at now?
-* Tweening (curve-based animations)
+## What features are in progress?
 * Sprite animations (spritesheet and object based)
 * Physics engine - p2 (https://github.com/schteppe/p2.js)
-* GUI (buttons, sliders, inputs)
+* More GUI (sliders, inputs)
 * Particles
 
 ## Global roadmap
