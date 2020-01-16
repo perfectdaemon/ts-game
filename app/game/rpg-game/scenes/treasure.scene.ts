@@ -1,5 +1,6 @@
 import { GuiButton } from '../../../engine/gui/gui-button';
 import { GuiManager } from '../../../engine/gui/gui-manager';
+import { MenuHelper } from '../../../engine/helpers/menu/menu-helper';
 import { clamp } from '../../../engine/math/math-base';
 import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
@@ -11,7 +12,6 @@ import { DialogBox } from '../dialog-box';
 import { GLOBAL } from '../global';
 import { GlobalEvents } from '../global.events';
 import { ItemGenerator } from '../item-generator';
-import { MenuHelper } from '../menu/menu-helper';
 import { BaseItem, Inventory, InventoryCell } from '../planet/inventory';
 import { ItemDescription } from '../planet/item-description';
 import { ItemRarity, ItemType } from '../player-data';

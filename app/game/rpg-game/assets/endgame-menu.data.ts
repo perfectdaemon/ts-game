@@ -1,7 +1,7 @@
+import { MenuData } from '../../../engine/helpers/menu/menu-data';
 import { Vector2 } from '../../../engine/math/vector2';
 import { Vector3 } from '../../../engine/math/vector3';
 import { Vector4 } from '../../../engine/math/vector4';
-import { MenuData } from '../menu/menu-data';
 
 const WIDTH = 960;
 const HEIGHT = 768;

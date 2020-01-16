@@ -1,5 +1,6 @@
 import { GuiButton } from '../../../engine/gui/gui-button';
 import { GuiManager } from '../../../engine/gui/gui-manager';
+import { MenuHelper } from '../../../engine/helpers/menu/menu-helper';
 import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
 import { div } from '../../../engine/math/math-base';
 import { Vector2 } from '../../../engine/math/vector2';
@@ -11,7 +12,6 @@ import { Scene } from '../../../engine/scenes/scene';
 import { PLANET_MENU_DATA } from '../assets/planet-menu.data';
 import { GLOBAL } from '../global';
 import { GlobalEvents } from '../global.events';
-import { MenuHelper } from '../menu/menu-helper';
 import { PLANET_GAME_STATE } from '../planet/game-state';
 import { BaseItem, InventoryCell } from '../planet/inventory';
 import { ItemDescription } from '../planet/item-description';

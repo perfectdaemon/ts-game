@@ -1,8 +1,6 @@
 import { GuiManager } from '../../../engine/gui/gui-manager';
 import { ActionManager } from '../../../engine/helpers/action-manager/action-manager';
 import { SimpleAction } from '../../../engine/helpers/action-manager/actions.func';
-import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
-import { Vector2 } from '../../../engine/math/vector2';
 import { Vector4 } from '../../../engine/math/vector4';
 import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';

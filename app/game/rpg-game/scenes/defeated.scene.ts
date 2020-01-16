@@ -1,5 +1,6 @@
 import { GuiButton } from '../../../engine/gui/gui-button';
 import { GuiManager } from '../../../engine/gui/gui-manager';
+import { MenuHelper } from '../../../engine/helpers/menu/menu-helper';
 import { Vector2 } from '../../../engine/math/vector2';
 import { renderer } from '../../../engine/render/webgl';
 import { Sprite } from '../../../engine/scene/sprite';
@@ -8,7 +9,6 @@ import { Scene } from '../../../engine/scenes/scene';
 import { DEFEATED_MENU_DATA } from '../assets/defeated-menu.data';
 import { DialogBox } from '../dialog-box';
 import { GLOBAL } from '../global';
-import { MenuHelper } from '../menu/menu-helper';
 import { IRenderable, RenderHelper } from '../render-helper';
 import { GAME_STATE } from '../solar/game-state';
 
