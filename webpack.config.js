@@ -24,7 +24,7 @@ module.exports = {
   },
   plugins: [
     new copy([
-      {from: 'assets', to: 'assets', ignore: '.gitkeep'},
+      {from: 'assets', to: 'assets', ignore: ['.gitkeep']},
       {from: 'app/index.html'},
       {from: 'app/tools.html'}
     ])
