@@ -1,5 +1,6 @@
 import { GuiButton } from '../../../engine/gui/gui-button';
 import { GuiManager } from '../../../engine/gui/gui-manager';
+import { TweenStyle } from '../../../engine/helpers/tween/tween-style.enum';
 import { Keys, MouseButtons } from '../../../engine/input/keys.enum';
 import { Vector2 } from '../../../engine/math/vector2';
 import { Vector4 } from '../../../engine/math/vector4';
@@ -28,14 +29,34 @@ export class MainMenuScene extends Scene {
     button.sprite.position.set(350, 250, 5);
     button.sprite.setVerticesColor(new Vector4(0.3, 0.5, 0.7, 1.0));
     button.label.color.set(1, 1, 1, 1);
-    button.onClick = (el, ev) => {
-      button.label.text = `clicked: ${ev.x}, ${ev.y}`;
+    button.onClick = async (el, ev) => {
+      const me = el as GuiButton;
+      me.label.text = `clicked: ${ev.x}, ${ev.y}`;
+
+      await GLOBAL.tweenManager.startTweenAsync(
+        (value: number) => me.sprite.position.y = value, {
+        tweenStyle: TweenStyle.Bounce,
+        start: me.sprite.position.y,
+        finish: me.sprite.position.y + 100,
+        duration: 1.5,
+        pauseOnStart: 0,
+      });
+
+      GLOBAL.tweenManager.startTweenAsync(
+        (value: number) => me.sprite.position.y = value, {
+        tweenStyle: TweenStyle.Bounce,
+        start: me.sprite.position.y,
+        finish: me.sprite.position.y - 100,
+        duration: 1.5,
+        pauseOnStart: 0,
+      });
     };
 
-    button.onTouchDown = () => button.sprite.setVerticesColor(new Vector4(1, 0, 0, 1));
-    button.onTouchUp = () => button.sprite.setVerticesColor(new Vector4(0.3, 0.5, 0.7, 1.0));
-
     button.updateHitBox();
+
+    button.onTouchDown = () => button.sprite.setVerticesColor(new Vector4(1, 0, 0, 1));
+
+    button.onTouchUp = () => button.sprite.setVerticesColor(new Vector4(0.3, 0.5, 0.7, 1.0));
 
     this.guiManager.addElement(button);
 
