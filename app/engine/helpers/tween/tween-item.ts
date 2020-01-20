@@ -3,20 +3,23 @@ import { Vector3 } from '../../math/vector3';
 import { Vector4 } from '../../math/vector4';
 import { IPoolItem } from '../pool/ipool-item';
 import { EasingFunc, easingFunctions } from './easing-func';
+import { SetValueFunc } from './set-value.func';
+import { TweenParams } from './tween-params';
 import { TweenStyle } from './tween-style.enum';
 
+/**
+ * Represents tween animation that performs for a while
+ */
 export class TweenItem implements IPoolItem {
   active: boolean = false;
 
-  time: number = 0;
-  pauseOnStart: number = 0;
-  duration: number = 0;
+  private time: number = 0;
+  private pauseOnStart: number = 0;
+  private duration: number = 0;
 
-  start: number | Vector2 | Vector3 | Vector4 = 0;
-  finish: number | Vector2 | Vector3 | Vector4 = 0;
-  current: number | Vector2 | Vector3 | Vector4 = 0;
-  setValue: (value: number | Vector2 | Vector3 | Vector4) => void = (value) => value;
-  easingFunc: EasingFunc = (start, diff, unit) => start;
+  private start: number | Vector2 | Vector3 | Vector4 = 0;
+  private finish: number | Vector2 | Vector3 | Vector4 = 0;
+  private current: number | Vector2 | Vector3 | Vector4 = 0;
 
   onActivate(): void {
     this.active = true;
@@ -24,45 +27,41 @@ export class TweenItem implements IPoolItem {
 
   onDeactivate(): void {
     this.active = false;
+    this.tweenFinished();
   }
 
-  refresh(
-    setValue: (value: number | Vector2 | Vector3 | Vector4) => void,
-    tweenStyle: TweenStyle,
-    start: number | Vector2 | Vector3 | Vector4,
-    finish: number | Vector2 | Vector3 | Vector4,
-    duration: number, pauseOnStart: number = 0,
-  ): void {
+  /**
+   * Starts new tween animation
+   * @param setValue Callback with current value parameter that should change something you want to animate
+   * @param params Additional parameters for animation including start and finish values, duration and pause on start
+   */
+  startAsync(setValue: SetValueFunc, params: TweenParams): Promise<void> {
     this.setValue = setValue;
-    this.easingFunc = this.getEasingFunc(tweenStyle);
-    this.start = start;
-    if (start instanceof Vector2 || start instanceof Vector3 || start instanceof Vector4) {
-      (this.current as any).set(start);
+
+    this.easingFunc = this.getEasingFunc(params.tweenStyle);
+
+    this.start = params.start;
+    this.finish = params.finish;
+    this.duration = params.duration;
+    this.pauseOnStart = params.pauseOnStart;
+
+    this.time = 0;
+
+    if (this.start instanceof Vector2 || params.start instanceof Vector3 || params.start instanceof Vector4) {
+      (this.current as any).set(params.start);
     } else {
       this.current = this.start;
     }
 
-    this.finish = finish;
-    this.duration = duration;
-    this.pauseOnStart = pauseOnStart;
-
-    this.time = 0;
-
     this.onActivate();
+
+    return new Promise(resolve => this.tweenFinished = resolve);
   }
 
-  getUnitValue(): number {
-    if (this.time <= this.pauseOnStart) {
-      return 0;
-    }
-
-    if (this.time >= this.duration + this.pauseOnStart) {
-      return 1;
-    }
-
-    return (this.time - this.pauseOnStart) / this.duration;
-  }
-
+  /**
+   * Updates current state of tween item
+   * @param deltaTime Time passed since last update(deltaTime) called
+   */
   update(deltaTime: number): void {
     if (!this.active) {
       return;
@@ -92,12 +91,30 @@ export class TweenItem implements IPoolItem {
       this.current = this.easingFunc(this.start, this.finish - this.start, this.getUnitValue());
     }
 
-    this.setValue(this.current);
+    this.setValue(this.current as any);
 
     if (this.time - this.pauseOnStart >= this.duration) {
       this.time = this.duration + this.pauseOnStart;
       this.onDeactivate();
     }
+  }
+
+  private setValue: SetValueFunc = (value: number) => value;
+
+  private easingFunc: EasingFunc = (start, diff, unit) => start;
+
+  private tweenFinished: () => void = () => {};
+
+  private getUnitValue(): number {
+    if (this.time <= this.pauseOnStart) {
+      return 0;
+    }
+
+    if (this.time >= this.duration + this.pauseOnStart) {
+      return 1;
+    }
+
+    return (this.time - this.pauseOnStart) / this.duration;
   }
 
   private getEasingFunc(tweenStyle: TweenStyle): EasingFunc {

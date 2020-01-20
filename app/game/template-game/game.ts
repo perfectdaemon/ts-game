@@ -23,7 +23,7 @@ export class Game extends GameBase {
 
   protected onUpdate(deltaTime: number): void {
     GLOBAL.actionManager.update(deltaTime);
-    GLOBAL.tweener.update(deltaTime);
+    GLOBAL.tweenManager.update(deltaTime);
     this.sceneManager.update(deltaTime);
   }
 
