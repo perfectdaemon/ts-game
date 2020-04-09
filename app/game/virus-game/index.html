@@ -1,0 +1,116 @@
+<html>
+
+<head>
+  <title>Corona virus game</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+      background: #999;
+      font-size: 16pt;
+      color: rgb(19, 104, 138)
+    }
+
+    * {
+      outline: none;
+    }
+
+    .flex-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      max-width: 960px;
+    }
+
+    .loading-screen {
+      position: absolute;
+    }
+
+    .lds-ripple {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 164px;
+      height: 164px;
+    }
+
+    .lds-ripple div {
+      position: absolute;
+      border: 4px solid #fff;
+      opacity: 1;
+      border-radius: 50%;
+      animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+
+    .lds-ripple div:nth-child(2) {
+      animation-delay: -0.2s;
+    }
+
+    .lds-ripple div:nth-child(3) {
+      animation-delay: -0.4s;
+    }
+
+    @keyframes lds-ripple {
+      0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+      }
+
+      100% {
+        width: 158px;
+        height: 158px;
+        opacity: 0;
+      }
+    }
+
+
+    .footer {
+      justify-content: space-between;
+
+      margin: 10px auto;
+      max-width: 960px;
+      color: hsl(0, 0%, 30%);
+    }
+
+    .footer a {
+      color: hsl(0, 0%, 30%);
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
+
+
+    #canvas-main {
+      display: block;
+      margin: 10px auto;
+    }
+
+  </style>
+</head>
+
+<body>
+
+
+  <div class="flex-container">
+    <div class="loading-screen" id="loader">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <canvas width="1280" height="768" id="canvas-main" tabindex="1">
+      No canvas support :(
+    </canvas>
+  </div>
+
+  <div class="flex-container footer">
+    <div>Specially for IGDC-169 RPG Game contest</div>
+    <a href="mailto:info@perfectdaemon.ru">info@perfectdaemon.ru</a>
+  </div>
+
+  <script src="game.bundle.js"></script>
+</body>
+
+</html>

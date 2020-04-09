@@ -8,12 +8,16 @@
 
     "start:garbage": "npm run webpack-dev-server -- --env.game=garbage-game",
     "start:rpg": "npm run webpack-dev-server -- --env.game=rpg-game",
+    "start:virus": "npm run webpack-dev-server -- --env.game=virus-game",
     "start:template": "npm run webpack-dev-server -- --env.game=template-game",
+
     "start:tools": "npm run webpack-dev-server -- --env.tools",
 
     "build:garbage": "npm run webpack-build -- --env.game=garbage-game",
     "build:rpg": "npm run webpack-build -- --env.game=rpg-game",
+    "build:virus": "npm run webpack-build -- --env.game=virus-game",
     "build:template": "npm run webpack-build -- --env.game=template-game",
+
     "build:tools": "npm run webpack-build -- --env.tools"
   },
   "private": true,
