@@ -7,7 +7,7 @@ import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { Scene } from '../../../engine/scenes/scene';
-import { TREASURE_MENU_DATA } from '../assets/treasure-menu.data';
+import { TREASURE_MENU_DATA } from '../data-assets/treasure-menu.data';
 import { DialogBox } from '../dialog-box';
 import { GLOBAL } from '../global';
 import { GlobalEvents } from '../global.events';

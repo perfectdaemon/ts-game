@@ -91,7 +91,6 @@ export class Game extends GameBase {
 
     this.renderer.setClearColorRGB(0.1, 0.2, 0.2, 0.5);
     this.audioManager.masterVolume = 0;
-    this.actionManagerTest();
   }
 
   protected onUpdate(deltaTime: number): void {
@@ -168,12 +167,5 @@ export class Game extends GameBase {
   }
   protected onKeyUp(key: Keys): void {
     // nothing
-  }
-
-  private actionManagerTest(): void {
-    this.actionManager.add(() => console.log('simple with 2 seconds timeout'), 2);
-    this.actionManager.add((deltaTime) => console.log('repeat with 1 second timeout for 3 seconds'), 1, 3)
-      .then(dt => console.log('after that repeat for 2 seconds'), 0, 2)
-      .then(() => console.log('after that - simple'));
   }
 }

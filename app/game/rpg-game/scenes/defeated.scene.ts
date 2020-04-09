@@ -6,7 +6,7 @@ import { renderer } from '../../../engine/render/webgl';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { Scene } from '../../../engine/scenes/scene';
-import { DEFEATED_MENU_DATA } from '../assets/defeated-menu.data';
+import { DEFEATED_MENU_DATA } from '../data-assets/defeated-menu.data';
 import { DialogBox } from '../dialog-box';
 import { GLOBAL } from '../global';
 import { IRenderable, RenderHelper } from '../render-helper';

@@ -4,8 +4,8 @@ import { MenuHelper } from '../../../engine/helpers/menu/menu-helper';
 import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
-import { MAIN_MENU_DATA } from '../assets/main-menu.data';
-import { SOUNDS } from '../assets/sound.data';
+import { MAIN_MENU_DATA } from '../data-assets/main-menu.data';
+import { SOUNDS } from '../data-assets/sound.data';
 import { GLOBAL } from '../global';
 import { SCENES } from './scenes.const';
 

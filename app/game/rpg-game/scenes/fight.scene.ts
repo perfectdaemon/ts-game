@@ -5,7 +5,7 @@ import { Vector4 } from '../../../engine/math/vector4';
 import { SpriteBatch } from '../../../engine/render2d/sprite-batch';
 import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Scene } from '../../../engine/scenes/scene';
-import { SOUNDS } from '../assets/sound.data';
+import { SOUNDS } from '../data-assets/sound.data';
 import { DialogBox } from '../dialog-box';
 import { ConsumableItem } from '../fight/consumable-item';
 import { ParticleEmitterExtensions } from '../fight/emitter-extensions';

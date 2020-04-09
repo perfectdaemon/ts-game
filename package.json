@@ -3,21 +3,27 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "lite": "lite-server --baseDir=\"dist\"",
-    "webpackWatch": "webpack --config webpack.dev.js --watch",
-    "start": "concurrently \"npm run webpackWatch\" \"npm run lite\" ",
-    "build": "webpack --config webpack.prod.js --optimize-minimize"
+    "webpack-dev-server": "webpack-dev-server --open",
+    "webpack-build": "webpack --env.production",
+
+    "start:garbage": "npm run webpack-dev-server -- --env.game=garbage-game",
+    "start:rpg": "npm run webpack-dev-server -- --env.game=rpg-game",
+    "start:template": "npm run webpack-dev-server -- --env.game=template-game",
+    "start:tools": "npm run webpack-dev-server -- --env.tools",
+
+    "build:garbage": "npm run webpack-build -- --env.game=garbage-game",
+    "build:rpg": "npm run webpack-build -- --env.game=rpg-game",
+    "build:template": "npm run webpack-build -- --env.game=template-game",
+    "build:tools": "npm run webpack-build -- --env.tools"
   },
   "private": true,
   "devDependencies": {
-    "concurrently": "5.1.0",
     "copy-webpack-plugin": "5.1.1",
-    "lite-server": "2.5.4",
     "ts-loader": "6.2.2",
     "tslint": "6.1.1",
     "typescript": "3.8.3",
     "webpack": "4.42.1",
-    "webpack-command": "0.5.0",
-    "webpack-merge": "4.2.2"
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   }
 }

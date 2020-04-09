@@ -3,7 +3,7 @@ import { Vector2 } from '../../../engine/math/vector2';
 import { renderer } from '../../../engine/render/webgl';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
-import { SOUNDS } from '../assets/sound.data';
+import { SOUNDS } from '../data-assets/sound.data';
 import { GLOBAL } from '../global';
 import { PlayerData } from '../player-data';
 import { PlayerDataExtensions } from '../player-data-extensions';

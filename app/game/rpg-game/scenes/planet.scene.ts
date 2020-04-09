@@ -9,7 +9,7 @@ import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { Scene } from '../../../engine/scenes/scene';
-import { PLANET_MENU_DATA } from '../assets/planet-menu.data';
+import { PLANET_MENU_DATA } from '../data-assets/planet-menu.data';
 import { GLOBAL } from '../global';
 import { GlobalEvents } from '../global.events';
 import { PLANET_GAME_STATE } from '../planet/game-state';

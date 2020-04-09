@@ -1,0 +1,26 @@
+textures: atlas.png
+enemy3.png	0	0	58	61	0	0	58	61	
+enemy1.png	59	0	58	61	0	0	58	61	
+enemy2.png	0	62	58	58	0	1	58	61	
+wall1.png	59	62	32	32	0	0	32	32	
+wall6.png	92	62	32	32	0	0	32	32	
+wall2.png	95	95	32	32	0	0	32	32	
+wall5.png	62	95	32	32	0	0	32	32	
+wall4.png	0	121	32	32	0	0	32	32	
+wall3.png	33	128	32	32	0	0	32	32	
+enemy4.png	66	128	29	31	0	0	29	31	
+gold1.png	96	128	29	29	0	0	29	29	
+mana1.png	0	154	11	29	0	0	11	29	
+health1.png	12	154	11	29	0	0	11	29	
+knife3.png	118	0	5	25	0	0	5	25	
+bullet1.png	24	161	49	24	12	2	64	27	
+knife1.png	74	160	11	24	0	0	11	24	
+knife2.png	118	26	9	24	0	0	9	24	
+pistol3.png	86	160	9	23	0	0	9	23	
+pistol4.png	96	158	9	23	0	0	9	23	
+pistol2.png	106	158	10	22	0	0	10	22	
+pistol1.png	117	158	9	22	0	0	9	22	
+gold2_1.png	115	181	12	12	0	0	12	12	
+gold2_3.png	102	182	12	12	0	0	12	12	
+gold2_4.png	93	184	8	12	0	0	8	12	
+gold2_2.png	84	185	8	12	0	0	8	12	

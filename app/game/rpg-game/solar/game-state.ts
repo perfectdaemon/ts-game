@@ -1,6 +1,6 @@
 import { ActionManager } from '../../../engine/helpers/action-manager/action-manager';
 import { Vector2 } from '../../../engine/math/vector2';
-import { PLAYER_DATA_START } from '../assets/player-data.const';
+import { PLAYER_DATA_START } from '../data-assets/player-data.const';
 import { PlayerData } from '../player-data';
 import { Enemy } from './enemy';
 import { Planet } from './planet';
