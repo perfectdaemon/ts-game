@@ -9,6 +9,7 @@ import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
 import { GlobalEvents } from '../global.events';
 import { InfectedPickedUpEvent } from '../infected-picked-up.event';
+import { GAME_SETTINGS } from '../game-settings';
 
 export class Player implements IRenderable {
   sprite: Sprite;
@@ -51,7 +52,7 @@ export class Player implements IRenderable {
   }
 
   canPickup(): boolean {
-    return this.pickedUpCount < 10;
+    return this.pickedUpCount < GAME_SETTINGS.playerCapacity;
   }
 
   private onPickUp(event: InfectedPickedUpEvent): void {
@@ -66,9 +67,9 @@ export class Player implements IRenderable {
     let { rotation } = this.sprite;
 
     if (INPUT.isKeyDown[Keys.A]) {
-      rotation -= 100 * deltaTime;
+      rotation -= GAME_SETTINGS.playerRotationSpeed * deltaTime;
     } else if (INPUT.isKeyDown[Keys.D]) {
-      rotation += 100 * deltaTime;
+      rotation += GAME_SETTINGS.playerRotationSpeed * deltaTime;
     }
     this.sprite.rotation = rotation;
     this.velocity = Vector2.fromAngle(this.sprite.rotation - 90).multiplyNum(this.velocityMultiplier);

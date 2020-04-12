@@ -16,6 +16,7 @@ import { RenderHelper } from '../render-helper';
 import { Person } from './person';
 import { Player } from './player';
 import { InfectedDiedEvent } from '../infected-died.event';
+import { GAME_SETTINGS } from '../game-settings';
 
 export class GameScene extends Scene implements IRenderable {
   guiManager: GuiManager;
@@ -69,7 +70,11 @@ export class GameScene extends Scene implements IRenderable {
       GLOBAL.assets.guiCamera,
     );
 
-    this.persons = this.initPersons(new Vector2(0, 0), new Vector2(1280, 760), 100, 0.05);
+    this.persons = this.initPersons(
+      new Vector2(0, 0), new Vector2(renderer.width, renderer.height),
+      GAME_SETTINGS.infectedCount,
+      GAME_SETTINGS.infectedStartCount,
+    );
 
     this.infectedText = new Text('Заражено: 0');
     this.infectedText.position.set(10, 5, 15);
@@ -81,7 +86,7 @@ export class GameScene extends Scene implements IRenderable {
     this.diedText.position.set(400, 5, 15);
 
     this.player = new Player();
-    this.player.initialize(new Vector2(300, 300), 100);
+    this.player.initialize(new Vector2(300, 300), GAME_SETTINGS.playerSpeed);
 
     this.diedCount = 0;
 
@@ -131,6 +136,7 @@ export class GameScene extends Scene implements IRenderable {
   }
 
   onMouseDown(position: Vector2, button: MouseButtons): void {
+    // nothing
   }
 
   onPause(pause: boolean): void {
@@ -140,12 +146,13 @@ export class GameScene extends Scene implements IRenderable {
 
   private checkInfection(infected: Person): void {
     this.persons
-      .filter(person => !person.isInfected && person.sprite.position.subtract(infected.sprite.position).lengthQ() < 16 * 16)
+      .filter(person => !person.isInfected
+        && person.sprite.position.subtract(infected.sprite.position).lengthQ() < GAME_SETTINGS.infectionDistanceQ)
       .map(person => person.setInfected());
   }
 
   private checkAmbulancePickup(infected: Person): void {
-    const isPickup = infected.sprite.position.subtract(this.player.sprite.position).lengthQ() < 16 * 16
+    const isPickup = infected.sprite.position.subtract(this.player.sprite.position).lengthQ() < GAME_SETTINGS.playerPickupDistance
       && this.player.canPickup();
 
     if (isPickup) {
@@ -171,17 +178,18 @@ export class GameScene extends Scene implements IRenderable {
     this.diedText.text = `Умерло: ${this.diedCount}`;
   }
 
-  private initPersons(regionTopLeft: Vector2, regionBottomRight: Vector2, count: number, virusChance: number): Person[] {
+  private initPersons(regionTopLeft: Vector2, regionBottomRight: Vector2, count: number, infectedCount: number): Person[] {
     const persons: Person[] = [];
+
+    let infectedCountLeft = infectedCount;
 
     for (let i = 0; i < count; ++i) {
       const person = new Person();
-      person.initialize(regionTopLeft, regionBottomRight, 20);
+      person.initialize(regionTopLeft, regionBottomRight, GAME_SETTINGS.infectedSpeed);
 
-      const virusRoll = Math.random();
-
-      if (virusRoll < virusChance) {
+      if (infectedCountLeft > 0) {
         person.setInfected();
+        --infectedCountLeft;
       }
 
       persons.push(person);
