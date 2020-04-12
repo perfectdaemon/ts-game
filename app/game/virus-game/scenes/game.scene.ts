@@ -10,7 +10,6 @@ import { Text } from '../../../engine/scene/text';
 import { Scene } from '../../../engine/scenes/scene';
 import { GLOBAL } from '../global';
 import { RenderHelper } from '../render-helper';
-import { Vector3 } from '../../../engine/math/vector3';
 
 export class Person implements IRenderable {
 
@@ -93,21 +92,32 @@ export class Person implements IRenderable {
       || this.sprite.position.y < this.regionTopLeft.y
       || this.sprite.position.y > this.regionBottomRight.y) {
         const newDirection = this.sprite.position.asVector2().subtract(new Vector2(500, 400)).toAngle() - 90;
+        this.timeToChangeDirectionCounter = this.timeToChangeDirection;
         this.changeDirection(newDirection);
       }
   }
 }
 
-export class GameScene extends Scene {
+export class GameScene extends Scene implements IRenderable {
   guiManager: GuiManager;
   guiSpriteBatch: SpriteBatch;
   guiTextBatch: TextBatch;
   renderHelper: RenderHelper;
 
+  infectedText: Text;
+
   persons: Person[] = [];
 
   constructor() {
     super();
+  }
+
+  getSpritesToRender(): Sprite[] {
+    return [];
+  }
+
+  getTextsToRender(): Text[] {
+    return [this.infectedText];
   }
 
   load(): Promise<void> {
@@ -126,6 +136,9 @@ export class GameScene extends Scene {
 
     this.persons = this.initPersons(new Vector2(0, 0), new Vector2(1280, 760), 100, 0.05);
 
+    this.infectedText = new Text();
+    this.infectedText.position.set(10, 5, 10);
+
     return super.load();
   }
 
@@ -142,15 +155,20 @@ export class GameScene extends Scene {
     this.renderHelper.render(this.persons);
     GLOBAL.assets.guiCamera.update();
     this.guiManager.render();
+    this.renderHelper.render([this]);
   }
 
   update(deltaTime: number): void {
     this.persons
       .map(person => person.update(deltaTime));
 
-    this.persons
+    const infectedCount = this.persons
       .filter(person => person.isInfected)
-      .map(person => this.checkInfection(person));
+      .map(person =>
+         this.checkInfection(person)
+      ).length;
+
+    this.infectedText.text = `Заражено: ${infectedCount}`;
   }
 
   onMouseDown(position: Vector2, button: MouseButtons): void {
