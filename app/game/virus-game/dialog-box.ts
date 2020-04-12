@@ -7,6 +7,7 @@ import { IRenderable } from './render-helper';
 export class DialogBox implements IRenderable {
 
   background: Sprite;
+
   text: Text;
 
   constructor(height: number) {

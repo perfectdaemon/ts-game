@@ -12,6 +12,7 @@ export interface IRenderable {
 
 export class RenderHelper {
   spriteBatch: SpriteBatch;
+
   textBatch: TextBatch;
 
   constructor(
