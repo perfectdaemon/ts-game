@@ -17,7 +17,7 @@ module.exports = env => {
         ]
       },
       resolve: {
-        extensions: [ '.tsx', '.ts', '.js' ]
+        extensions: ['.tsx', '.ts', '.js']
       },
       output: {
         filename: '[name].bundle.js',
@@ -29,7 +29,7 @@ module.exports = env => {
       },
       plugins: [
         new copy([
-          {from: 'app/tools.html'}
+          { from: 'app/tools.html' }
         ])
       ]
     }
@@ -39,14 +39,14 @@ module.exports = env => {
     mode: env.production ? 'production' : 'development',
     devtool: env.production ? '' : 'inline-source-map',
     entry: {
-      game: `./app/game/${env.game}/index.ts`
+      game: `./app/game/${env.game}/index.ts`,
     },
     module: {
       rules: [
         {
           test: /\.tsx?$/,
           use: 'ts-loader',
-          exclude: /node_modules/
+          exclude: /node_modules/,
         }
       ]
     },
@@ -54,7 +54,7 @@ module.exports = env => {
       contentBase: `dist/${env.game}`,
     },
     resolve: {
-      extensions: [ '.tsx', '.ts', '.js' ]
+      extensions: ['.tsx', '.ts', '.js']
     },
     output: {
       filename: '[name].bundle.js',
@@ -62,8 +62,8 @@ module.exports = env => {
     },
     plugins: [
       new copy([
-        {from: `./app/game/${env.game}/assets`, to: 'assets', ignore: ['.gitkeep']},
-        {from: `./app/game/${env.game}/index.html`},
+        { from: `./app/game/${env.game}/assets`, to: 'assets', ignore: ['.gitkeep'] },
+        { from: `./app/game/${env.game}/index.html` },
       ])
     ]
   }
