@@ -15,6 +15,7 @@ import { InfectedPickedUpEvent } from '../infected-picked-up.event';
 import { RenderHelper } from '../render-helper';
 import { Person } from './person';
 import { Player } from './player';
+import { InfectedDiedEvent } from '../infected-died.event';
 
 export class GameScene extends Scene implements IRenderable {
   guiManager: GuiManager;
@@ -30,18 +31,28 @@ export class GameScene extends Scene implements IRenderable {
 
   inAmbulanceText: Text;
 
+  diedText: Text;
+
+  // Игроки и NPC
   persons: Person[] = [];
 
   player: Player;
 
+  // Чиселки
+
+  diedCount: number;
+
+  // Подписки
   onPickup$: Subscription<InfectedPickedUpEvent>;
+
+  onDied$: Subscription<InfectedDiedEvent>;
 
   getSpritesToRender(): Sprite[] {
     return [];
   }
 
   getTextsToRender(): Text[] {
-    return [this.infectedText, this.inAmbulanceText];
+    return [this.infectedText, this.inAmbulanceText, this.diedText];
   }
 
   load(): Promise<void> {
@@ -66,10 +77,16 @@ export class GameScene extends Scene implements IRenderable {
     this.inAmbulanceText = new Text('В скорой: 0');
     this.inAmbulanceText.position.set(200, 5, 15);
 
+    this.diedText = new Text('Умерло: 0');
+    this.diedText.position.set(400, 5, 15);
+
     this.player = new Player();
     this.player.initialize(new Vector2(300, 300), 100);
 
-    GlobalEvents.infectedPickedUp.subscribe(event => this.onPickUp(event));
+    this.diedCount = 0;
+
+    this.onPickup$ = GlobalEvents.infectedPickedUp.subscribe(event => this.onPickUp(event));
+    this.onDied$ = GlobalEvents.infectedDied.subscribe(event => this.onInfectedDied(event));
 
     return super.load();
   }
@@ -81,6 +98,7 @@ export class GameScene extends Scene implements IRenderable {
     this.renderHelper.free();
 
     this.onPickup$.unsubscribe();
+    this.onDied$.unsubscribe();
 
     return super.unload();
   }
@@ -141,6 +159,16 @@ export class GameScene extends Scene implements IRenderable {
     this.persons.splice(index, 1);
 
     this.inAmbulanceText.text = `В скорой: ${this.player.pickedUpCount}`;
+  }
+
+  private onInfectedDied(event: InfectedDiedEvent): void {
+    const index = this.persons.indexOf(event.infected);
+
+    this.persons.splice(index, 1);
+
+    ++this.diedCount;
+
+    this.diedText.text = `Умерло: ${this.diedCount}`;
   }
 
   private initPersons(regionTopLeft: Vector2, regionBottomRight: Vector2, count: number, virusChance: number): Person[] {

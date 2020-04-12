@@ -3,6 +3,8 @@ import { IRenderable } from '../../../engine/render2d/render-helper';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { GLOBAL } from '../global';
+import { GlobalEvents } from '../global.events';
+import { InfectedDiedEvent } from '../infected-died.event';
 
 export class Person implements IRenderable {
   getSpritesToRender(): Sprite[] {
@@ -17,6 +19,8 @@ export class Person implements IRenderable {
 
   isInfected: boolean;
 
+  isDead: boolean;
+
   regionTopLeft: Vector2;
 
   regionBottomRight: Vector2;
@@ -28,6 +32,8 @@ export class Person implements IRenderable {
   timeToChangeDirectionCounter: number;
 
   velocityMultiplier: number;
+
+  timerToDie: number;
 
   initialize(regionTopLeft: Vector2, regionBottomRight: Vector2, velocityMultiplier: number): void {
     const textureRegion = GLOBAL.assets.solarAtlas.getRegion('triangle.png');
@@ -49,9 +55,15 @@ export class Person implements IRenderable {
 
     this.timeToChangeDirection = 3 + 3 * Math.random();
     this.timeToChangeDirectionCounter = this.timeToChangeDirection;
+
+    this.isDead = false;
   }
 
   update(deltaTime: number): void {
+    if (this.isDead) {
+      return;
+    }
+
     this.move(deltaTime);
 
     this.timeToChangeDirectionCounter -= deltaTime;
@@ -61,11 +73,22 @@ export class Person implements IRenderable {
     }
 
     this.checkRegion();
+
+    if (this.isInfected) {
+      this.timerToDie -= deltaTime;
+
+      if (this.timerToDie < 0) {
+        this.isDead = true;
+        this.sprite.setVerticesColor(0.1, 0.1, 0.1, 1.0);
+        GlobalEvents.infectedDied.next(new InfectedDiedEvent(this));
+      }
+    }
   }
 
   setInfected(): void {
     this.isInfected = true;
     this.sprite.setVerticesColor(1, 0.1, 0.1, 1.0);
+    this.timerToDie = 7 + 7 * Math.random();
   }
 
   setCured(): void {
