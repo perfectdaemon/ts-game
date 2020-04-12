@@ -27,6 +27,9 @@ module.exports = {
     "no-unused-vars": ["off"],
     "arrow-parens": 'off',
     "no-plusplus": 'off',
+    "no-empty-function": 'off',
+    "typescript-eslint/no-empty-function": ['error'],
+    "no-useless-constructor": 'off',
   },
   "settings": {
     "import/resolver": {
