@@ -1,4 +1,5 @@
 import { GuiManager } from '../../../engine/gui/gui-manager';
+import { Subscription } from '../../../engine/helpers/event/subscription';
 import { MouseButtons } from '../../../engine/input/keys.enum';
 import { Vector2 } from '../../../engine/math/vector2';
 import { renderer } from '../../../engine/render/webgl';
@@ -9,6 +10,8 @@ import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { Scene } from '../../../engine/scenes/scene';
 import { GLOBAL } from '../global';
+import { GlobalEvents } from '../global.events';
+import { InfectedPickedUpEvent } from '../infected-picked-up.event';
 import { RenderHelper } from '../render-helper';
 import { Person } from './person';
 import { Player } from './player';
@@ -22,18 +25,23 @@ export class GameScene extends Scene implements IRenderable {
 
   renderHelper: RenderHelper;
 
+  // Тексты
   infectedText: Text;
+
+  inAmbulanceText: Text;
 
   persons: Person[] = [];
 
   player: Player;
+
+  onPickup$: Subscription<InfectedPickedUpEvent>;
 
   getSpritesToRender(): Sprite[] {
     return [];
   }
 
   getTextsToRender(): Text[] {
-    return [this.infectedText];
+    return [this.infectedText, this.inAmbulanceText];
   }
 
   load(): Promise<void> {
@@ -52,11 +60,16 @@ export class GameScene extends Scene implements IRenderable {
 
     this.persons = this.initPersons(new Vector2(0, 0), new Vector2(1280, 760), 100, 0.05);
 
-    this.infectedText = new Text();
-    this.infectedText.position.set(10, 5, 10);
+    this.infectedText = new Text('Заражено: 0');
+    this.infectedText.position.set(10, 5, 15);
+
+    this.inAmbulanceText = new Text('В скорой: 0');
+    this.inAmbulanceText.position.set(200, 5, 15);
 
     this.player = new Player();
-    this.player.initialize(new Vector2(300, 300), 55);
+    this.player.initialize(new Vector2(300, 300), 100);
+
+    GlobalEvents.infectedPickedUp.subscribe(event => this.onPickUp(event));
 
     return super.load();
   }
@@ -66,6 +79,9 @@ export class GameScene extends Scene implements IRenderable {
     this.guiTextBatch.free();
     this.guiSpriteBatch.free();
     this.renderHelper.free();
+
+    this.onPickup$.unsubscribe();
+
     return super.unload();
   }
 
@@ -84,7 +100,11 @@ export class GameScene extends Scene implements IRenderable {
 
     const infectedCount = this.persons
       .filter(person => person.isInfected)
-      .map(person => this.checkInfection(person))
+      .map(person => {
+        this.checkInfection(person);
+        this.checkAmbulancePickup(person);
+        return person;
+      })
       .length;
 
     this.infectedText.text = `Заражено: ${infectedCount}`;
@@ -106,12 +126,29 @@ export class GameScene extends Scene implements IRenderable {
       .map(person => person.setInfected());
   }
 
+  private checkAmbulancePickup(infected: Person): void {
+    const isPickup = infected.sprite.position.subtract(this.player.sprite.position).lengthQ() < 16 * 16
+      && this.player.canPickup();
+
+    if (isPickup) {
+      GlobalEvents.infectedPickedUp.next(new InfectedPickedUpEvent(infected, this.player));
+    }
+  }
+
+  private onPickUp(event: InfectedPickedUpEvent): void {
+    const index = this.persons.indexOf(event.infected);
+
+    this.persons.splice(index, 1);
+
+    this.inAmbulanceText.text = `В скорой: ${this.player.pickedUpCount}`;
+  }
+
   private initPersons(regionTopLeft: Vector2, regionBottomRight: Vector2, count: number, virusChance: number): Person[] {
     const persons: Person[] = [];
 
     for (let i = 0; i < count; ++i) {
       const person = new Person();
-      person.initialize(regionTopLeft, regionBottomRight, 30);
+      person.initialize(regionTopLeft, regionBottomRight, 20);
 
       const virusRoll = Math.random();
 
