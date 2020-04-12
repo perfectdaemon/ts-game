@@ -14,10 +14,6 @@ export class MainMenuScene extends Scene {
 
   musicEnabled: boolean = true;
 
-  constructor() {
-    super();
-  }
-
   load(): Promise<void> {
     this.guiManager = new GuiManager(
       GLOBAL.assets.solarMaterial,
@@ -38,20 +34,21 @@ export class MainMenuScene extends Scene {
     this.guiManager
       .getElement<GuiButton>('MusicButton')
       .onClick = (el) => {
-        GLOBAL.assets.audioManager.playSound(SOUNDS.select);
-        if (!this.musicEnabled) {
-          GLOBAL.assets.audioManager.playMusic(SOUNDS.music);
-          this.musicEnabled = true;
-          (el as GuiButton).label.text = 'Музыка вкл.';
-        } else {
-          GLOBAL.assets.audioManager.stopMusic();
-          this.musicEnabled = false;
-          (el as GuiButton).label.text = 'Музыка выкл.';
-        }
-      };
+        const button = (el as GuiButton);
 
-    // GLOBAL.assets.audioManager.stopMusic();
-    // GLOBAL.assets.audioManager.playMusic(SOUNDS.music);
+        GLOBAL.assets.audioManager.playSound(SOUNDS.select);
+
+        this.musicEnabled = !this.musicEnabled;
+
+        button.label.text = this.musicEnabled
+          ? 'Музыка вкл.'
+          : 'Музыка выкл.';
+
+        // eslint-disable-next-line no-unused-expressions
+        this.musicEnabled
+          ? GLOBAL.assets.audioManager.playMusic(SOUNDS.music)
+          : GLOBAL.assets.audioManager.stopMusic();
+      };
 
     return super.load();
   }
