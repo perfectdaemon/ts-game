@@ -28,7 +28,7 @@ module.exports = {
     "arrow-parens": 'off',
     "no-plusplus": 'off',
     "no-empty-function": 'off',
-    "typescript-eslint/no-empty-function": ['error'],
+    "@typescript-eslint/no-empty-function": ['error'],
     "no-useless-constructor": 'off',
   },
   "settings": {
