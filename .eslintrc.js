@@ -30,6 +30,12 @@ module.exports = {
     "no-empty-function": 'off',
     "@typescript-eslint/no-empty-function": ['error'],
     "no-useless-constructor": 'off',
+    "object-curly-newline": ["error", {
+      "ObjectExpression": { "multiline": true },
+      "ObjectPattern": { "multiline": true },
+      "ImportDeclaration": "never",
+      "ExportDeclaration": { "multiline": true, "minProperties": 3 }
+    }],
   },
   "settings": {
     "import/resolver": {

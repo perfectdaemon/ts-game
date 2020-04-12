@@ -15,14 +15,17 @@ import { DEFAULT_ATLAS_DATA } from './textures';
 
 export class Assets {
   shader: ShaderProgram;
+
   blankMaterial: Material;
 
   solarAtlas: TextureAtlas;
+
   solarMaterial: Material;
 
   font: Font;
 
   gameCamera: Camera;
+
   guiCamera: Camera;
 
   audioManager: AudioManager;
@@ -65,16 +68,11 @@ export class Assets {
   private async loadSounds(): Promise<void> {
     this.audioManager = new AudioManager();
 
-    const loadedSounds = await this.loaders.loadSounds(SOUNDS_DATA);
-    for (const sound of loadedSounds) {
-      this.audioManager.addSound(sound.audioBuffer, sound.soundName);
-    }
+    (await this.loaders.loadSounds(SOUNDS_DATA))
+      .map(sound => this.audioManager.addSound(sound.audioBuffer, sound.soundName));
 
-    const loadedMusic = await this.loaders.loadSounds(MUSIC_DATA);
-
-    for (const music of loadedMusic) {
-      this.audioManager.addMusic(music.audioBuffer, music.soundName);
-    }
+    (await this.loaders.loadSounds(MUSIC_DATA))
+      .map(music => this.audioManager.addMusic(music.audioBuffer, music.soundName));
 
     return Promise.resolve();
   }
