@@ -9,14 +9,15 @@ import { TextBatch } from '../../../engine/render2d/text-batch';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
 import { Scene } from '../../../engine/scenes/scene';
+import { GAME_SETTINGS } from '../game-settings';
 import { GLOBAL } from '../global';
 import { GlobalEvents } from '../global.events';
+import { InfectedDiedEvent } from '../infected-died.event';
 import { InfectedPickedUpEvent } from '../infected-picked-up.event';
 import { RenderHelper } from '../render-helper';
 import { Person } from './person';
+import { PersonStatus } from './person-status';
 import { Player } from './player';
-import { InfectedDiedEvent } from '../infected-died.event';
-import { GAME_SETTINGS } from '../game-settings';
 
 export class GameScene extends Scene implements IRenderable {
   guiManager: GuiManager;
@@ -122,7 +123,7 @@ export class GameScene extends Scene implements IRenderable {
       .map(person => person.update(deltaTime));
 
     const infectedCount = this.persons
-      .filter(person => person.isInfected)
+      .filter(person => person.status === PersonStatus.Infected)
       .map(person => {
         this.checkInfection(person);
         this.checkAmbulancePickup(person);
@@ -146,7 +147,7 @@ export class GameScene extends Scene implements IRenderable {
 
   private checkInfection(infected: Person): void {
     this.persons
-      .filter(person => !person.isInfected
+      .filter(person => person.status === PersonStatus.NotInfected
         && person.sprite.position.subtract(infected.sprite.position).lengthQ() < GAME_SETTINGS.infectionDistanceQ)
       .map(person => person.setInfected());
   }

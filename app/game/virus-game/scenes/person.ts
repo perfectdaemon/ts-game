@@ -1,10 +1,13 @@
 import { Vector2 } from '../../../engine/math/vector2';
+import { renderer } from '../../../engine/render/webgl';
 import { IRenderable } from '../../../engine/render2d/render-helper';
 import { Sprite } from '../../../engine/scene/sprite';
 import { Text } from '../../../engine/scene/text';
+import { GAME_SETTINGS } from '../game-settings';
 import { GLOBAL } from '../global';
 import { GlobalEvents } from '../global.events';
 import { InfectedDiedEvent } from '../infected-died.event';
+import { PersonStatus } from './person-status';
 
 export class Person implements IRenderable {
   getSpritesToRender(): Sprite[] {
@@ -17,9 +20,7 @@ export class Person implements IRenderable {
 
   sprite: Sprite;
 
-  isInfected: boolean;
-
-  isDead: boolean;
+  status: PersonStatus;
 
   regionTopLeft: Vector2;
 
@@ -34,6 +35,8 @@ export class Person implements IRenderable {
   velocityMultiplier: number;
 
   timerToDie: number;
+
+  private centerPosition = new Vector2(renderer.width / 2, renderer.height / 2);
 
   initialize(regionTopLeft: Vector2, regionBottomRight: Vector2, velocityMultiplier: number): void {
     const textureRegion = GLOBAL.assets.solarAtlas.getRegion('triangle.png');
@@ -56,11 +59,11 @@ export class Person implements IRenderable {
     this.timeToChangeDirection = 3 + 3 * Math.random();
     this.timeToChangeDirectionCounter = this.timeToChangeDirection;
 
-    this.isDead = false;
+    this.status = PersonStatus.NotInfected;
   }
 
   update(deltaTime: number): void {
-    if (this.isDead) {
+    if (this.status === PersonStatus.Dead) {
       return;
     }
 
@@ -74,26 +77,37 @@ export class Person implements IRenderable {
 
     this.checkRegion();
 
-    if (this.isInfected) {
+    if (this.status === PersonStatus.Infected) {
       this.timerToDie -= deltaTime;
 
       if (this.timerToDie < 0) {
-        this.isDead = true;
-        this.sprite.setVerticesColor(0.1, 0.1, 0.1, 1.0);
-        GlobalEvents.infectedDied.next(new InfectedDiedEvent(this));
+        const isDead = Math.random() <= GAME_SETTINGS.infectedDeathChance;
+
+        if (isDead) {
+          this.setDead();
+        } else {
+          this.setCured();
+        }
       }
     }
   }
 
   setInfected(): void {
-    this.isInfected = true;
+    this.status = PersonStatus.Infected;
     this.sprite.setVerticesColor(1, 0.1, 0.1, 1.0);
-    this.timerToDie = 7 + 7 * Math.random();
+    this.timerToDie = Math.random() * (GAME_SETTINGS.infectedTimeToDeathOrCure.y - GAME_SETTINGS.infectedTimeToDeathOrCure.x)
+      + GAME_SETTINGS.infectedTimeToDeathOrCure.x;
   }
 
   setCured(): void {
-    this.isInfected = false;
+    this.status = PersonStatus.Cured;
     this.sprite.setVerticesColor(0.1, 1.0, 0.1, 1.0);
+  }
+
+  setDead(): void {
+    this.status = PersonStatus.Dead;
+    this.sprite.setVerticesColor(0.1, 0.1, 0.1, 1.0);
+    GlobalEvents.infectedDied.next(new InfectedDiedEvent(this));
   }
 
   private move(deltaTime: number): void {
@@ -110,7 +124,7 @@ export class Person implements IRenderable {
       || this.sprite.position.x > this.regionBottomRight.x
       || this.sprite.position.y < this.regionTopLeft.y
       || this.sprite.position.y > this.regionBottomRight.y) {
-      const newDirection = this.sprite.position.asVector2().subtract(new Vector2(500, 400)).toAngle() - 90;
+      const newDirection = this.sprite.position.asVector2().subtract(this.centerPosition).toAngle() - 90;
       this.timeToChangeDirectionCounter = this.timeToChangeDirection;
       this.changeDirection(newDirection);
     }
