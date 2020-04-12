@@ -28,6 +28,7 @@ export class Vector3 {
     if (x instanceof Vector2) {
       this.x = x.x;
       this.y = x.y;
+      this.z = y ?? this.z;
     } else if (x instanceof Vector3) {
       this.x = x.x;
       this.y = x.y;
