@@ -5,6 +5,7 @@ In fact it is just a beginning of that.
 
 ## Quick demo
 * [Simple shooter game](https://perfectdaemon.github.io/151/index.html) — for [IGDC-151 contest](http://igdc.ru/igdc_top.php?konkurs=151), February, 2018
+
 ![Simple shooter game gif](https://github.com/perfectdaemon/ts-game/raw/master/promo/3_2.gif)
 * [Space RPG game](https://perfectdaemon.github.io/159/index.html) — for [IGDC-159 contest](http://igdc.ru/igdc_top.php?konkurs=159), January, 2019
 
