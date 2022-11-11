@@ -52,7 +52,7 @@ export abstract class GameBase {
    * Initialization method callback.
    * It runs once before game loop starts.
    */
-  protected abstract async onInit(): Promise<void>;
+  protected abstract onInit(): Promise<void>;
 
   /**
    *

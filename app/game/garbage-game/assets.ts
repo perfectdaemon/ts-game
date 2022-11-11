@@ -29,7 +29,7 @@ export class Assets {
           .then(data => this.sounds[data.soundName] = data.audioBuffer));
       }
 
-      Promise.all<ShaderProgram, TextureAtlas, Texture>([
+      Promise.all([
         loaderFactory.loadShaderProgram(DEFAULT_SHADER_DATA),
         loaderFactory.loadTextureAtlas(DEFAULT_ATLAS_DATA),
         loaderFactory.loadTexture(CHARACTER_TEXTURE_DATE),

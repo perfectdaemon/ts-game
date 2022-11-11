@@ -24,20 +24,22 @@ module.exports = env => {
         path: path.resolve(__dirname, `dist/tools`)
       },
       devServer: {
-        contentBase: 'dist',
+        static: 'dist',
         index: 'tools.html',
       },
       plugins: [
-        new copy([
-          { from: 'app/tools.html' }
-        ])
+        new copy({
+          patterns: [
+            { from: 'app/tools.html' }
+          ]
+        })
       ]
     }
   }
 
   return {
     mode: env.production ? 'production' : 'development',
-    devtool: env.production ? '' : 'inline-source-map',
+    devtool: env.production ? false : 'inline-source-map',
     entry: {
       game: `./app/game/${env.game}/index.ts`,
     },
@@ -51,7 +53,7 @@ module.exports = env => {
       ]
     },
     devServer: {
-      contentBase: `dist/${env.game}`,
+      static: `dist/${env.game}`,
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js']
@@ -61,10 +63,12 @@ module.exports = env => {
       path: path.resolve(__dirname, `dist/${env.game}`)
     },
     plugins: [
-      new copy([
-        { from: `./app/game/${env.game}/assets`, to: 'assets', ignore: ['.gitkeep'] },
-        { from: `./app/game/${env.game}/index.html` },
-      ])
+      new copy({
+        patterns: [
+          { from: `./app/game/${env.game}/assets`, to: 'assets', globOptions: { ignore: ['.gitkeep'] } },
+          { from: `./app/game/${env.game}/index.html` },
+        ]
+      })
     ]
   }
 };
